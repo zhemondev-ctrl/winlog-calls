@@ -42,8 +42,8 @@ export function AssistantChat({
 }: {
   threadId: string;
   initialMessages: UIMessage[];
-  initialQuestion?: string;
-  onQuestionSent?: () => void;
+  initialQuestion?: string | undefined;
+  onQuestionSent?: (() => void) | undefined;
 }) {
   const queryClient = useQueryClient();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
