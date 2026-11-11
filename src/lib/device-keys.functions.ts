@@ -2,11 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { sha256Hex } from "@/lib/hash";
 
-async function sha256Hex(value: string): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
 
 /**
  * Gives this phone its own upload key so it can keep sending calls while the app is closed.
@@ -54,4 +51,3 @@ export const revokeDeviceKey = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export { sha256Hex };

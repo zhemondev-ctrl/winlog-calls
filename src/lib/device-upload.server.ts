@@ -1,7 +1,7 @@
 // Server-only: receives calls sent by the Android app in the background with its device upload key.
 import { z } from "zod";
 
-import { sha256Hex } from "@/lib/device-keys.functions";
+import { sha256Hex } from "@/lib/hash";
 
 const DIRECTIONS = ["incoming", "outgoing", "missed", "rejected", "blocked", "unknown"] as const;
 
