@@ -16,6 +16,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedCallsRouteImport } from './routes/_authenticated/calls'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedPhoneRouteImport } from './routes/_authenticated/phone'
+import { Route as AuthenticatedSyncRouteImport } from './routes/_authenticated/sync'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
 import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
@@ -56,6 +57,11 @@ const AuthenticatedPhoneRoute = AuthenticatedPhoneRouteImport.update({
   path: '/phone',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSyncRoute = AuthenticatedSyncRouteImport.update({
+  id: '/sync',
+  path: '/sync',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
   id: '/team',
   path: '/team',
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/calls': typeof AuthenticatedCallsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/phone': typeof AuthenticatedPhoneRoute
+  '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/calls': typeof AuthenticatedCallsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/phone': typeof AuthenticatedPhoneRoute
+  '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/_authenticated/calls': typeof AuthenticatedCallsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/phone': typeof AuthenticatedPhoneRoute
+  '/_authenticated/sync': typeof AuthenticatedSyncRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/calls'
     | '/dashboard'
     | '/phone'
+    | '/sync'
     | '/team'
     | '/api/assistant'
     | '/assistant/$threadId'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/calls'
     | '/dashboard'
     | '/phone'
+    | '/sync'
     | '/team'
     | '/api/assistant'
     | '/assistant/$threadId'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/_authenticated/calls'
     | '/_authenticated/dashboard'
     | '/_authenticated/phone'
+    | '/_authenticated/sync'
     | '/_authenticated/team'
     | '/api/assistant'
     | '/_authenticated/assistant/$threadId'
@@ -228,6 +240,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPhoneRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sync': {
+      id: '/_authenticated/sync'
+      path: '/sync'
+      fullPath: '/sync'
+      preLoaderRoute: typeof AuthenticatedSyncRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/team': {
       id: '/_authenticated/team'
       path: '/team'
@@ -270,6 +289,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCallsRoute: typeof AuthenticatedCallsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedPhoneRoute: typeof AuthenticatedPhoneRoute
+  AuthenticatedSyncRoute: typeof AuthenticatedSyncRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
   AuthenticatedAssistantIndexRoute: typeof AuthenticatedAssistantIndexRoute
@@ -279,6 +299,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCallsRoute: AuthenticatedCallsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedPhoneRoute: AuthenticatedPhoneRoute,
+  AuthenticatedSyncRoute: AuthenticatedSyncRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,
   AuthenticatedAssistantIndexRoute: AuthenticatedAssistantIndexRoute,

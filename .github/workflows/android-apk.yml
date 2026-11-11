@@ -1,9 +1,24 @@
 name: Build Android APK
 
+# Lovable sends every saved change to GitHub. Website-only changes reach phones as soon as you
+# publish (the app loads the live site), so a new APK is only built when phone-side files change.
+# Run it by hand any time from the Actions tab ("Run workflow").
 on:
   push:
     branches: [main, master]
+    paths:
+      - "android/**"
+      - "capacitor.config.ts"
+      - "android-shell/**"
+      - "package.json"
+      - "bun.lock"
+      - "bun.lockb"
+      - ".github/workflows/android-apk.yml"
   workflow_dispatch:
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -33,16 +48,23 @@ jobs:
       - name: Copy app settings into the Android project
         run: bunx cap sync android
 
-      - name: Build APK
+      - name: Build signed APK
         working-directory: android
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
 
+      - name: Check the APK signature
+        run: |
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          "$APKSIGNER" verify --print-certs android/app/build/outputs/apk/release/app-release.apk
+
       - name: Name the APK
         run: |
           mkdir -p out
           cp android/app/build/outputs/apk/release/app-release.apk "out/WinLog-${{ github.run_number }}.apk"
+          # Same name every time, so .../releases/latest/download/WinLog.apk always gets the newest build.
+          cp android/app/build/outputs/apk/release/app-release.apk out/WinLog.apk
 
       - name: Keep APK on this run
         uses: actions/upload-artifact@v4

@@ -97,6 +97,16 @@ public class WinLogNativePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void openAppSettings(PluginCall call) {
+        Context ctx = getContext();
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + ctx.getPackageName()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(intent);
+        call.resolve();
+    }
+
+    @PluginMethod
     public void getCalls(PluginCall call) {
         if (getPermissionState("callLog") != PermissionState.GRANTED) {
             call.reject("Call history permission is not granted", "PERMISSION_DENIED");
