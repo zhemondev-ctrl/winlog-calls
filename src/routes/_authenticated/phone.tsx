@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Activity, Battery, Check, ChevronRight, MessageCircle, Phone, RefreshCw } from "lucide-react";
+import {
+  Activity,
+  Battery,
+  Check,
+  ChevronRight,
+  MessageCircle,
+  Phone,
+  RefreshCw,
+} from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { toast } from "sonner";
 
