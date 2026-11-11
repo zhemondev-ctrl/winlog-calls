@@ -10,11 +10,11 @@
 - [x] Manager AI assistant: separate saved conversations about team call activity
 - [x] Background call uploads while the app is closed
 - [x] Rebuild APK with icon + background uploads
-- [ ] Phone sync status screen: permissions, last SIM/WhatsApp sync, troubleshooting
-- [ ] GitHub Actions: build + publish signed APK on every app update
-- [ ] Remove Lovable badge (live site + Android app)
+- [x] Phone sync status screen: permissions, last SIM/WhatsApp sync, troubleshooting
+- [x] GitHub Actions: build + publish signed APK on every app update
+- [ ] Remove Lovable badge (blocked: needs Pro plan, then Project settings → Hide badge)
 - [ ] AI summary from manager-provided call records: activity summary + calls needing follow-up
 - [ ] Quick AI summary on each call card (pattern / follow-up)
 - [ ] Connect project to GitHub so every change builds a fresh APK (user action: Project settings → Git)
 - [ ] Real-phone test: install APK, SIM + WhatsApp call, confirm closed-app upload (user action; checklist provided)
-- [ ] Publish the Winstone version
+- [x] Publish the Winstone version
