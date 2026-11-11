@@ -37,3 +37,7 @@ use the editor.
 - Call uploads are idempotent upserts keyed by (user_id, device_id, source, external_id) with a one-day overlap re-read. Why: repeated syncs never duplicate calls.
 - APKs are built by `.github/workflows/android-apk.yml` and signed with the committed `android/app/winlog-release.keystore`. Why: internal sideloaded app; a fixed signature lets updates install over old versions.
 - Roles live in `user_roles`; the first account to sign up becomes admin (manager). Why: no separate admin setup step for the company.
+- Background uploads: each phone gets its own upload key (`registerDeviceKey`, hash stored in `device_upload_tokens`); a WorkManager job (`CallUploadWorker`, every 15 min + soon after WhatsApp calls) posts to `/api/public/device-upload`, which takes the owner from the key, never the body. Why: Supabase refresh tokens rotate, so the web session can't be shared with a background job.
+- Manager AI assistant: `/api/assistant` streams Lovable AI Gateway answers; history is loaded from `assistant_messages` server-side (only the newest question comes from the browser) and team calls are condensed by `src/lib/call-digest.ts`. Why: smaller requests and the browser can't rewrite saved history.
+- Brand assets: the Winstone logo drives the web header (CDN pointer in `src/assets`), `public/favicon.png`, and the Android launcher icons/splash in `android/app/src/main/res`. Why: one company mark everywhere.
+
