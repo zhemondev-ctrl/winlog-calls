@@ -26,11 +26,14 @@ export const Route = createFileRoute("/_authenticated/phone")({
 
 function PhonePage() {
   const sync = useNativeSyncContext();
-  const { native, status, refreshStatus } = sync;
+  const { native, status, refreshStatus, background, refreshBackground } = sync;
 
   useEffect(() => {
-    if (native) void refreshStatus();
-  }, [native, refreshStatus]);
+    if (native) {
+      void refreshStatus();
+      void refreshBackground();
+    }
+  }, [native, refreshStatus, refreshBackground]);
 
   if (!native) {
     return (
@@ -128,9 +131,25 @@ function PhonePage() {
             </Button>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            WinLog uploads automatically whenever the app is opened and every 5 minutes while it's
-            open.
+            WinLog uploads whenever the app is opened, every 5 minutes while it's open, and in the
+            background every 15 minutes (and shortly after each WhatsApp call) while it's closed.
           </p>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
+          <div className="font-semibold">Background upload</div>
+          <div className="text-sm text-muted-foreground">
+            {background === null
+              ? "Update to the newest WinLog app to upload while the app is closed."
+              : background.enabled
+                ? background.lastSuccessAt
+                  ? `On · last background upload ${new Date(background.lastSuccessAt).toLocaleString()}`
+                  : "On · first background upload starts within 15 minutes"
+                : "Off · sign in again to turn it on"}
+          </div>
+          {background?.lastError && (
+            <div className="mt-1 text-sm text-destructive">{background.lastError}</div>
+          )}
         </div>
         {status?.appVersion && (
           <p className="stamp text-muted-foreground">App version {status.appVersion}</p>

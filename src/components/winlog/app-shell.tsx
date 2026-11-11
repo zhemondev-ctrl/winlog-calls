@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 
 import logo from "@/assets/winstone-logo.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
+import { stopBackgroundUpload } from "@/lib/background-upload";
 import { meQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { useNativeSyncContext } from "./native-sync-context";
@@ -33,6 +34,7 @@ export function AppShell({
   const items = NAV.filter((n) => !n.adminOnly || me?.isAdmin);
 
   async function signOut() {
+    await stopBackgroundUpload();
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();

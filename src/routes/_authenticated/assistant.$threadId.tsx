@@ -51,7 +51,10 @@ function ThreadPage() {
     <AppShell title="Ask AI" kicker={data.thread.title}>
       <div className="grid gap-6 md:grid-cols-[16rem_1fr]">
         <AssistantThreads activeId={threadId} className="hidden md:flex" />
-        <div className="h-[calc(100dvh-16rem)] min-h-[26rem] md:h-[calc(100dvh-12rem)]">
+        <div className="h-[calc(100dvh-17rem)] min-h-[26rem] md:h-[calc(100dvh-12rem)]">
+          <Link to="/assistant" className="stamp mb-2 inline-block text-muted-foreground md:hidden">
+            ← All conversations
+          </Link>
           <AssistantChat
             key={threadId}
             threadId={threadId}
