@@ -28,3 +28,12 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- Android app = Capacitor shell in `android/` whose `server.url` (capacitor.config.ts) loads the published site; web changes reach phones after publishing, native changes need a new APK. Why: TanStack Start SSR has no static bundle to ship inside the APK.
+- Native call access lives only in the `WinLogNative` Capacitor plugin (`android/app/src/main/java/com/winlog/app/`); web code reaches it through `src/lib/native.ts`. Why: one typed bridge, browser builds stay safe.
+- WhatsApp calls are inferred from WhatsApp call notifications by a NotificationListenerService and stored on-device until uploaded. Why: WhatsApp exposes no call history API.
+- Call uploads are idempotent upserts keyed by (user_id, device_id, source, external_id) with a one-day overlap re-read. Why: repeated syncs never duplicate calls.
+- APKs are built by `.github/workflows/android-apk.yml` and signed with the committed `android/app/winlog-release.keystore`. Why: internal sideloaded app; a fixed signature lets updates install over old versions.
+- Roles live in `user_roles`; the first account to sign up becomes admin (manager). Why: no separate admin setup step for the company.
