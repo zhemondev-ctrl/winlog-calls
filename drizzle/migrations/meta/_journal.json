@@ -15,6 +15,13 @@
       "when": 1794439299357,
       "tag": "0001_assistant_and_device_uploads",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794441077664,
+      "tag": "0002_call_ai_notes",
+      "breakpoints": true
     }
   ]
 }
