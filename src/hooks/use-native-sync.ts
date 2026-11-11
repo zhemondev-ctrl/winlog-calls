@@ -8,7 +8,10 @@ import {
   type BackgroundUploadStatus,
   type NativeStatus,
 } from "@/lib/native";
-import { lastSyncAt, syncCalls, type SyncResult } from "@/lib/sync";
+import { lastSyncAt, readSourceSync, syncCalls, type SyncResult } from "@/lib/sync";
+import type { SourceSync } from "@/lib/sync-health";
+
+const EMPTY_SOURCE: SourceSync = { at: null, count: 0, error: null };
 
 const AUTO_SYNC_MS = 5 * 60 * 1000;
 
@@ -25,6 +28,27 @@ export function useNativeSync(userId: string | undefined) {
   const [lastAt, setLastAt] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [background, setBackground] = useState<BackgroundUploadStatus | null>(null);
+  const [sources, setSources] = useState<{ sim: SourceSync; whatsapp: SourceSync }>({
+    sim: EMPTY_SOURCE,
+    whatsapp: EMPTY_SOURCE,
+  });
+  const [online, setOnline] = useState(true);
+
+  const readSources = useCallback(() => {
+    if (!userId || typeof window === "undefined") return;
+    setSources({ sim: readSourceSync(userId, "sim"), whatsapp: readSourceSync(userId, "whatsapp") });
+  }, [userId]);
+
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    update();
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
 
   const refreshStatus = useCallback(async () => {
     if (!isAndroidApp()) return null;
@@ -47,13 +71,15 @@ export function useNativeSync(userId: string | undefined) {
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
       setSyncing(false);
+      readSources();
     }
-  }, [queryClient, userId]);
+  }, [queryClient, readSources, userId]);
 
   useEffect(() => {
     if (!isAndroidApp() || !userId) return;
     setNative(true);
     setLastAt(lastSyncAt(userId));
+    readSources();
     void refreshStatus().then(() => syncNow());
     ensureBackgroundUpload(userId)
       .then(setBackground)
@@ -70,7 +96,7 @@ export function useNativeSync(userId: string | undefined) {
       document.removeEventListener("visibilitychange", onVisible);
       window.clearInterval(timer);
     };
-  }, [refreshStatus, syncNow, userId]);
+  }, [readSources, refreshStatus, syncNow, userId]);
 
   const refreshBackground = useCallback(async () => {
     if (!isAndroidApp()) return null;
@@ -91,6 +117,8 @@ export function useNativeSync(userId: string | undefined) {
     lastAt,
     error,
     background,
+    sources,
+    online,
     syncNow,
     refreshStatus,
     refreshBackground,

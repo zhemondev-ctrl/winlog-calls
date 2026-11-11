@@ -25,6 +25,8 @@ interface WinLogNativePlugin {
   requestCallLogPermission(): Promise<NativeStatus>;
   openNotificationAccessSettings(): Promise<void>;
   openBatterySettings(): Promise<void>;
+  /** Android "App info" page for WinLog. Missing in APKs built before the sync status screen. */
+  openAppSettings(): Promise<void>;
   getCalls(options: { since: number; limit?: number }): Promise<{ calls: NativeSimCall[] }>;
   getWhatsAppCalls(options: { since: number }): Promise<{ calls: NativeWhatsAppCall[] }>;
   // Background uploads (added in app version with the Winstone icon; older APKs reject these calls).

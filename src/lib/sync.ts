@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { mapSimCall, mapWhatsAppCall, type DeviceInfo, type NewCallRow } from "@/lib/calls";
 import { WinLogNative, isAndroidApp } from "@/lib/native";
+import type { SourceSync, SyncSource } from "@/lib/sync-health";
 
 const DAY = 86_400_000;
 const FIRST_SYNC_DAYS = 30;
@@ -55,18 +56,33 @@ async function doSync(userId: string): Promise<SyncResult> {
   };
   const result: SyncResult = { sim: 0, whatsapp: 0, at: Date.now() };
 
+  const errors: string[] = [];
+
   if (status.callLog) {
-    const key = cursorKey(userId, device.deviceId, "sim");
-    const since = Math.max(0, readCursor(key) - OVERLAP);
-    const { calls } = await WinLogNative.getCalls({ since, limit: 5000 });
-    const rows = calls.map((c) => mapSimCall(c, device));
-    await upload(rows);
-    const newest = calls.reduce((m, c) => Math.max(m, c.date), readCursor(key));
-    window.localStorage.setItem(key, String(newest));
-    result.sim = rows.length;
+    try {
+      const key = cursorKey(userId, device.deviceId, "sim");
+      const since = Math.max(0, readCursor(key) - OVERLAP);
+      const { calls } = await WinLogNative.getCalls({ since, limit: 5000 });
+      const rows = calls.map((c) => mapSimCall(c, device));
+      await upload(rows);
+      const newest = calls.reduce((m, c) => Math.max(m, c.date), readCursor(key));
+      window.localStorage.setItem(key, String(newest));
+      result.sim = rows.length;
+      writeSourceSync(userId, "sim", { at: Date.now(), count: rows.length, error: null });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "SIM upload failed";
+      errors.push(message);
+      writeSourceSync(userId, "sim", { ...readSourceSync(userId, "sim"), error: message });
+    }
+  } else {
+    writeSourceSync(userId, "sim", {
+      ...readSourceSync(userId, "sim"),
+      error: "Call history permission is off.",
+    });
   }
 
-  {
+  // WhatsApp is uploaded even when SIM fails, so one problem never blocks the other.
+  try {
     const key = cursorKey(userId, device.deviceId, "whatsapp");
     const since = Math.max(0, readCursor(key) - OVERLAP);
     const { calls } = await WinLogNative.getWhatsAppCalls({ since });
@@ -75,8 +91,14 @@ async function doSync(userId: string): Promise<SyncResult> {
     const newest = calls.reduce((m, c) => Math.max(m, c.startedAt), readCursor(key));
     window.localStorage.setItem(key, String(newest));
     result.whatsapp = rows.length;
+    writeSourceSync(userId, "whatsapp", { at: Date.now(), count: rows.length, error: null });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "WhatsApp upload failed";
+    errors.push(message);
+    writeSourceSync(userId, "whatsapp", { ...readSourceSync(userId, "whatsapp"), error: message });
   }
 
+  if (errors.length) throw new Error(errors.join(" · "));
   window.localStorage.setItem(`winlog:lastSync:${userId}`, String(result.at));
   return result;
 }
@@ -84,4 +106,27 @@ async function doSync(userId: string): Promise<SyncResult> {
 export function lastSyncAt(userId: string): number | null {
   const raw = window.localStorage.getItem(`winlog:lastSync:${userId}`);
   return raw ? Number(raw) : null;
+}
+
+function sourceKey(userId: string, source: SyncSource) {
+  return `winlog:sourceSync:${userId}:${source}`;
+}
+
+function writeSourceSync(userId: string, source: SyncSource, value: SourceSync) {
+  window.localStorage.setItem(sourceKey(userId, source), JSON.stringify(value));
+}
+
+/** Last sync of one source made while the app was open (the background job keeps its own record). */
+export function readSourceSync(userId: string, source: SyncSource): SourceSync {
+  try {
+    const raw = window.localStorage.getItem(sourceKey(userId, source));
+    const v = raw ? (JSON.parse(raw) as Partial<SourceSync>) : {};
+    return {
+      at: typeof v.at === "number" ? v.at : null,
+      count: typeof v.count === "number" ? v.count : 0,
+      error: typeof v.error === "string" ? v.error : null,
+    };
+  } catch {
+    return { at: null, count: 0, error: null };
+  }
 }
