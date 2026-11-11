@@ -15,7 +15,15 @@ const NAV = [
   { to: "/phone", label: "Phone", icon: Smartphone, adminOnly: false },
 ] as const;
 
-export function AppShell({ title, kicker, children }: { title: string; kicker?: ReactNode; children: ReactNode }) {
+export function AppShell({
+  title,
+  kicker,
+  children,
+}: {
+  title: string;
+  kicker?: ReactNode;
+  children: ReactNode;
+}) {
   const { data: me } = useSuspenseQuery(meQuery);
   const sync = useNativeSyncContext();
   const queryClient = useQueryClient();
@@ -45,7 +53,9 @@ export function AppShell({ title, kicker, children }: { title: string; kicker?: 
                 key={item.to}
                 to={item.to}
                 className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                activeProps={{ className: "bg-primary text-primary-foreground hover:text-primary-foreground" }}
+                activeProps={{
+                  className: "bg-primary text-primary-foreground hover:text-primary-foreground",
+                }}
               >
                 {item.label}
               </Link>
@@ -57,7 +67,9 @@ export function AppShell({ title, kicker, children }: { title: string; kicker?: 
                 {sync.syncing ? "Uploading…" : "Synced"}
               </span>
             )}
-            <span className="hidden text-sm text-muted-foreground sm:inline">{me?.displayName}</span>
+            <span className="hidden text-sm text-muted-foreground sm:inline">
+              {me?.displayName}
+            </span>
             <button
               onClick={signOut}
               className="grid size-9 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
@@ -72,7 +84,9 @@ export function AppShell({ title, kicker, children }: { title: string; kicker?: 
       <main className="mx-auto max-w-5xl px-4 pt-6">
         <div className="mb-6 animate-rise">
           {kicker && <div className="stamp mb-1 text-muted-foreground">{kicker}</div>}
-          <h1 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">{title}</h1>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
+            {title}
+          </h1>
         </div>
         {children}
       </main>
@@ -84,9 +98,15 @@ export function AppShell({ title, kicker, children }: { title: string; kicker?: 
               key={item.to}
               to={item.to}
               className="flex min-w-16 flex-col items-center gap-1 rounded-xl px-3 py-1.5 text-[11px] font-medium text-muted-foreground"
-              activeProps={{ className: "text-foreground [&_svg]:bg-accent [&_svg]:border-foreground" }}
+              activeProps={{
+                className: "text-foreground [&_svg]:bg-accent [&_svg]:border-foreground",
+              }}
             >
-              <item.icon className={cn("box-content size-5 rounded-full border border-transparent px-3 py-1")} />
+              <item.icon
+                className={cn(
+                  "box-content size-5 rounded-full border border-transparent px-3 py-1",
+                )}
+              />
               {item.label}
             </Link>
           ))}

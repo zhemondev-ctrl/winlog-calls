@@ -11,7 +11,10 @@ export const Route = createFileRoute("/_authenticated/team")({
   head: () => ({
     meta: [
       { title: "Team — WinLog" },
-      { name: "description", content: "Calls, talk time and missed calls for each employee's phone." },
+      {
+        name: "description",
+        content: "Calls, talk time and missed calls for each employee's phone.",
+      },
       { property: "og:title", content: "Team — WinLog" },
       { property: "og:description", content: "Per-employee call stats for the manager." },
     ],
@@ -29,7 +32,10 @@ function TeamPage() {
     return { from: from.toISOString(), to: new Date(Date.now() + 60_000).toISOString() };
   }, [period]);
 
-  const { data: calls = [], isLoading } = useQuery({ ...callsQuery({ ...range, userId: null }), enabled: !!me?.isAdmin });
+  const { data: calls = [], isLoading } = useQuery({
+    ...callsQuery({ ...range, userId: null }),
+    enabled: !!me?.isAdmin,
+  });
   const { data: profiles = [] } = useQuery({ ...profilesQuery, enabled: !!me?.isAdmin });
 
   const rows = useMemo(() => {
@@ -107,7 +113,15 @@ function TeamPage() {
   );
 }
 
-function Metric({ label, value, className }: { label: string; value: string | number; className?: string }) {
+function Metric({
+  label,
+  value,
+  className,
+}: {
+  label: string;
+  value: string | number;
+  className?: string;
+}) {
   return (
     <div className="rounded-xl bg-secondary px-1 py-2">
       <dd className={`num text-base font-semibold ${className ?? ""}`}>{value}</dd>

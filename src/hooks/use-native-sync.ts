@@ -31,7 +31,8 @@ export function useNativeSync(userId: string | undefined) {
       const result = await syncCalls(userId);
       setLastResult(result);
       setLastAt(result.at);
-      if (result.sim + result.whatsapp > 0) await queryClient.invalidateQueries({ queryKey: ["calls"] });
+      if (result.sim + result.whatsapp > 0)
+        await queryClient.invalidateQueries({ queryKey: ["calls"] });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {

@@ -12,10 +12,14 @@ export const Route = createFileRoute("/")({
       { title: "WinLog — SIM and WhatsApp call log for company phones" },
       {
         name: "description",
-        content: "WinLog logs every SIM and WhatsApp call on company Android phones, with talk time and daily and weekly stats.",
+        content:
+          "WinLog logs every SIM and WhatsApp call on company Android phones, with talk time and daily and weekly stats.",
       },
       { property: "og:title", content: "WinLog — call log for company phones" },
-      { property: "og:description", content: "Every SIM and WhatsApp call from company phones, with talk time and stats." },
+      {
+        property: "og:description",
+        content: "Every SIM and WhatsApp call from company phones, with talk time and stats.",
+      },
     ],
   }),
   component: Index,
@@ -39,7 +43,8 @@ function Index() {
         <span className="bg-accent px-1">Every phone.</span>
       </h1>
       <p className="mt-4 text-muted-foreground">
-        WinLog collects SIM and WhatsApp calls from your company's Android phones and adds up the talk time.
+        WinLog collects SIM and WhatsApp calls from your company's Android phones and adds up the
+        talk time.
       </p>
       <ul className="mt-6 space-y-3 text-sm">
         <li className="flex items-center gap-3">

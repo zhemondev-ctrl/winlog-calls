@@ -13,7 +13,10 @@ export const Route = createFileRoute("/_authenticated/phone")({
   head: () => ({
     meta: [
       { title: "Phone setup — WinLog" },
-      { name: "description", content: "Allow call history and WhatsApp call capture on this phone." },
+      {
+        name: "description",
+        content: "Allow call history and WhatsApp call capture on this phone.",
+      },
       { property: "og:title", content: "Phone setup — WinLog" },
       { property: "og:description", content: "Set up WinLog on a company phone." },
     ],
@@ -34,15 +37,20 @@ function PhonePage() {
       <AppShell title="Phone setup" kicker="Android app">
         <div className="max-w-xl space-y-4 rounded-2xl border border-border bg-card p-5 shadow-card">
           <p>
-            Calls are collected by the <strong>WinLog Android app</strong>. Install it on every company phone and sign
-            in with that employee's account.
+            Calls are collected by the <strong>WinLog Android app</strong>. Install it on every
+            company phone and sign in with that employee's account.
           </p>
           <ol className="list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
-            <li>Open the latest WinLog build on your GitHub repository's Releases page and download the APK.</li>
+            <li>
+              Open the latest WinLog build on your GitHub repository's Releases page and download
+              the APK.
+            </li>
             <li>Open the file on the phone and allow "Install unknown apps" if Android asks.</li>
             <li>Sign in, then follow the setup steps the app shows.</li>
           </ol>
-          <p className="text-sm text-muted-foreground">This page in a normal browser only shows uploaded calls.</p>
+          <p className="text-sm text-muted-foreground">
+            This page in a normal browser only shows uploaded calls.
+          </p>
         </div>
       </AppShell>
     );
@@ -67,7 +75,11 @@ function PhonePage() {
           icon={<Phone className="size-5" />}
           title="SIM calls"
           body="Reads this phone's call history: number, name, time and talk time."
-          action={<Button variant="signal" onClick={allowCallLog}>Allow</Button>}
+          action={
+            <Button variant="signal" onClick={allowCallLog}>
+              Allow
+            </Button>
+          }
         />
         <Step
           done={!!status?.notificationAccess}
@@ -86,7 +98,11 @@ function PhonePage() {
           title="Keep running"
           body="Stops the phone from closing WinLog in the background, so no WhatsApp call is missed."
           action={
-            <Button variant="outline" className="rounded-full" onClick={() => WinLogNative.openBatterySettings()}>
+            <Button
+              variant="outline"
+              className="rounded-full"
+              onClick={() => WinLogNative.openBatterySettings()}
+            >
               Allow
             </Button>
           }
@@ -97,8 +113,12 @@ function PhonePage() {
             <div>
               <div className="font-semibold">Upload</div>
               <div className="text-sm text-muted-foreground">
-                {sync.lastAt ? `Last upload ${new Date(sync.lastAt).toLocaleString()}` : "Not uploaded yet"}
-                {sync.lastResult ? ` · ${sync.lastResult.sim} SIM, ${sync.lastResult.whatsapp} WhatsApp checked` : ""}
+                {sync.lastAt
+                  ? `Last upload ${new Date(sync.lastAt).toLocaleString()}`
+                  : "Not uploaded yet"}
+                {sync.lastResult
+                  ? ` · ${sync.lastResult.sim} SIM, ${sync.lastResult.whatsapp} WhatsApp checked`
+                  : ""}
               </div>
               {sync.error && <div className="mt-1 text-sm text-destructive">{sync.error}</div>}
             </div>
@@ -108,10 +128,13 @@ function PhonePage() {
             </Button>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            WinLog uploads automatically whenever the app is opened and every 5 minutes while it's open.
+            WinLog uploads automatically whenever the app is opened and every 5 minutes while it's
+            open.
           </p>
         </div>
-        {status?.appVersion && <p className="stamp text-muted-foreground">App version {status.appVersion}</p>}
+        {status?.appVersion && (
+          <p className="stamp text-muted-foreground">App version {status.appVersion}</p>
+        )}
       </div>
     </AppShell>
   );
@@ -131,7 +154,12 @@ function Step({
   action: ReactNode;
 }) {
   return (
-    <div className={cn("flex gap-4 rounded-2xl border bg-card p-4 shadow-card", done ? "border-border" : "border-foreground")}>
+    <div
+      className={cn(
+        "flex gap-4 rounded-2xl border bg-card p-4 shadow-card",
+        done ? "border-border" : "border-foreground",
+      )}
+    >
       <span
         className={cn(
           "grid size-11 shrink-0 place-items-center rounded-full",

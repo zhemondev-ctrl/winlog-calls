@@ -37,7 +37,15 @@ describe("call rules", () => {
 
   it("keeps a WhatsApp call's direction, talk time and video flag", () => {
     const row = mapWhatsAppCall(
-      { id: "w1", app: "whatsapp", name: "Rahim", direction: "incoming", video: true, startedAt: 1_700_000_000_000, duration: 125 },
+      {
+        id: "w1",
+        app: "whatsapp",
+        name: "Rahim",
+        direction: "incoming",
+        video: true,
+        startedAt: 1_700_000_000_000,
+        duration: 125,
+      },
       device,
     );
     expect(row.source).toBe("whatsapp");
@@ -49,7 +57,15 @@ describe("call rules", () => {
 
   it("maps a SIM call from the phone's history", () => {
     const row = mapSimCall(
-      { id: "42", number: "+8801700000000", name: null, type: "missed", date: 1_700_000_000_000, duration: 0, sim: "SIM 2 · GP" },
+      {
+        id: "42",
+        number: "+8801700000000",
+        name: null,
+        type: "missed",
+        date: 1_700_000_000_000,
+        duration: 0,
+        sim: "SIM 2 · GP",
+      },
       device,
     );
     expect(row.source).toBe("sim");
@@ -69,8 +85,16 @@ describe("call rules", () => {
     const monday = new Date(2026, 10, 9);
     const series = dailySeries(
       [
-        { direction: "incoming", duration_seconds: 60, started_at: new Date(2026, 10, 9, 10).toISOString() },
-        { direction: "missed", duration_seconds: 0, started_at: new Date(2026, 10, 11, 18).toISOString() },
+        {
+          direction: "incoming",
+          duration_seconds: 60,
+          started_at: new Date(2026, 10, 9, 10).toISOString(),
+        },
+        {
+          direction: "missed",
+          duration_seconds: 0,
+          started_at: new Date(2026, 10, 11, 18).toISOString(),
+        },
       ],
       monday,
       7,

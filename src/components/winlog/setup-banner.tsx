@@ -17,7 +17,9 @@ export function SetupBanner() {
       <div className="text-sm">
         <div className="font-semibold">Finish phone setup</div>
         <div>
-          {!status.callLog ? "Allow call history so SIM calls are logged." : "Turn on WhatsApp call capture."}
+          {!status.callLog
+            ? "Allow call history so SIM calls are logged."
+            : "Turn on WhatsApp call capture."}
         </div>
       </div>
     </Link>

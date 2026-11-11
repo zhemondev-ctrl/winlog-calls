@@ -32,7 +32,10 @@ export const meQuery = queryOptions({
 export const profilesQuery = queryOptions({
   queryKey: ["profiles"],
   queryFn: async () => {
-    const { data, error } = await supabase.from("profiles").select("id, display_name").order("display_name");
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, display_name")
+      .order("display_name");
     if (error) throw new Error(error.message);
     return data ?? [];
   },

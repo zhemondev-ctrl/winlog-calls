@@ -22,7 +22,10 @@ async function upload(rows: NewCallRow[]) {
     const chunk = rows.slice(i, i + 500);
     const { error } = await supabase
       .from("call_logs")
-      .upsert(chunk, { onConflict: "user_id,device_id,source,external_id", ignoreDuplicates: true });
+      .upsert(chunk, {
+        onConflict: "user_id,device_id,source,external_id",
+        ignoreDuplicates: true,
+      });
     if (error) throw new Error(error.message);
   }
 }
@@ -47,7 +50,11 @@ export function syncCalls(userId: string): Promise<SyncResult> {
 
 async function doSync(userId: string): Promise<SyncResult> {
   const status = await WinLogNative.getStatus();
-  const device: DeviceInfo = { userId, deviceId: status.deviceId, deviceName: status.deviceName || null };
+  const device: DeviceInfo = {
+    userId,
+    deviceId: status.deviceId,
+    deviceName: status.deviceName || null,
+  };
   const result: SyncResult = { sim: 0, whatsapp: 0, at: Date.now() };
 
   if (status.callLog) {

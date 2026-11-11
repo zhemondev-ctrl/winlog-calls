@@ -7,7 +7,13 @@ import { AppShell } from "@/components/winlog/app-shell";
 import { CallList } from "@/components/winlog/call-item";
 import { Segmented } from "@/components/winlog/segmented";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { computeStats, formatDuration, isUnanswered, startOfDay } from "@/lib/calls";
 import { callsQuery, meQuery, profilesQuery } from "@/lib/queries";
 
@@ -15,7 +21,10 @@ export const Route = createFileRoute("/_authenticated/calls")({
   head: () => ({
     meta: [
       { title: "Call log — WinLog" },
-      { name: "description", content: "Every SIM and WhatsApp call from company phones, with talk time." },
+      {
+        name: "description",
+        content: "Every SIM and WhatsApp call from company phones, with talk time.",
+      },
       { property: "og:title", content: "Call log — WinLog" },
       { property: "og:description", content: "Every SIM and WhatsApp call from company phones." },
     ],
@@ -52,14 +61,18 @@ function CallsPage() {
       if (source !== "all" && c.source !== source) return false;
       if (kind === "missed" && !isUnanswered(c.direction)) return false;
       if ((kind === "incoming" || kind === "outgoing") && c.direction !== kind) return false;
-      if (q && !`${c.contact_name ?? ""} ${c.phone_number ?? ""}`.toLowerCase().includes(q)) return false;
+      if (q && !`${c.contact_name ?? ""} ${c.phone_number ?? ""}`.toLowerCase().includes(q))
+        return false;
       return true;
     });
   }, [calls, source, kind, search]);
   const stats = computeStats(filtered);
 
   return (
-    <AppShell title="Call log" kicker={`${stats.total} calls · ${formatDuration(stats.talkSeconds)} talk time`}>
+    <AppShell
+      title="Call log"
+      kicker={`${stats.total} calls · ${formatDuration(stats.talkSeconds)} talk time`}
+    >
       <div className="mb-4 space-y-3">
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />

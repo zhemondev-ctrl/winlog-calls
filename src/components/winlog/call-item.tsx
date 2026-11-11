@@ -16,7 +16,10 @@ export function CallItem({ call, employee }: { call: CallRow; employee?: string 
   const Icon = call.is_video ? Video : ICONS[call.direction];
   const unanswered = isUnanswered(call.direction);
   const who = call.contact_name || call.phone_number || "Unknown";
-  const time = new Date(call.started_at).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  const time = new Date(call.started_at).toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 
   return (
     <li className="flex items-center gap-3 px-4 py-3">
@@ -51,14 +54,22 @@ export function CallItem({ call, employee }: { call: CallRow; employee?: string 
         </div>
       </div>
       <div className="shrink-0 text-right">
-        <div className="num text-sm font-medium">{unanswered ? "—" : formatDuration(call.duration_seconds)}</div>
+        <div className="num text-sm font-medium">
+          {unanswered ? "—" : formatDuration(call.duration_seconds)}
+        </div>
         <div className="num text-xs text-muted-foreground">{time}</div>
       </div>
     </li>
   );
 }
 
-export function CallList({ calls, names }: { calls: CallRow[]; names?: Map<string, string> | undefined }) {
+export function CallList({
+  calls,
+  names,
+}: {
+  calls: CallRow[];
+  names?: Map<string, string> | undefined;
+}) {
   if (calls.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-border bg-card/60 px-6 py-10 text-center text-sm text-muted-foreground">

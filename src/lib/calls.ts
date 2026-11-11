@@ -48,7 +48,14 @@ export interface DeviceInfo {
   deviceName: string | null;
 }
 
-const DIRECTIONS: CallDirection[] = ["incoming", "outgoing", "missed", "rejected", "blocked", "unknown"];
+const DIRECTIONS: CallDirection[] = [
+  "incoming",
+  "outgoing",
+  "missed",
+  "rejected",
+  "blocked",
+  "unknown",
+];
 
 function toDirection(value: string): CallDirection {
   return (DIRECTIONS as string[]).includes(value) ? (value as CallDirection) : "unknown";
@@ -103,8 +110,18 @@ export interface CallStats {
   sim: number;
 }
 
-export function computeStats(calls: Pick<CallRow, "direction" | "duration_seconds" | "source">[]): CallStats {
-  const stats: CallStats = { total: 0, incoming: 0, outgoing: 0, missed: 0, talkSeconds: 0, whatsapp: 0, sim: 0 };
+export function computeStats(
+  calls: Pick<CallRow, "direction" | "duration_seconds" | "source">[],
+): CallStats {
+  const stats: CallStats = {
+    total: 0,
+    incoming: 0,
+    outgoing: 0,
+    missed: 0,
+    talkSeconds: 0,
+    whatsapp: 0,
+    sim: 0,
+  };
   for (const c of calls) {
     stats.total += 1;
     if (c.direction === "incoming") stats.incoming += 1;

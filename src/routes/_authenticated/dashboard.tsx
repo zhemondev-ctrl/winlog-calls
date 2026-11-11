@@ -8,7 +8,12 @@ import { CallItem } from "@/components/winlog/call-item";
 import { SetupBanner } from "@/components/winlog/setup-banner";
 import { Segmented } from "@/components/winlog/segmented";
 import { StatCard } from "@/components/winlog/stat-card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { computeStats, dailySeries, formatDuration, startOfDay, startOfWeek } from "@/lib/calls";
 import { callsQuery, meQuery, profilesQuery } from "@/lib/queries";
 
@@ -16,9 +21,15 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "Today — WinLog" },
-      { name: "description", content: "Today's and this week's calls, talk time and missed calls across company phones." },
+      {
+        name: "description",
+        content: "Today's and this week's calls, talk time and missed calls across company phones.",
+      },
       { property: "og:title", content: "Today — WinLog" },
-      { property: "og:description", content: "Daily and weekly call stats from every company phone." },
+      {
+        property: "og:description",
+        content: "Daily and weekly call stats from every company phone.",
+      },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(meQuery),
@@ -41,11 +52,18 @@ function Dashboard() {
     const weekStart = startOfWeek(now);
     const end = new Date(weekStart);
     end.setDate(end.getDate() + 7);
-    return { weekStart, from: weekStart.toISOString(), to: end.toISOString(), todayStart: startOfDay(now) };
+    return {
+      weekStart,
+      from: weekStart.toISOString(),
+      to: end.toISOString(),
+      todayStart: startOfDay(now),
+    };
   }, []);
 
   const userId = me?.isAdmin && scope === "all" ? null : me?.userId;
-  const { data: weekCalls = [], isLoading } = useQuery(callsQuery({ from: range.from, to: range.to, userId }));
+  const { data: weekCalls = [], isLoading } = useQuery(
+    callsQuery({ from: range.from, to: range.to, userId }),
+  );
   const { data: profiles = [] } = useQuery({ ...profilesQuery, enabled: !!me?.isAdmin });
   const names = useMemo(() => new Map(profiles.map((p) => [p.id, p.display_name])), [profiles]);
 
@@ -55,13 +73,20 @@ function Dashboard() {
   );
   const shown = period === "today" ? todayCalls : weekCalls;
   const stats = computeStats(shown);
-  const series = useMemo(() => dailySeries(weekCalls, range.weekStart, 7), [weekCalls, range.weekStart]);
+  const series = useMemo(
+    () => dailySeries(weekCalls, range.weekStart, 7),
+    [weekCalls, range.weekStart],
+  );
   const showNames = me?.isAdmin && scope === "all";
 
   return (
     <AppShell
       title={period === "today" ? "Today" : "This week"}
-      kicker={new Date().toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })}
+      kicker={new Date().toLocaleDateString(undefined, {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      })}
     >
       <SetupBanner />
 
@@ -87,10 +112,29 @@ function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <StatCard label="Calls" value={isLoading ? "…" : stats.total} tone="accent" hint={`${stats.incoming} in · ${stats.outgoing} out`} />
-        <StatCard label="Talk time" value={isLoading ? "…" : formatDuration(stats.talkSeconds)} hint="Connected calls only" />
-        <StatCard label="Missed" value={isLoading ? "…" : stats.missed} tone="missed" hint="Missed, declined, blocked" />
-        <StatCard label="WhatsApp" value={isLoading ? "…" : stats.whatsapp} tone="whatsapp" hint={`${stats.sim} SIM calls`} />
+        <StatCard
+          label="Calls"
+          value={isLoading ? "…" : stats.total}
+          tone="accent"
+          hint={`${stats.incoming} in · ${stats.outgoing} out`}
+        />
+        <StatCard
+          label="Talk time"
+          value={isLoading ? "…" : formatDuration(stats.talkSeconds)}
+          hint="Connected calls only"
+        />
+        <StatCard
+          label="Missed"
+          value={isLoading ? "…" : stats.missed}
+          tone="missed"
+          hint="Missed, declined, blocked"
+        />
+        <StatCard
+          label="WhatsApp"
+          value={isLoading ? "…" : stats.whatsapp}
+          tone="whatsapp"
+          hint={`${stats.sim} SIM calls`}
+        />
       </div>
 
       <section className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-card">
@@ -120,12 +164,18 @@ function Dashboard() {
         </div>
         {shown.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-card/60 px-6 py-10 text-center text-sm text-muted-foreground">
-            {isLoading ? "Loading calls…" : "No calls yet. Calls appear here once a phone with WinLog uploads them."}
+            {isLoading
+              ? "Loading calls…"
+              : "No calls yet. Calls appear here once a phone with WinLog uploads them."}
           </div>
         ) : (
           <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card shadow-card">
             {shown.slice(0, 8).map((c) => (
-              <CallItem key={c.id} call={c} employee={showNames ? names.get(c.user_id) : undefined} />
+              <CallItem
+                key={c.id}
+                call={c}
+                employee={showNames ? names.get(c.user_id) : undefined}
+              />
             ))}
           </ul>
         )}

@@ -15,7 +15,10 @@ export const Route = createFileRoute("/auth")({
       { title: "Sign in — WinLog" },
       { name: "description", content: "Sign in to WinLog to log and review company phone calls." },
       { property: "og:title", content: "Sign in — WinLog" },
-      { property: "og:description", content: "Sign in to WinLog, the call log for company phones." },
+      {
+        property: "og:description",
+        content: "Sign in to WinLog, the call log for company phones.",
+      },
     ],
   }),
   component: AuthPage,
@@ -71,7 +74,11 @@ function AuthPage() {
   return (
     <BrandPanel>
       <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight">
-        {mode === "signup" ? "Add this phone's owner." : mode === "forgot" ? "Reset password." : "Every call, logged."}
+        {mode === "signup"
+          ? "Add this phone's owner."
+          : mode === "forgot"
+            ? "Reset password."
+            : "Every call, logged."}
       </h1>
       <p className="mt-3 text-muted-foreground">
         {mode === "signup"
@@ -101,7 +108,13 @@ function AuthPage() {
         {mode === "signup" && (
           <div className="space-y-1.5">
             <Label htmlFor="name">Full name</Label>
-            <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} className="h-11 bg-card" />
+            <Input
+              id="name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="h-11 bg-card"
+            />
           </div>
         )}
         <div className="space-y-1.5">
@@ -133,7 +146,13 @@ function AuthPage() {
         )}
         {notice && <p className="rounded-xl bg-accent/60 px-3 py-2 text-sm">{notice}</p>}
         <Button type="submit" variant="signal" size="xl" className="w-full" disabled={busy}>
-          {busy ? "Please wait…" : mode === "signin" ? "Sign in" : mode === "signup" ? "Create account" : "Send reset link"}
+          {busy
+            ? "Please wait…"
+            : mode === "signin"
+              ? "Sign in"
+              : mode === "signup"
+                ? "Create account"
+                : "Send reset link"}
         </Button>
       </form>
 
