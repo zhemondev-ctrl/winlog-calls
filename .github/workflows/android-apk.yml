@@ -1,0 +1,62 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install packages
+        run: bun install --frozen-lockfile || bun install
+
+      - name: Copy app settings into the Android project
+        run: bunx cap sync android
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+
+      - name: Name the APK
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/release/app-release.apk "out/WinLog-${{ github.run_number }}.apk"
+
+      - name: Keep APK on this run
+        uses: actions/upload-artifact@v4
+        with:
+          name: WinLog-${{ github.run_number }}
+          path: out/*.apk
+
+      - name: Publish download link
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: WinLog build ${{ github.run_number }}
+          body: |
+            Install on each company phone: download the APK below, open it, and allow "Install unknown apps" if asked.
+            Updates install over the previous version.
+          files: out/*.apk
+          make_latest: true
