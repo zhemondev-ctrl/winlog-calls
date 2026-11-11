@@ -16,3 +16,5 @@
 - [ ] AI summary from manager-provided call records: activity summary + calls needing follow-up
 - [ ] Quick AI summary on each call card (pattern / follow-up)
 - [ ] Connect project to GitHub so every change builds a fresh APK (user action: Project settings → Git)
+- [ ] Real-phone test: install APK, SIM + WhatsApp call, confirm closed-app upload (user action; checklist provided)
+- [ ] Publish the Winstone version
