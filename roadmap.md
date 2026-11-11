@@ -9,4 +9,4 @@
 - [x] Winstone logo as Android app icon + site icon
 - [x] Manager AI assistant: separate saved conversations about team call activity
 - [x] Background call uploads while the app is closed
-- [ ] Rebuild APK with icon + background uploads
+- [x] Rebuild APK with icon + background uploads
