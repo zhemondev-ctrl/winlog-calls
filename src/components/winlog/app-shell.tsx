@@ -65,9 +65,23 @@ export function AppShell({
           </nav>
           <div className="ml-auto flex items-center gap-3">
             {sync.native && (
-              <span className="stamp hidden text-primary-foreground/70 sm:inline">
-                {sync.syncing ? "Uploading…" : "Synced"}
-              </span>
+              <Link
+                to="/sync"
+                className={cn(
+                  "stamp rounded-full px-2.5 py-1",
+                  sync.error || !sync.online
+                    ? "bg-destructive text-destructive-foreground"
+                    : "text-primary-foreground/70",
+                )}
+              >
+                {sync.syncing
+                  ? "Uploading…"
+                  : !sync.online
+                    ? "Offline"
+                    : sync.error
+                      ? "Sync problem"
+                      : "Synced"}
+              </Link>
             )}
             <span className="hidden text-sm text-primary-foreground/80 sm:inline">
               {me?.displayName}

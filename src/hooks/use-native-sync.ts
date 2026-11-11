@@ -36,7 +36,10 @@ export function useNativeSync(userId: string | undefined) {
 
   const readSources = useCallback(() => {
     if (!userId || typeof window === "undefined") return;
-    setSources({ sim: readSourceSync(userId, "sim"), whatsapp: readSourceSync(userId, "whatsapp") });
+    setSources({
+      sim: readSourceSync(userId, "sim"),
+      whatsapp: readSourceSync(userId, "whatsapp"),
+    });
   }, [userId]);
 
   useEffect(() => {

@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { classifyError, diagnose, lastSynced, STALE_AFTER_MS, type HealthInput } from "./sync-health";
+import {
+  classifyError,
+  diagnose,
+  lastSynced,
+  STALE_AFTER_MS,
+  type HealthInput,
+} from "./sync-health";
 
 const NOW = Date.UTC(2026, 10, 12, 6, 0, 0);
 const ok = (at: number | null = NOW - 60_000) => ({ at, count: 3, error: null });
@@ -26,7 +32,11 @@ describe("sync health", () => {
   });
 
   it("flags missing call history and notification access as errors", () => {
-    const issues = diagnose(input({ permissions: { callLog: false, notificationAccess: false, batteryUnrestricted: true } }));
+    const issues = diagnose(
+      input({
+        permissions: { callLog: false, notificationAccess: false, batteryUnrestricted: true },
+      }),
+    );
     expect(issues.map((i) => [i.id, i.severity])).toEqual([
       ["call-log", "error"],
       ["notifications", "error"],
@@ -47,9 +57,25 @@ describe("sync health", () => {
   it("warns when nothing uploaded for more than 2 hours", () => {
     const old = NOW - STALE_AFTER_MS - 1000;
     expect(STALE_AFTER_MS).toBe(2 * 60 * 60 * 1000);
-    expect(ids(input({ sim: ok(old), whatsapp: ok(old), background: { enabled: true, lastSuccessAt: old, lastError: null } }))).toEqual(["stale"]);
+    expect(
+      ids(
+        input({
+          sim: ok(old),
+          whatsapp: ok(old),
+          background: { enabled: true, lastSuccessAt: old, lastError: null },
+        }),
+      ),
+    ).toEqual(["stale"]);
     const recent = NOW - STALE_AFTER_MS + 60_000;
-    expect(ids(input({ sim: ok(recent), whatsapp: ok(recent), background: { enabled: true, lastSuccessAt: null, lastError: null } }))).toEqual([]);
+    expect(
+      ids(
+        input({
+          sim: ok(recent),
+          whatsapp: ok(recent),
+          background: { enabled: true, lastSuccessAt: null, lastError: null },
+        }),
+      ),
+    ).toEqual([]);
   });
 
   it("asks to update an app without background uploads", () => {

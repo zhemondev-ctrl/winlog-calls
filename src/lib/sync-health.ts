@@ -26,7 +26,8 @@ export interface HealthInput {
   uploadError: string | null;
 }
 
-export type FixAction = "callLog" | "notifications" | "battery" | "appSettings" | "syncNow" | "signIn" | "update";
+export type FixAction =
+  "callLog" | "notifications" | "battery" | "appSettings" | "syncNow" | "signIn" | "update";
 
 export interface Issue {
   id: string;
@@ -41,7 +42,8 @@ export interface Issue {
 export const STALE_AFTER_MS = 2 * 60 * 60 * 1000;
 
 const AUTH_RE = /jwt|auth|sign ?in|session|401|key rejected|not authori[sz]ed|forbidden/i;
-const NETWORK_RE = /failed to fetch|network|timeout|timed out|unable to resolve|connection|offline/i;
+const NETWORK_RE =
+  /failed to fetch|network|timeout|timed out|unable to resolve|connection|offline/i;
 
 export function classifyError(message: string): "auth" | "network" | "other" {
   if (AUTH_RE.test(message)) return "auth";
@@ -50,8 +52,13 @@ export function classifyError(message: string): "auth" | "network" | "other" {
 }
 
 /** Latest time each source was successfully synced, from the app (open) or the background job (closed). */
-export function lastSynced(source: SourceSync, backgroundSuccessAt: number | null | undefined): number | null {
-  const times = [source.at, backgroundSuccessAt ?? null].filter((t): t is number => typeof t === "number");
+export function lastSynced(
+  source: SourceSync,
+  backgroundSuccessAt: number | null | undefined,
+): number | null {
+  const times = [source.at, backgroundSuccessAt ?? null].filter(
+    (t): t is number => typeof t === "number",
+  );
   return times.length ? Math.max(...times) : null;
 }
 
@@ -153,7 +160,11 @@ export function diagnose(input: HealthInput): Issue[] {
       id: "signed-out",
       severity: "error",
       title: "Your sign-in has expired",
-      steps: ["Tap sign out (top right).", "Sign in again with your company account.", 'Come back here and tap "Upload now".'],
+      steps: [
+        "Tap sign out (top right).",
+        "Sign in again with your company account.",
+        'Come back here and tap "Upload now".',
+      ],
       actions: ["signIn"],
       detail,
     });

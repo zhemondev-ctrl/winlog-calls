@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Battery, Check, MessageCircle, Phone, RefreshCw } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Activity, Battery, Check, ChevronRight, MessageCircle, Phone, RefreshCw } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -73,6 +73,19 @@ function PhonePage() {
   return (
     <AppShell title="Phone setup" kicker={status?.deviceName ?? "This phone"}>
       <div className="max-w-xl space-y-3">
+        <Link
+          to="/sync"
+          className="flex items-center gap-4 rounded-2xl border-2 border-foreground bg-accent p-4 text-accent-foreground shadow-card"
+        >
+          <Activity className="size-6 shrink-0" />
+          <div className="min-w-0 flex-1">
+            <div className="font-semibold">Sync status & help</div>
+            <div className="text-sm opacity-80">
+              Permissions, last SIM and WhatsApp upload, and fix-it steps
+            </div>
+          </div>
+          <ChevronRight className="size-5" />
+        </Link>
         <Step
           done={!!status?.callLog}
           icon={<Phone className="size-5" />}
