@@ -86,9 +86,7 @@ export function AppShell({
       <main className="mx-auto max-w-5xl px-4 pt-6">
         <div className="mb-6 animate-rise">
           {kicker && <div className="stamp mb-1 text-muted-foreground">{kicker}</div>}
-          <h1 className="font-display text-3xl font-bold tracking-wide md:text-4xl">
-            {title}
-          </h1>
+          <h1 className="font-display text-3xl font-bold tracking-wide md:text-4xl">{title}</h1>
         </div>
         {children}
       </main>

@@ -15,7 +15,8 @@ export const Route = createFileRoute("/_authenticated/assistant/")({
       { title: "Ask AI — WinLog" },
       {
         name: "description",
-        content: "Managers ask questions about team call activity and get summaries and follow-ups.",
+        content:
+          "Managers ask questions about team call activity and get summaries and follow-ups.",
       },
       { property: "og:title", content: "Ask AI — WinLog" },
       { property: "og:description", content: "AI summaries of team call patterns and follow-ups." },

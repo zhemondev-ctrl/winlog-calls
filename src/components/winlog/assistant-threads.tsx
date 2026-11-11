@@ -9,7 +9,13 @@ import { createThread, deleteThread, threadsQuery } from "@/lib/assistant-querie
 import { cn } from "@/lib/utils";
 
 /** Saved assistant conversations, newest first, plus a "new conversation" action. */
-export function AssistantThreads({ activeId, className }: { activeId?: string; className?: string }) {
+export function AssistantThreads({
+  activeId,
+  className,
+}: {
+  activeId?: string;
+  className?: string;
+}) {
   const { data: threads = [], isLoading } = useQuery(threadsQuery);
   const queryClient = useQueryClient();
   const navigate = useNavigate();

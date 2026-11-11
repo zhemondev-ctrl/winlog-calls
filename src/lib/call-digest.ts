@@ -78,9 +78,9 @@ function dayKey(iso: string, timeZone: string): string {
 }
 
 function hourOf(iso: string, timeZone: string): number {
-  return Number(
-    new Date(iso).toLocaleString("en-GB", { timeZone, hour: "2-digit", hour12: false }),
-  ) % 24;
+  return (
+    Number(new Date(iso).toLocaleString("en-GB", { timeZone, hour: "2-digit", hour12: false })) % 24
+  );
 }
 
 function who(c: Pick<DigestCall, "phone_number" | "contact_name">): string {
@@ -160,17 +160,31 @@ export function buildCallDigest(
 
   // Unreturned missed calls
   const waiting = unreturnedMissedCalls(sorted).slice(0, 60);
-  lines.push("", `## Missed calls nobody has called back yet (${waiting.length} shown, newest first)`);
+  lines.push(
+    "",
+    `## Missed calls nobody has called back yet (${waiting.length} shown, newest first)`,
+  );
   for (const c of waiting) {
-    lines.push(`- ${fmtTime(c.started_at, tz)} · ${who(c)} · missed by ${nameOf(c.user_id)} · ${c.source}`);
+    lines.push(
+      `- ${fmtTime(c.started_at, tz)} · ${who(c)} · missed by ${nameOf(c.user_id)} · ${c.source}`,
+    );
   }
 
   // Top contacts
-  const contacts = new Map<string, { label: string; n: number; talk: number; last: string; staff: Set<string> }>();
+  const contacts = new Map<
+    string,
+    { label: string; n: number; talk: number; last: string; staff: Set<string> }
+  >();
   for (const c of sorted) {
     const key = contactKey(c);
     if (!key) continue;
-    const entry = contacts.get(key) ?? { label: who(c), n: 0, talk: 0, last: c.started_at, staff: new Set() };
+    const entry = contacts.get(key) ?? {
+      label: who(c),
+      n: 0,
+      talk: 0,
+      last: c.started_at,
+      staff: new Set(),
+    };
     entry.n += 1;
     entry.talk += c.duration_seconds;
     entry.staff.add(nameOf(c.user_id));

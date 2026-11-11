@@ -6,7 +6,9 @@ import { isAndroidApp, WinLogNative, type BackgroundUploadStatus } from "@/lib/n
  * key the first time (or after a different person signs in). Returns null on browsers and on older
  * APKs that don't have background uploads yet.
  */
-export async function ensureBackgroundUpload(userId: string): Promise<BackgroundUploadStatus | null> {
+export async function ensureBackgroundUpload(
+  userId: string,
+): Promise<BackgroundUploadStatus | null> {
   if (!isAndroidApp()) return null;
   let current: BackgroundUploadStatus;
   try {

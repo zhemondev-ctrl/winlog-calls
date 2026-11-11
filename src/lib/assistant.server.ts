@@ -47,10 +47,12 @@ function json(status: number, error: string) {
 
 /** Saved messages are replayed as plain text turns; stored reasoning is display-only. */
 function forModel(messages: UIMessage[]): UIMessage[] {
-  return messages.map((m) => ({
-    ...m,
-    parts: m.parts.filter((p) => p.type === "text"),
-  })).filter((m) => m.parts.length > 0);
+  return messages
+    .map((m) => ({
+      ...m,
+      parts: m.parts.filter((p) => p.type === "text"),
+    }))
+    .filter((m) => m.parts.length > 0);
 }
 
 export async function handleAssistant(request: Request): Promise<Response> {
@@ -96,14 +98,30 @@ export async function handleAssistant(request: Request): Promise<Response> {
 
   const history: UIMessage[] = (saved ?? [])
     .filter((m) => m.ui_id !== latest.id)
-    .map((m) => ({ id: m.ui_id, role: m.role as UIMessage["role"], parts: m.parts as UIMessage["parts"] }));
-  const userMessage: UIMessage = { id: latest.id, role: "user", parts: [{ type: "text", text: latestText }] };
+    .map((m) => ({
+      id: m.ui_id,
+      role: m.role as UIMessage["role"],
+      parts: m.parts as UIMessage["parts"],
+    }));
+  const userMessage: UIMessage = {
+    id: latest.id,
+    role: "user",
+    parts: [{ type: "text", text: latestText }],
+  };
   const originalMessages = [...history, userMessage];
 
-  const { error: saveUserError } = await supabase.from("assistant_messages").upsert(
-    { thread_id: thread.id, user_id: userId, ui_id: userMessage.id, role: "user", parts: userMessage.parts as unknown as Json },
-    { onConflict: "thread_id,ui_id" },
-  );
+  const { error: saveUserError } = await supabase
+    .from("assistant_messages")
+    .upsert(
+      {
+        thread_id: thread.id,
+        user_id: userId,
+        ui_id: userMessage.id,
+        role: "user",
+        parts: userMessage.parts as unknown as Json,
+      },
+      { onConflict: "thread_id,ui_id" },
+    );
   if (saveUserError) return json(500, "Could not save your question.");
 
   const title = thread.title === "New conversation" ? latestText.slice(0, 70) : thread.title;
@@ -119,7 +137,9 @@ export async function handleAssistant(request: Request): Promise<Response> {
   for (let offset = 0; offset < 20_000; offset += 1000) {
     const { data, error } = await supabase
       .from("call_logs")
-      .select("user_id, source, direction, phone_number, contact_name, started_at, duration_seconds, is_video")
+      .select(
+        "user_id, source, direction, phone_number, contact_name, started_at, duration_seconds, is_video",
+      )
       .gte("started_at", from)
       .order("started_at", { ascending: false })
       .range(offset, offset + 999);
@@ -166,20 +186,34 @@ export async function handleAssistant(request: Request): Promise<Response> {
       console.error("Assistant stream failed", error);
       const status = (error as { statusCode?: number })?.statusCode;
       if (status === 429) return "The AI is busy right now. Please wait a moment and try again.";
-      if (status === 402) return "AI credits have run out for this workspace. Add credits to keep using the assistant.";
+      if (status === 402)
+        return "AI credits have run out for this workspace. Add credits to keep using the assistant.";
       if (status === 403) return "The AI service refused this request.";
       return "The assistant could not answer. Please try again.";
     },
     onFinish: async ({ responseMessage, isAborted }) => {
       if (!responseMessage || responseMessage.role !== "assistant") return;
-      const parts = responseMessage.parts.filter((p) => p.type === "text" || p.type === "reasoning");
-      if (parts.length === 0) return;
-      const { error } = await supabase.from("assistant_messages").upsert(
-        { thread_id: thread.id, user_id: userId, ui_id: responseMessage.id, role: "assistant", parts: parts as unknown as Json },
-        { onConflict: "thread_id,ui_id" },
+      const parts = responseMessage.parts.filter(
+        (p) => p.type === "text" || p.type === "reasoning",
       );
+      if (parts.length === 0) return;
+      const { error } = await supabase
+        .from("assistant_messages")
+        .upsert(
+          {
+            thread_id: thread.id,
+            user_id: userId,
+            ui_id: responseMessage.id,
+            role: "assistant",
+            parts: parts as unknown as Json,
+          },
+          { onConflict: "thread_id,ui_id" },
+        );
       if (error) console.error("Could not save assistant reply", error.message, { isAborted });
-      await supabase.from("assistant_threads").update({ updated_at: new Date().toISOString() }).eq("id", thread.id);
+      await supabase
+        .from("assistant_threads")
+        .update({ updated_at: new Date().toISOString() })
+        .eq("id", thread.id);
     },
   });
 

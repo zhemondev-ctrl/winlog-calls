@@ -30,7 +30,8 @@ function friendlyError(error: Error): string {
   } catch {
     // Not JSON: the stream already sent a readable message.
   }
-  if (/fetch|network/i.test(error.message)) return "No connection. Check the internet and try again.";
+  if (/fetch|network/i.test(error.message))
+    return "No connection. Check the internet and try again.";
   return error.message || "The assistant could not answer.";
 }
 
@@ -112,7 +113,9 @@ export function AssistantChat({
             <div className="flex flex-col items-center gap-4 py-8 text-center">
               <img src={logo.url} alt="" className="size-16 rounded-full shadow-card" />
               <div>
-                <h2 className="font-display text-xl font-bold tracking-wide">Ask about your team's calls</h2>
+                <h2 className="font-display text-xl font-bold tracking-wide">
+                  Ask about your team's calls
+                </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Uses the last 30 days of SIM and WhatsApp calls from every phone.
                 </p>

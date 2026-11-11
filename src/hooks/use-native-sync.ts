@@ -2,7 +2,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
 import { ensureBackgroundUpload } from "@/lib/background-upload";
-import { isAndroidApp, WinLogNative, type BackgroundUploadStatus, type NativeStatus } from "@/lib/native";
+import {
+  isAndroidApp,
+  WinLogNative,
+  type BackgroundUploadStatus,
+  type NativeStatus,
+} from "@/lib/native";
 import { lastSyncAt, syncCalls, type SyncResult } from "@/lib/sync";
 
 const AUTO_SYNC_MS = 5 * 60 * 1000;

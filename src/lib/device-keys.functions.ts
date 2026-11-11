@@ -4,7 +4,6 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { sha256Hex } from "@/lib/hash";
 
-
 /**
  * Gives this phone its own upload key so it can keep sending calls while the app is closed.
  * Only a hash is stored; registering again replaces the phone's previous key.
@@ -40,7 +39,9 @@ export const registerDeviceKey = createServerFn({ method: "POST" })
 /** Stops background uploads from this phone (used on sign-out). */
 export const revokeDeviceKey = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ deviceId: z.string().min(1).max(128) }).parse(input))
+  .inputValidator((input: unknown) =>
+    z.object({ deviceId: z.string().min(1).max(128) }).parse(input),
+  )
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("device_upload_tokens")
@@ -50,4 +51,3 @@ export const revokeDeviceKey = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
-

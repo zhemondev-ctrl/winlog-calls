@@ -28,7 +28,12 @@ describe("unreturnedMissedCalls", () => {
   it("drops a missed call once anyone on the team calls that number back", () => {
     const calls = [
       call({ direction: "missed", duration_seconds: 0, started_at: "2026-11-10T09:00:00Z" }),
-      call({ user_id: "u2", direction: "outgoing", duration_seconds: 0, started_at: "2026-11-10T10:00:00Z" }),
+      call({
+        user_id: "u2",
+        direction: "outgoing",
+        duration_seconds: 0,
+        started_at: "2026-11-10T10:00:00Z",
+      }),
     ];
     expect(unreturnedMissedCalls(calls)).toHaveLength(0);
   });
