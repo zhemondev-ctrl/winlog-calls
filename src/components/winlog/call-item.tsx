@@ -12,7 +12,7 @@ const ICONS = {
   unknown: PhoneIncoming,
 };
 
-export function CallItem({ call, employee }: { call: CallRow; employee?: string }) {
+export function CallItem({ call, employee }: { call: CallRow; employee?: string | undefined }) {
   const Icon = call.is_video ? Video : ICONS[call.direction];
   const unanswered = isUnanswered(call.direction);
   const who = call.contact_name || call.phone_number || "Unknown";
@@ -58,7 +58,7 @@ export function CallItem({ call, employee }: { call: CallRow; employee?: string 
   );
 }
 
-export function CallList({ calls, names }: { calls: CallRow[]; names?: Map<string, string> }) {
+export function CallList({ calls, names }: { calls: CallRow[]; names?: Map<string, string> | undefined }) {
   if (calls.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-border bg-card/60 px-6 py-10 text-center text-sm text-muted-foreground">

@@ -75,8 +75,8 @@ describe("call rules", () => {
       monday,
       7,
     );
-    expect(series[0].incoming).toBe(1);
-    expect(series[0].talkMinutes).toBe(1);
-    expect(series[2].missed).toBe(1);
+    expect(series[0]!.incoming).toBe(1);
+    expect(series[0]!.talkMinutes).toBe(1);
+    expect(series[2]!.missed).toBe(1);
   });
 });

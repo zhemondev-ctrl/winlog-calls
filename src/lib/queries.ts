@@ -41,7 +41,7 @@ export const profilesQuery = queryOptions({
 export interface CallFilter {
   from: string;
   to: string;
-  userId?: string | null;
+  userId?: string | null | undefined;
 }
 
 /** Fetches every call in the window, page by page (the backend returns at most 1000 rows per request). */
