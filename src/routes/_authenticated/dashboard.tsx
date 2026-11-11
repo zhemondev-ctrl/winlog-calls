@@ -37,9 +37,9 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 const chartConfig = {
-  incoming: { label: "Incoming", color: "var(--color-incoming)" },
-  outgoing: { label: "Outgoing", color: "var(--color-outgoing)" },
-  missed: { label: "Missed", color: "var(--color-missed)" },
+  incoming: { label: "Incoming", color: "var(--incoming)" },
+  outgoing: { label: "Outgoing", color: "var(--outgoing)" },
+  missed: { label: "Missed", color: "var(--missed)" },
 } satisfies ChartConfig;
 
 function Dashboard() {
