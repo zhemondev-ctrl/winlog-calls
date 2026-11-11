@@ -20,12 +20,10 @@ function readCursor(key: string): number {
 async function upload(rows: NewCallRow[]) {
   for (let i = 0; i < rows.length; i += 500) {
     const chunk = rows.slice(i, i + 500);
-    const { error } = await supabase
-      .from("call_logs")
-      .upsert(chunk, {
-        onConflict: "user_id,device_id,source,external_id",
-        ignoreDuplicates: true,
-      });
+    const { error } = await supabase.from("call_logs").upsert(chunk, {
+      onConflict: "user_id,device_id,source,external_id",
+      ignoreDuplicates: true,
+    });
     if (error) throw new Error(error.message);
   }
 }
