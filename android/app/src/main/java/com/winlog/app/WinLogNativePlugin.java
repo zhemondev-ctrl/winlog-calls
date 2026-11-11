@@ -5,14 +5,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
-import android.provider.CallLog;
 import android.provider.Settings;
-import android.telephony.SubscriptionInfo;
-import android.telephony.SubscriptionManager;
 
 import androidx.core.app.NotificationManagerCompat;
 
@@ -29,9 +25,6 @@ import com.getcapacitor.annotation.PermissionCallback;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /** Bridge between the WinLog web screens and the phone's call history. */
 @CapacitorPlugin(
@@ -111,39 +104,10 @@ public class WinLogNativePlugin extends Plugin {
         }
         long since = readLong(call, "since", 0L);
         int limit = (int) readLong(call, "limit", 2000L);
-        Map<String, String> simLabels = simLabels();
-
-        String[] projection = {
-            CallLog.Calls._ID,
-            CallLog.Calls.NUMBER,
-            CallLog.Calls.CACHED_NAME,
-            CallLog.Calls.TYPE,
-            CallLog.Calls.DATE,
-            CallLog.Calls.DURATION,
-            CallLog.Calls.PHONE_ACCOUNT_ID
-        };
         JSArray out = new JSArray();
-        try (Cursor c = getContext().getContentResolver().query(
-            CallLog.Calls.CONTENT_URI,
-            projection,
-            CallLog.Calls.DATE + " > ?",
-            new String[] { String.valueOf(since) },
-            CallLog.Calls.DATE + " ASC"
-        )) {
-            if (c != null) {
-                while (c.moveToNext() && out.length() < limit) {
-                    JSObject row = new JSObject();
-                    row.put("id", String.valueOf(c.getLong(0)));
-                    row.put("number", c.getString(1));
-                    row.put("name", c.getString(2));
-                    row.put("type", typeName(c.getInt(3)));
-                    row.put("date", c.getLong(4));
-                    row.put("duration", c.getLong(5));
-                    String accountId = c.getString(6);
-                    row.put("sim", accountId == null ? null : simLabels.get(accountId));
-                    out.put(row);
-                }
-            }
+        try {
+            JSONArray rows = CallLogReader.read(getContext(), since, limit);
+            for (int i = 0; i < rows.length(); i++) out.put(rows.opt(i));
         } catch (SecurityException e) {
             call.reject("Call history permission is not granted", "PERMISSION_DENIED");
             return;
@@ -151,6 +115,45 @@ public class WinLogNativePlugin extends Plugin {
         JSObject result = new JSObject();
         result.put("calls", out);
         call.resolve(result);
+    }
+
+    /** Hands this phone's upload key to the background uploader and starts the 15-minute schedule. */
+    @PluginMethod
+    public void enableBackgroundUpload(PluginCall call) {
+        String endpoint = call.getString("endpoint");
+        String token = call.getString("token");
+        String userId = call.getString("userId");
+        if (endpoint == null || token == null || userId == null || !endpoint.startsWith("https://")) {
+            call.reject("endpoint (https), token and userId are required");
+            return;
+        }
+        BackgroundUpload.enable(getContext(), endpoint, token, userId, call.getString("deviceName"));
+        call.resolve(backgroundStatus());
+    }
+
+    @PluginMethod
+    public void disableBackgroundUpload(PluginCall call) {
+        BackgroundUpload.disable(getContext());
+        call.resolve(backgroundStatus());
+    }
+
+    @PluginMethod
+    public void getBackgroundUploadStatus(PluginCall call) {
+        call.resolve(backgroundStatus());
+    }
+
+    private JSObject backgroundStatus() {
+        android.content.SharedPreferences p = BackgroundUpload.prefs(getContext());
+        JSObject s = new JSObject();
+        s.put("enabled", BackgroundUpload.isEnabled(getContext()));
+        s.put("userId", p.getString(BackgroundUpload.KEY_USER, null));
+        long lastRun = p.getLong(BackgroundUpload.KEY_LAST_RUN, 0);
+        long lastSuccess = p.getLong(BackgroundUpload.KEY_LAST_SUCCESS, 0);
+        s.put("lastRunAt", lastRun == 0 ? null : lastRun);
+        s.put("lastSuccessAt", lastSuccess == 0 ? null : lastSuccess);
+        s.put("lastCount", p.getInt(BackgroundUpload.KEY_LAST_COUNT, 0));
+        s.put("lastError", p.getString(BackgroundUpload.KEY_LAST_ERROR, null));
+        return s;
     }
 
     @PluginMethod
@@ -189,48 +192,9 @@ public class WinLogNativePlugin extends Plugin {
         return s;
     }
 
-    private Map<String, String> simLabels() {
-        Map<String, String> labels = new HashMap<>();
-        if (getPermissionState("phone") != PermissionState.GRANTED) return labels;
-        try {
-            SubscriptionManager sm = (SubscriptionManager) getContext().getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
-            if (sm == null) return labels;
-            List<SubscriptionInfo> subs = sm.getActiveSubscriptionInfoList();
-            if (subs == null) return labels;
-            for (SubscriptionInfo info : subs) {
-                CharSequence carrier = info.getCarrierName();
-                String label = "SIM " + (info.getSimSlotIndex() + 1) + (carrier == null ? "" : " · " + carrier);
-                labels.put(String.valueOf(info.getSubscriptionId()), label);
-                String iccId = info.getIccId();
-                if (iccId != null && !iccId.isEmpty()) labels.put(iccId, label);
-            }
-        } catch (SecurityException ignored) {
-            // Without phone-state access we simply skip SIM names.
-        }
-        return labels;
-    }
-
     private static long readLong(PluginCall call, String key, long fallback) {
         Object value = call.getData().opt(key);
         if (value instanceof Number) return ((Number) value).longValue();
         return fallback;
-    }
-
-    private static String typeName(int type) {
-        switch (type) {
-            case CallLog.Calls.INCOMING_TYPE:
-            case CallLog.Calls.ANSWERED_EXTERNALLY_TYPE:
-                return "incoming";
-            case CallLog.Calls.OUTGOING_TYPE:
-                return "outgoing";
-            case CallLog.Calls.MISSED_TYPE:
-                return "missed";
-            case CallLog.Calls.REJECTED_TYPE:
-                return "rejected";
-            case CallLog.Calls.BLOCKED_TYPE:
-                return "blocked";
-            default:
-                return "unknown";
-        }
     }
 }
