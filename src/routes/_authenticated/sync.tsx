@@ -204,7 +204,7 @@ function SyncStatusPage() {
       <div className="max-w-xl space-y-4">
         <div
           className={cn(
-            "flex items-center gap-4 rounded-2xl border-2 p-4 shadow-card",
+            "flex flex-wrap items-center gap-x-4 gap-y-3 rounded-2xl border-2 p-4 shadow-card",
             issues.length === 0
               ? "border-incoming/40 bg-incoming/10"
               : errors > 0
@@ -539,7 +539,7 @@ function SourceCard({
       <div>{when(syncedAt, now)}</div>
       {count !== null && syncedAt && (
         <div className="text-xs text-muted-foreground">
-          {count} calls read on the last open-app check
+          {count} {count === 1 ? "call" : "calls"} read on the last open-app check
         </div>
       )}
       {error && <div className="mt-1 text-destructive">Last try failed: {error}</div>}
