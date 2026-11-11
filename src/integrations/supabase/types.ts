@@ -76,6 +76,38 @@ export type Database = {
         }
         Relationships: []
       }
+      call_ai_notes: {
+        Row: {
+          call_id: string
+          contact_last_at: string | null
+          follow_up: boolean
+          generated_at: string
+          note: string
+        }
+        Insert: {
+          call_id: string
+          contact_last_at?: string | null
+          follow_up?: boolean
+          generated_at?: string
+          note: string
+        }
+        Update: {
+          call_id?: string
+          contact_last_at?: string | null
+          follow_up?: boolean
+          generated_at?: string
+          note?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_ai_notes_call_id_fkey"
+            columns: ["call_id"]
+            isOneToOne: true
+            referencedRelation: "call_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       call_logs: {
         Row: {
           contact_name: string | null
