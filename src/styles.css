@@ -75,97 +75,100 @@
   --color-missed: var(--missed);
   --color-whatsapp: var(--whatsapp);
   --color-sim: var(--sim);
-  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --color-gold: var(--gold);
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cinzel", ui-serif, Georgia, serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --shadow-card: var(--shadow-card);
   --shadow-lift: var(--shadow-lift);
 }
 
 :root {
-  --radius: 0.875rem;
-  /* WinLog "field ledger": warm paper, ink, and signal colours for call outcomes. */
-  --background: oklch(0.965 0.012 85);
-  --foreground: oklch(0.21 0.015 60);
-  --card: oklch(0.99 0.006 85);
-  --card-foreground: oklch(0.21 0.015 60);
-  --popover: oklch(0.99 0.006 85);
-  --popover-foreground: oklch(0.21 0.015 60);
-  --primary: oklch(0.21 0.015 60);
-  --primary-foreground: oklch(0.97 0.012 85);
-  --secondary: oklch(0.925 0.014 85);
-  --secondary-foreground: oklch(0.21 0.015 60);
-  --muted: oklch(0.93 0.012 85);
-  --muted-foreground: oklch(0.5 0.02 70);
-  --accent: oklch(0.9 0.17 118);
-  --accent-foreground: oklch(0.21 0.015 60);
-  --destructive: oklch(0.58 0.2 30);
+  --radius: 0.75rem;
+  /* WinLog in Winstone Properties colours: deep navy ink, metallic gold, warm cream paper. */
+  --background: oklch(0.962 0.016 85);
+  --foreground: oklch(0.255 0.055 262);
+  --card: oklch(0.99 0.008 85);
+  --card-foreground: oklch(0.255 0.055 262);
+  --popover: oklch(0.99 0.008 85);
+  --popover-foreground: oklch(0.255 0.055 262);
+  --primary: oklch(0.255 0.055 262);
+  --primary-foreground: oklch(0.95 0.03 85);
+  --secondary: oklch(0.925 0.024 85);
+  --secondary-foreground: oklch(0.255 0.055 262);
+  --muted: oklch(0.93 0.018 85);
+  --muted-foreground: oklch(0.48 0.035 262);
+  --accent: oklch(0.77 0.085 80);
+  --accent-foreground: oklch(0.22 0.05 262);
+  --gold: oklch(0.7 0.09 78);
+  --destructive: oklch(0.55 0.19 28);
   --destructive-foreground: oklch(0.98 0.01 85);
-  --border: oklch(0.87 0.015 80);
-  --input: oklch(0.87 0.015 80);
-  --ring: oklch(0.21 0.015 60);
-  --incoming: oklch(0.56 0.13 158);
-  --outgoing: oklch(0.52 0.13 255);
-  --missed: oklch(0.62 0.19 35);
-  --whatsapp: oklch(0.64 0.15 152);
-  --sim: oklch(0.42 0.03 60);
+  --border: oklch(0.86 0.03 82);
+  --input: oklch(0.86 0.03 82);
+  --ring: oklch(0.7 0.09 78);
+  --incoming: oklch(0.52 0.11 165);
+  --outgoing: oklch(0.42 0.1 262);
+  --missed: oklch(0.58 0.18 32);
+  --whatsapp: oklch(0.6 0.14 152);
+  --sim: oklch(0.62 0.08 78);
   --chart-1: var(--incoming);
   --chart-2: var(--outgoing);
   --chart-3: var(--missed);
   --chart-4: var(--whatsapp);
   --chart-5: var(--sim);
-  --sidebar: oklch(0.95 0.012 85);
-  --sidebar-foreground: oklch(0.21 0.015 60);
-  --sidebar-primary: oklch(0.21 0.015 60);
-  --sidebar-primary-foreground: oklch(0.97 0.012 85);
-  --sidebar-accent: oklch(0.92 0.014 85);
-  --sidebar-accent-foreground: oklch(0.21 0.015 60);
-  --sidebar-border: oklch(0.87 0.015 80);
-  --sidebar-ring: oklch(0.21 0.015 60);
-  --shadow-card: 0 1px 0 oklch(0.21 0.015 60 / 0.06), 0 8px 24px -12px oklch(0.21 0.015 60 / 0.18);
-  --shadow-lift: 4px 4px 0 oklch(0.21 0.015 60);
+  --sidebar: oklch(0.255 0.055 262);
+  --sidebar-foreground: oklch(0.95 0.03 85);
+  --sidebar-primary: oklch(0.77 0.085 80);
+  --sidebar-primary-foreground: oklch(0.22 0.05 262);
+  --sidebar-accent: oklch(0.32 0.055 262);
+  --sidebar-accent-foreground: oklch(0.95 0.03 85);
+  --sidebar-border: oklch(0.36 0.05 262);
+  --sidebar-ring: oklch(0.77 0.085 80);
+  --shadow-card: 0 1px 0 oklch(0.255 0.055 262 / 0.06), 0 10px 28px -14px oklch(0.255 0.055 262 / 0.28);
+  --shadow-lift: 3px 3px 0 oklch(0.255 0.055 262);
 }
 
 .dark {
-  --background: oklch(0.18 0.012 60);
-  --foreground: oklch(0.95 0.012 85);
-  --card: oklch(0.22 0.012 60);
-  --card-foreground: oklch(0.95 0.012 85);
-  --popover: oklch(0.22 0.012 60);
-  --popover-foreground: oklch(0.95 0.012 85);
-  --primary: oklch(0.95 0.012 85);
-  --primary-foreground: oklch(0.18 0.012 60);
-  --secondary: oklch(0.27 0.012 60);
-  --secondary-foreground: oklch(0.95 0.012 85);
-  --muted: oklch(0.27 0.012 60);
-  --muted-foreground: oklch(0.7 0.015 80);
-  --accent: oklch(0.88 0.17 118);
-  --accent-foreground: oklch(0.18 0.012 60);
+  --background: oklch(0.2 0.045 262);
+  --foreground: oklch(0.94 0.03 85);
+  --card: oklch(0.24 0.05 262);
+  --card-foreground: oklch(0.94 0.03 85);
+  --popover: oklch(0.24 0.05 262);
+  --popover-foreground: oklch(0.94 0.03 85);
+  --primary: oklch(0.8 0.085 80);
+  --primary-foreground: oklch(0.2 0.045 262);
+  --secondary: oklch(0.29 0.05 262);
+  --secondary-foreground: oklch(0.94 0.03 85);
+  --muted: oklch(0.29 0.05 262);
+  --muted-foreground: oklch(0.74 0.03 85);
+  --accent: oklch(0.8 0.085 80);
+  --accent-foreground: oklch(0.2 0.045 262);
+  --gold: oklch(0.8 0.085 80);
   --destructive: oklch(0.65 0.19 30);
   --destructive-foreground: oklch(0.98 0.01 85);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.95 0.012 85);
-  --incoming: oklch(0.7 0.13 158);
-  --outgoing: oklch(0.7 0.12 255);
-  --missed: oklch(0.7 0.18 35);
+  --ring: oklch(0.8 0.085 80);
+  --incoming: oklch(0.72 0.12 165);
+  --outgoing: oklch(0.72 0.1 255);
+  --missed: oklch(0.7 0.17 35);
   --whatsapp: oklch(0.72 0.15 152);
-  --sim: oklch(0.75 0.03 70);
+  --sim: oklch(0.8 0.085 80);
   --chart-1: var(--incoming);
   --chart-2: var(--outgoing);
   --chart-3: var(--missed);
   --chart-4: var(--whatsapp);
   --chart-5: var(--sim);
-  --sidebar: oklch(0.2 0.012 60);
-  --sidebar-foreground: oklch(0.95 0.012 85);
-  --sidebar-primary: oklch(0.95 0.012 85);
-  --sidebar-primary-foreground: oklch(0.18 0.012 60);
-  --sidebar-accent: oklch(0.27 0.012 60);
-  --sidebar-accent-foreground: oklch(0.95 0.012 85);
+  --sidebar: oklch(0.18 0.045 262);
+  --sidebar-foreground: oklch(0.94 0.03 85);
+  --sidebar-primary: oklch(0.8 0.085 80);
+  --sidebar-primary-foreground: oklch(0.2 0.045 262);
+  --sidebar-accent: oklch(0.29 0.05 262);
+  --sidebar-accent-foreground: oklch(0.94 0.03 85);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.95 0.012 85);
+  --sidebar-ring: oklch(0.8 0.085 80);
   --shadow-card: 0 1px 0 oklch(0 0 0 / 0.3), 0 8px 24px -12px oklch(0 0 0 / 0.5);
-  --shadow-lift: 4px 4px 0 oklch(0.95 0.012 85);
+  --shadow-lift: 3px 3px 0 oklch(0.8 0.085 80);
 }
 
 @layer base {
@@ -182,15 +185,20 @@
 }
 
 @layer components {
-  /* Ruled-paper texture behind app screens. */
+  /* Faint gold ruled-paper texture behind app screens. */
   .ledger-bg {
     background-image: repeating-linear-gradient(
       to bottom,
       transparent 0,
       transparent 31px,
-      oklch(0.21 0.015 60 / 0.045) 31px,
-      oklch(0.21 0.015 60 / 0.045) 32px
+      oklch(0.7 0.09 78 / 0.09) 31px,
+      oklch(0.7 0.09 78 / 0.09) 32px
     );
+  }
+  /* Thin gold rule, echoing the rings around the Winstone crest. */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
   }
   .num {
     font-family: var(--font-mono);

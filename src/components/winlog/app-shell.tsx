@@ -1,9 +1,11 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { BarChart3, ListOrdered, LogOut, Smartphone, Users } from "lucide-react";
+import { BarChart3, ListOrdered, LogOut, MessagesSquare, Smartphone, Users } from "lucide-react";
 import type { ReactNode } from "react";
 
+import logo from "@/assets/winstone-logo.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
+import { stopBackgroundUpload } from "@/lib/background-upload";
 import { meQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { useNativeSyncContext } from "./native-sync-context";
@@ -12,6 +14,7 @@ const NAV = [
   { to: "/dashboard", label: "Today", icon: BarChart3, adminOnly: false },
   { to: "/calls", label: "Calls", icon: ListOrdered, adminOnly: false },
   { to: "/team", label: "Team", icon: Users, adminOnly: true },
+  { to: "/assistant", label: "Ask AI", icon: MessagesSquare, adminOnly: true },
   { to: "/phone", label: "Phone", icon: Smartphone, adminOnly: false },
 ] as const;
 
@@ -31,6 +34,7 @@ export function AppShell({
   const items = NAV.filter((n) => !n.adminOnly || me?.isAdmin);
 
   async function signOut() {
+    await stopBackgroundUpload();
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
@@ -39,22 +43,20 @@ export function AppShell({
 
   return (
     <div className="ledger-bg min-h-screen pb-24 md:pb-10">
-      <header className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b-2 border-gold bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3">
           <Link to="/dashboard" className="flex items-center gap-2">
-            <span className="grid size-8 place-items-center rounded-full border-2 border-foreground bg-accent font-display text-sm font-extrabold">
-              W
-            </span>
-            <span className="font-display text-lg font-extrabold tracking-tight">WinLog</span>
+            <img src={logo.url} alt="Winstone Properties" className="size-9 rounded-full" />
+            <span className="font-display text-lg font-bold tracking-wide text-accent">WinLog</span>
           </Link>
           <nav className="ml-4 hidden items-center gap-1 md:flex">
             {items.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="rounded-full px-3 py-1.5 text-sm font-medium text-primary-foreground/70 transition-colors hover:text-primary-foreground"
                 activeProps={{
-                  className: "bg-primary text-primary-foreground hover:text-primary-foreground",
+                  className: "bg-accent text-accent-foreground hover:text-accent-foreground",
                 }}
               >
                 {item.label}
@@ -63,16 +65,16 @@ export function AppShell({
           </nav>
           <div className="ml-auto flex items-center gap-3">
             {sync.native && (
-              <span className="stamp hidden text-muted-foreground sm:inline">
+              <span className="stamp hidden text-primary-foreground/70 sm:inline">
                 {sync.syncing ? "Uploading…" : "Synced"}
               </span>
             )}
-            <span className="hidden text-sm text-muted-foreground sm:inline">
+            <span className="hidden text-sm text-primary-foreground/80 sm:inline">
               {me?.displayName}
             </span>
             <button
               onClick={signOut}
-              className="grid size-9 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              className="grid size-9 place-items-center rounded-full text-primary-foreground/70 transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground"
               aria-label="Sign out"
             >
               <LogOut className="size-4" />
@@ -84,9 +86,7 @@ export function AppShell({
       <main className="mx-auto max-w-5xl px-4 pt-6">
         <div className="mb-6 animate-rise">
           {kicker && <div className="stamp mb-1 text-muted-foreground">{kicker}</div>}
-          <h1 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
-            {title}
-          </h1>
+          <h1 className="font-display text-3xl font-bold tracking-wide md:text-4xl">{title}</h1>
         </div>
         {children}
       </main>
@@ -97,7 +97,7 @@ export function AppShell({
             <Link
               key={item.to}
               to={item.to}
-              className="flex min-w-16 flex-col items-center gap-1 rounded-xl px-3 py-1.5 text-[11px] font-medium text-muted-foreground"
+              className="flex min-w-14 flex-col items-center gap-1 rounded-xl px-2 py-1.5 text-[11px] font-medium text-muted-foreground"
               activeProps={{
                 className: "text-foreground [&_svg]:bg-accent [&_svg]:border-foreground",
               }}

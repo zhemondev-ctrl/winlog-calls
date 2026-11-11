@@ -48,6 +48,7 @@ public class WhatsAppCallListener extends NotificationListenerService {
             if (session == null) {
                 WhatsAppCallStore.add(this, appName(sbn.getPackageName()), cleanName(title), "missed",
                     isVideo(lower), System.currentTimeMillis(), 0);
+                BackgroundUpload.uploadSoon(this, 30);
             }
             return;
         }
@@ -110,6 +111,7 @@ public class WhatsAppCallListener extends NotificationListenerService {
             direction = s.sawIncoming ? "missed" : "outgoing";
         }
         WhatsAppCallStore.add(this, s.app, s.name, direction, s.video, s.startedAt, duration);
+        BackgroundUpload.uploadSoon(this, 30);
     }
 
     private boolean stillInCall() {

@@ -37,7 +37,7 @@ function Index() {
 
   return (
     <BrandPanel>
-      <h1 className="font-display text-5xl font-extrabold leading-[0.95] tracking-tight">
+      <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-wide">
         Every call.
         <br />
         <span className="bg-accent px-1">Every phone.</span>

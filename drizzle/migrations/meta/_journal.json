@@ -8,6 +8,13 @@
       "when": 1794437430649,
       "tag": "0000_winlog_call_logs",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794439299357,
+      "tag": "0001_assistant_and_device_uploads",
+      "breakpoints": true
     }
   ]
 }
