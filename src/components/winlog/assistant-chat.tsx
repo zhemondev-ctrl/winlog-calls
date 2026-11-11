@@ -90,12 +90,16 @@ export function AssistantChat({
   }
 
   // A starter question picked on the overview page is sent once when the conversation opens.
+  // Deferred with a cleared timer so a development double-mount can't drop or double-send it.
   const sentInitial = useRef(false);
   useEffect(() => {
     if (!initialQuestion || sentInitial.current || initialMessages.length > 0) return;
-    sentInitial.current = true;
-    ask(initialQuestion);
-    onQuestionSent?.();
+    const timer = window.setTimeout(() => {
+      sentInitial.current = true;
+      ask(initialQuestion);
+      onQuestionSent?.();
+    }, 0);
+    return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuestion]);
 
