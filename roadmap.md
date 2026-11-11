@@ -10,3 +10,6 @@
 - [x] Manager AI assistant: separate saved conversations about team call activity
 - [x] Background call uploads while the app is closed
 - [x] Rebuild APK with icon + background uploads
+- [ ] Phone sync status screen: permissions, last SIM/WhatsApp sync, troubleshooting
+- [ ] GitHub Actions: build + publish signed APK on every app update
+- [ ] Remove Lovable badge (live site + Android app)
