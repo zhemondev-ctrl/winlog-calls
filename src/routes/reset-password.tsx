@@ -40,7 +40,7 @@ function ResetPasswordPage() {
 
   return (
     <BrandPanel>
-      <h1 className="font-display text-4xl font-extrabold tracking-tight">New password.</h1>
+      <h1 className="font-display text-4xl font-bold tracking-wide">New password.</h1>
       <form onSubmit={submit} className="mt-6 space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="password">New password</Label>

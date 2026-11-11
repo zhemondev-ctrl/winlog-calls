@@ -73,7 +73,7 @@ function AuthPage() {
 
   return (
     <BrandPanel>
-      <h1 className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight">
+      <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-wide">
         {mode === "signup"
           ? "Add this phone's owner."
           : mode === "forgot"
