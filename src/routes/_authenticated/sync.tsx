@@ -231,7 +231,12 @@ function SyncStatusPage() {
                 : "Follow the steps below, then tap Upload now."}
             </p>
           </div>
-          <Button variant="ink" onClick={uploadNow} disabled={sync.syncing || !online}>
+          <Button
+            variant="ink"
+            className="w-full sm:w-auto"
+            onClick={uploadNow}
+            disabled={sync.syncing || !online}
+          >
             <RefreshCw className={cn(sync.syncing && "animate-spin")} />
             {sync.syncing ? "Uploading" : "Upload now"}
           </Button>
