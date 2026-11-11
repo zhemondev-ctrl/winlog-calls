@@ -7,8 +7,9 @@ android {
         applicationId "com.winlog.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        // GitHub Actions passes its run number so every new APK installs over the previous one.
+        versionCode((System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger())
+        versionName "1.0." + (System.getenv("GITHUB_RUN_NUMBER") ?: "0")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,8 +17,23 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        // Internal sideloaded app: a fixed key in the repo keeps the signature identical across builds,
+        // so updates install over the old version without uninstalling.
+        winlog {
+            storeFile file("winlog-release.keystore")
+            storeType "pkcs12"
+            storePassword "winlog-internal"
+            keyAlias "winlog"
+            keyPassword "winlog-internal"
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.winlog
+        }
         release {
+            signingConfig signingConfigs.winlog
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
