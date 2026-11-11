@@ -110,18 +110,16 @@ export async function handleAssistant(request: Request): Promise<Response> {
   };
   const originalMessages = [...history, userMessage];
 
-  const { error: saveUserError } = await supabase
-    .from("assistant_messages")
-    .upsert(
-      {
-        thread_id: thread.id,
-        user_id: userId,
-        ui_id: userMessage.id,
-        role: "user",
-        parts: userMessage.parts as unknown as Json,
-      },
-      { onConflict: "thread_id,ui_id" },
-    );
+  const { error: saveUserError } = await supabase.from("assistant_messages").upsert(
+    {
+      thread_id: thread.id,
+      user_id: userId,
+      ui_id: userMessage.id,
+      role: "user",
+      parts: userMessage.parts as unknown as Json,
+    },
+    { onConflict: "thread_id,ui_id" },
+  );
   if (saveUserError) return json(500, "Could not save your question.");
 
   const title = thread.title === "New conversation" ? latestText.slice(0, 70) : thread.title;
@@ -197,18 +195,16 @@ export async function handleAssistant(request: Request): Promise<Response> {
         (p) => p.type === "text" || p.type === "reasoning",
       );
       if (parts.length === 0) return;
-      const { error } = await supabase
-        .from("assistant_messages")
-        .upsert(
-          {
-            thread_id: thread.id,
-            user_id: userId,
-            ui_id: responseMessage.id,
-            role: "assistant",
-            parts: parts as unknown as Json,
-          },
-          { onConflict: "thread_id,ui_id" },
-        );
+      const { error } = await supabase.from("assistant_messages").upsert(
+        {
+          thread_id: thread.id,
+          user_id: userId,
+          ui_id: responseMessage.id,
+          role: "assistant",
+          parts: parts as unknown as Json,
+        },
+        { onConflict: "thread_id,ui_id" },
+      );
       if (error) console.error("Could not save assistant reply", error.message, { isAborted });
       await supabase
         .from("assistant_threads")
