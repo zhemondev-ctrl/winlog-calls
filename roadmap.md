@@ -22,3 +22,4 @@
 - [ ] Signed APK build on every push, with stable latest download
 - [ ] Create real manager and team accounts (email invitations; no shared passwords)
 - [ ] Resolve overdue Pro payment (user action: Plans & credits)
+- [ ] Rebuild WinLog from this project's Android source and verify shared website screens
