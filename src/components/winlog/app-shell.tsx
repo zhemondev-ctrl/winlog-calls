@@ -14,6 +14,7 @@ import { useNativeSyncContext } from "./native-sync-context";
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: BarChart3, adminOnly: false },
   { to: "/calls", label: "Calls", icon: ListOrdered, adminOnly: false },
+  { to: "/follow-ups", label: "Follow-ups", icon: BellRing, adminOnly: true },
   { to: "/team", label: "Team", icon: Users, adminOnly: true },
   { to: "/assistant", label: "Ask AI", icon: MessagesSquare, adminOnly: true },
   { to: "/phone", label: "Phone", icon: Smartphone, adminOnly: false },

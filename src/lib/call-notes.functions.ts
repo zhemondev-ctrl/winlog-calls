@@ -110,6 +110,9 @@ export const getCallNotes = createServerFn({ method: "POST" })
             follow_up: n.follow_up,
             contact_last_at: job.contactLastAt,
             generated_at: new Date().toISOString(),
+            // A rewrite means the contact called again, so a resolved follow-up reopens.
+            resolved_at: null,
+            resolved_by: null,
           };
         })
         .filter((r): r is NonNullable<typeof r> => !!r && r.note.length > 0);
