@@ -19,6 +19,8 @@ export const Route = createFileRoute("/_authenticated/assistant/")({
           "Managers ask questions about team call activity and get summaries and follow-ups.",
       },
       { property: "og:title", content: "Ask AI — WinLog" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "AI summaries of team call patterns and follow-ups." },
     ],
   }),

@@ -14,6 +14,8 @@ export const Route = createFileRoute("/reset-password")({
       { title: "Choose a new password — WinLog" },
       { name: "description", content: "Set a new password for your WinLog account." },
       { property: "og:title", content: "Choose a new password — WinLog" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "Set a new password for your WinLog account." },
     ],
   }),

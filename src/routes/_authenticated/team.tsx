@@ -16,6 +16,8 @@ export const Route = createFileRoute("/_authenticated/team")({
         content: "Calls, talk time and missed calls for each employee's phone.",
       },
       { property: "og:title", content: "Team — WinLog" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "Per-employee call stats for the manager." },
     ],
   }),

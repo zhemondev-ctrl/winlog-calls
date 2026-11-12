@@ -16,6 +16,8 @@ export const Route = createFileRoute("/")({
           "WinLog logs every SIM and WhatsApp call on company Android phones, with talk time and daily and weekly stats.",
       },
       { property: "og:title", content: "WinLog — call log for company phones" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Every SIM and WhatsApp call from company phones, with talk time and stats.",

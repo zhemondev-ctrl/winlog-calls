@@ -26,6 +26,8 @@ export const Route = createFileRoute("/_authenticated/calls")({
         content: "Every SIM and WhatsApp call from company phones, with talk time.",
       },
       { property: "og:title", content: "Call log — WinLog" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "Every SIM and WhatsApp call from company phones." },
     ],
   }),

@@ -26,6 +26,8 @@ export const Route = createFileRoute("/_authenticated/phone")({
         content: "Allow call history and WhatsApp call capture on this phone.",
       },
       { property: "og:title", content: "Phone setup — WinLog" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "Set up WinLog on a company phone." },
     ],
   }),

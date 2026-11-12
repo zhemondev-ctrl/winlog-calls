@@ -15,6 +15,8 @@ export const Route = createFileRoute("/auth")({
       { title: "Sign in — WinLog" },
       { name: "description", content: "Sign in to WinLog to log and review company phone calls." },
       { property: "og:title", content: "Sign in — WinLog" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Sign in to WinLog, the call log for company phones.",
