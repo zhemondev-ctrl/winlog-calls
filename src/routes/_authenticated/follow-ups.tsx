@@ -74,8 +74,18 @@ function FollowUpsPage() {
   const { data: me } = useSuspenseQuery(meQuery);
   const qc = useQueryClient();
   const { data: flagged = [], isLoading } = useQuery({ ...followUpsQuery, enabled: !!me?.isAdmin });
+  const { data: resolved = [] } = useQuery({ ...resolvedFollowUpsQuery, enabled: !!me?.isAdmin });
   const { data: profiles = [] } = useQuery({ ...profilesQuery, enabled: !!me?.isAdmin });
   const groups = useMemo(() => groupFollowUps(flagged), [flagged]);
+  const history = useMemo(() => {
+    const sorted = [...resolved].sort(
+      (a, b) => Date.parse(b.resolved_at) - Date.parse(a.resolved_at),
+    );
+    return groupFollowUps(sorted).map((g) => {
+      const items = sorted.filter((c) => g.callIds.includes(c.call_id));
+      return { ...g, resolvedAt: items[0]?.resolved_at ?? "", resolvedBy: items[0]?.resolved_by ?? null };
+    });
+  }, [resolved]);
   const names = useMemo(() => new Map(profiles.map((p) => [p.id, p.display_name])), [profiles]);
 
   const resolve = useMutation({
