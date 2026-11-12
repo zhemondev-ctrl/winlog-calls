@@ -18,8 +18,8 @@
 - [ ] Connect project to GitHub so every change builds a fresh APK (user action: Project settings → Git)
 - [ ] Real-phone test: install APK, SIM + WhatsApp call, confirm closed-app upload (user action; checklist provided)
 - [x] Publish the Winstone version
-- [ ] Agent-focused dashboard with personal call details and manager agent filter
-- [ ] Signed APK build on every push, with stable latest download
-- [ ] Create real manager and team accounts (email invitations; no shared passwords)
+- [x] Agent-focused dashboard with personal call details and manager agent filter
+- [x] Signed APK build on every push, with stable latest download
+- [ ] Create real manager and team accounts (blocked: user must create first account/invite members via More → Users; agent has no invitation tool)
 - [ ] Resolve overdue Pro payment (user action: Plans & credits)
-- [ ] Rebuild WinLog from this project's Android source and verify shared website screens
+- [x] Rebuild WinLog from this project's Android source and verify shared website URL in the APK

@@ -44,4 +44,5 @@ use the editor.
 - "Summarize records" (`/summary` → `/api/summary`): uploaded/pasted records are read in the browser (Excel via SheetJS, loaded on demand) and sent as text; WinLog periods are condensed with `buildCallDigest`. Shared gateway setup lives in `src/lib/ai-gateway.server.ts`. Why: one model contract for every one-shot AI feature.
 - Sync status screen (`/sync`) gets its fix-it steps from `diagnose()` in `src/lib/sync-health.ts`; the app records SIM and WhatsApp sync times separately. Why: the troubleshooting rules are tested in one place.
 - APK workflow builds on every branch push and publishes a fixed-name `WinLog.apk`; only default-branch releases become latest. Why: every commit is buildable without letting an experimental branch replace the team's stable download.
+- The dashboard uses existing call/profile queries for personal agent details and a manager agent selector; the Android shell renders this same route. Why: phone and website screens remain one implementation.
 
