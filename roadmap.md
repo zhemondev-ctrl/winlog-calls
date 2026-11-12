@@ -13,8 +13,8 @@
 - [x] Phone sync status screen: permissions, last SIM/WhatsApp sync, troubleshooting
 - [x] GitHub Actions: build + publish signed APK on every app update
 - [ ] Remove Lovable badge (blocked: needs Pro plan, then Project settings → Hide badge)
-- [ ] AI summary from manager-provided call records: activity summary + calls needing follow-up
-- [ ] Quick AI summary on each call card (pattern / follow-up)
+- [x] AI summary from manager-provided call records: activity summary + calls needing follow-up
+- [x] Quick AI summary on each call card (pattern / follow-up)
 - [ ] Connect project to GitHub so every change builds a fresh APK (user action: Project settings → Git)
 - [ ] Real-phone test: install APK, SIM + WhatsApp call, confirm closed-app upload (user action; checklist provided)
 - [x] Publish the Winstone version

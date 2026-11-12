@@ -76,8 +76,10 @@ export const getCallNotes = createServerFn({ method: "POST" })
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) return { notes, error: "AI is not configured for this app." };
 
-    const [{ streamText, Output, NoObjectGeneratedError }, { createGatewayModel, LOW_REASONING, describeAiError }] =
-      await Promise.all([import("ai"), import("@/lib/ai-gateway.server")]);
+    const [
+      { streamText, Output, NoObjectGeneratedError },
+      { createGatewayModel, LOW_REASONING, describeAiError },
+    ] = await Promise.all([import("ai"), import("@/lib/ai-gateway.server")]);
 
     const { data: people } = await supabase.from("profiles").select("id, display_name");
     const names = new Map((people ?? []).map((p) => [p.id, p.display_name || "Unnamed"]));
@@ -91,9 +93,7 @@ export const getCallNotes = createServerFn({ method: "POST" })
         prompt: notesPrompt(jobs, names, tz, new Date()),
         output: Output.object({
           schema: z.object({
-            notes: z.array(
-              z.object({ ref: z.string(), note: z.string(), follow_up: z.boolean() }),
-            ),
+            notes: z.array(z.object({ ref: z.string(), note: z.string(), follow_up: z.boolean() })),
           }),
         }),
         providerOptions: LOW_REASONING,
@@ -114,7 +114,9 @@ export const getCallNotes = createServerFn({ method: "POST" })
         })
         .filter((r): r is NonNullable<typeof r> => !!r && r.note.length > 0);
       if (rows.length) {
-        const { error } = await supabase.from("call_ai_notes").upsert(rows, { onConflict: "call_id" });
+        const { error } = await supabase
+          .from("call_ai_notes")
+          .upsert(rows, { onConflict: "call_id" });
         if (error) console.error("Could not save call notes", error.message);
       }
       for (const r of rows) notes[r.call_id] = { note: r.note, followUp: r.follow_up };

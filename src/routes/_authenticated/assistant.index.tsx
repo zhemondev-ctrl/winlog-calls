@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -80,6 +80,18 @@ function AssistantHome() {
               </button>
             ))}
           </div>
+          <Link
+            to="/summary"
+            className="mt-2 flex w-full max-w-lg items-center justify-between gap-3 rounded-xl border-2 border-foreground bg-accent px-4 py-3 text-left text-accent-foreground"
+          >
+            <span>
+              <span className="block font-semibold">Summarize call records</span>
+              <span className="block text-sm opacity-80">
+                Upload a file, paste records or pick a period, and get follow-ups.
+              </span>
+            </span>
+            <span aria-hidden>→</span>
+          </Link>
         </section>
       </div>
     </AppShell>
