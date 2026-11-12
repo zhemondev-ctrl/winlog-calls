@@ -4,6 +4,7 @@ import { BarChart3, ListOrdered, LogOut, MessagesSquare, Smartphone, Users } fro
 import type { ReactNode } from "react";
 
 import logo from "@/assets/winstone-logo.png.asset.json";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { stopBackgroundUpload } from "@/lib/background-upload";
 import { meQuery } from "@/lib/queries";
@@ -11,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { useNativeSyncContext } from "./native-sync-context";
 
 const NAV = [
-  { to: "/dashboard", label: "Today", icon: BarChart3, adminOnly: false },
+  { to: "/dashboard", label: "Dashboard", icon: BarChart3, adminOnly: false },
   { to: "/calls", label: "Calls", icon: ListOrdered, adminOnly: false },
   { to: "/team", label: "Team", icon: Users, adminOnly: true },
   { to: "/assistant", label: "Ask AI", icon: MessagesSquare, adminOnly: true },
@@ -86,13 +87,13 @@ export function AppShell({
             <span className="hidden text-sm text-primary-foreground/80 sm:inline">
               {me?.displayName}
             </span>
-            <button
+            <Button variant="ghost" size="icon" title="Sign out"
               onClick={signOut}
               className="grid size-9 place-items-center rounded-full text-primary-foreground/70 transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground"
               aria-label="Sign out"
             >
               <LogOut className="size-4" />
-            </button>
+            </Button>
           </div>
         </div>
       </header>

@@ -8,6 +8,8 @@ import { CallItem } from "@/components/winlog/call-item";
 import { SetupBanner } from "@/components/winlog/setup-banner";
 import { Segmented } from "@/components/winlog/segmented";
 import { StatCard } from "@/components/winlog/stat-card";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   ChartContainer,
   ChartTooltip,
@@ -20,12 +22,14 @@ import { callsQuery, meQuery, profilesQuery } from "@/lib/queries";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Today — WinLog" },
+      { title: "Agent dashboard — WinLog" },
       {
         name: "description",
         content: "Today's and this week's calls, talk time and missed calls across company phones.",
       },
-      { property: "og:title", content: "Today — WinLog" },
+      { property: "og:title", content: "Agent dashboard — WinLog" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Daily and weekly call stats from every company phone.",
@@ -45,7 +49,7 @@ const chartConfig = {
 function Dashboard() {
   const { data: me } = useSuspenseQuery(meQuery);
   const [period, setPeriod] = useState<"today" | "week">("today");
-  const [scope, setScope] = useState<"all" | "me">("all");
+  const [agent, setAgent] = useState("all");
 
   const range = useMemo(() => {
     const now = new Date();
@@ -60,7 +64,7 @@ function Dashboard() {
     };
   }, []);
 
-  const userId = me?.isAdmin && scope === "all" ? null : me?.userId;
+  const userId = me?.isAdmin ? (agent === "all" ? null : agent) : me?.userId;
   const { data: weekCalls = [], isLoading } = useQuery(
     callsQuery({ from: range.from, to: range.to, userId }),
   );
@@ -77,11 +81,13 @@ function Dashboard() {
     () => dailySeries(weekCalls, range.weekStart, 7),
     [weekCalls, range.weekStart],
   );
-  const showNames = me?.isAdmin && scope === "all";
+  const showNames = me?.isAdmin && agent === "all";
+  const selectedName = me?.isAdmin && agent === "all" ? "All agents" : names.get(agent) || me?.displayName;
+  const latestUpload = shown.reduce<string | null>((latest, call) => !latest || call.created_at > latest ? call.created_at : latest, null);
 
   return (
     <AppShell
-      title={period === "today" ? "Today" : "This week"}
+      title={me?.isAdmin ? "Agent dashboard" : "My dashboard"}
       kicker={new Date().toLocaleDateString(undefined, {
         weekday: "long",
         day: "numeric",
@@ -100,16 +106,24 @@ function Dashboard() {
           ]}
         />
         {me?.isAdmin && (
-          <Segmented
-            value={scope}
-            onChange={setScope}
-            options={[
-              { value: "all", label: "All phones" },
-              { value: "me", label: "Only me" },
-            ]}
-          />
+          <Select value={agent} onValueChange={setAgent}>
+            <SelectTrigger className="w-full bg-card sm:w-64" aria-label="Agent"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All agents</SelectItem>
+              {profiles.map((profile) => <SelectItem key={profile.id} value={profile.id}>{profile.display_name || "Unnamed agent"}</SelectItem>)}
+            </SelectContent>
+          </Select>
         )}
       </div>
+
+      <section className="mb-6 flex flex-wrap items-center justify-between gap-4 border-y border-border py-4">
+        <div className="min-w-0">
+          <h2 className="break-words font-semibold">{selectedName}</h2>
+          <p className="text-sm text-muted-foreground">{me?.isAdmin ? "Manager view" : "Agent"}{!me?.isAdmin && me?.email ? ` · ${me.email}` : ""}</p>
+          <p className="mt-1 text-xs text-muted-foreground">Latest call received: {latestUpload ? new Date(latestUpload).toLocaleString() : "No uploads yet"}</p>
+        </div>
+        <Button asChild variant="outline"><Link to="/sync">Sync status</Link></Button>
+      </section>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard
@@ -137,7 +151,7 @@ function Dashboard() {
         />
       </div>
 
-      <section className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-card">
+      <section className="mt-6 border-y border-border py-5">
         <div className="mb-3 flex items-baseline justify-between">
           <h2 className="font-display text-lg font-bold">Calls per day</h2>
           <span className="stamp text-muted-foreground">Mon – Sun</span>
@@ -157,7 +171,7 @@ function Dashboard() {
 
       <section className="mt-6">
         <div className="mb-2 flex items-baseline justify-between px-1">
-          <h2 className="font-display text-lg font-bold">Latest calls</h2>
+          <h2 className="font-display text-lg font-bold">Agent call details</h2>
           <Link to="/calls" className="text-sm font-medium underline underline-offset-4">
             See all
           </Link>
@@ -169,7 +183,7 @@ function Dashboard() {
               : "No calls yet. Calls appear here once a phone with WinLog uploads them."}
           </div>
         ) : (
-          <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card shadow-card">
+          <ul className="divide-y divide-border border-y border-border">
             {shown.slice(0, 8).map((c) => (
               <CallItem
                 key={c.id}

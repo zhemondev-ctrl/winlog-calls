@@ -15,6 +15,8 @@ export const Route = createFileRoute("/_authenticated/assistant/$threadId")({
       { title: "Conversation — WinLog Ask AI" },
       { name: "description", content: "A saved conversation with the WinLog call assistant." },
       { property: "og:title", content: "Conversation — WinLog Ask AI" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:description", content: "Questions and answers about team call activity." },
     ],
   }),

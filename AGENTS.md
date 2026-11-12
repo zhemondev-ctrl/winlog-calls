@@ -43,5 +43,6 @@ use the editor.
 - AI call-card notes: `getCallNotes` (managers only) writes one-line notes in batches for cards scrolled into view and saves them in `call_ai_notes`; a note is rewritten only when its contact has a newer call (`planNotes` in `src/lib/call-notes.ts`). Why: notes appear automatically without paying for the same note on every visit.
 - "Summarize records" (`/summary` → `/api/summary`): uploaded/pasted records are read in the browser (Excel via SheetJS, loaded on demand) and sent as text; WinLog periods are condensed with `buildCallDigest`. Shared gateway setup lives in `src/lib/ai-gateway.server.ts`. Why: one model contract for every one-shot AI feature.
 - Sync status screen (`/sync`) gets its fix-it steps from `diagnose()` in `src/lib/sync-health.ts`; the app records SIM and WhatsApp sync times separately. Why: the troubleshooting rules are tested in one place.
-- APK workflow builds only when phone-side files change (path filter) and also publishes a fixed-name `WinLog.apk` for a stable latest-download link. Why: website updates reach phones on publish without a new APK.
+- APK workflow builds on every branch push and publishes a fixed-name `WinLog.apk`; only default-branch releases become latest. Why: every commit is buildable without letting an experimental branch replace the team's stable download.
+- The dashboard uses existing call/profile queries for personal agent details and a manager agent selector; the Android shell renders this same route. Why: phone and website screens remain one implementation.
 
