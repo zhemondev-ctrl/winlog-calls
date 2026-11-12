@@ -87,9 +87,14 @@ function SummaryPage() {
     if (!f) return;
     try {
       const text = (await readFileAsText(f)).trim();
-      if (!text) return toast.error("That file looks empty.");
-      if (text.length > MAX_CHARS)
-        return toast.error("That file is too large. Split it into smaller periods and try again.");
+      if (!text) {
+        toast.error("That file looks empty.");
+        return;
+      }
+      if (text.length > MAX_CHARS) {
+        toast.error("That file is too large. Split it into smaller periods and try again.");
+        return;
+      }
       setFile({ name: f.name, text });
     } catch {
       toast.error("Could not read that file. Use CSV, Excel or a text file.");
