@@ -25,6 +25,11 @@ export const Route = createFileRoute("/_authenticated/follow-ups")({
   component: FollowUpsPage,
 });
 
+interface ResolvedFlaggedCall extends FlaggedCall {
+  resolved_at: string;
+  resolved_by: string | null;
+}
+
 const followUpsQuery = {
   queryKey: ["follow-ups"],
   queryFn: async (): Promise<FlaggedCall[]> => {
@@ -42,12 +47,45 @@ const followUpsQuery = {
   },
 };
 
+const resolvedFollowUpsQuery = {
+  queryKey: ["follow-ups-resolved"],
+  queryFn: async (): Promise<ResolvedFlaggedCall[]> => {
+    const { data, error } = await supabase
+      .from("call_ai_notes")
+      .select(
+        "call_id, note, resolved_at, resolved_by, call_logs!inner(user_id, phone_number, contact_name, direction, started_at)",
+      )
+      .eq("follow_up", true)
+      .not("resolved_at", "is", null)
+      .order("resolved_at", { ascending: false })
+      .limit(200);
+    if (error) throw error;
+    return (data ?? []).map((r) => ({
+      call_id: r.call_id,
+      note: r.note,
+      resolved_at: r.resolved_at!,
+      resolved_by: r.resolved_by,
+      ...r.call_logs,
+    }));
+  },
+};
+
 function FollowUpsPage() {
   const { data: me } = useSuspenseQuery(meQuery);
   const qc = useQueryClient();
   const { data: flagged = [], isLoading } = useQuery({ ...followUpsQuery, enabled: !!me?.isAdmin });
+  const { data: resolved = [] } = useQuery({ ...resolvedFollowUpsQuery, enabled: !!me?.isAdmin });
   const { data: profiles = [] } = useQuery({ ...profilesQuery, enabled: !!me?.isAdmin });
   const groups = useMemo(() => groupFollowUps(flagged), [flagged]);
+  const history = useMemo(() => {
+    const sorted = [...resolved].sort(
+      (a, b) => Date.parse(b.resolved_at) - Date.parse(a.resolved_at),
+    );
+    return groupFollowUps(sorted).map((g) => {
+      const items = sorted.filter((c) => g.callIds.includes(c.call_id));
+      return { ...g, resolvedAt: items[0]?.resolved_at ?? "", resolvedBy: items[0]?.resolved_by ?? null };
+    });
+  }, [resolved]);
   const names = useMemo(() => new Map(profiles.map((p) => [p.id, p.display_name])), [profiles]);
 
   const resolve = useMutation({
@@ -61,6 +99,7 @@ function FollowUpsPage() {
     onSuccess: () => {
       toast.success("Marked resolved");
       void qc.invalidateQueries({ queryKey: ["follow-ups"] });
+      void qc.invalidateQueries({ queryKey: ["follow-ups-resolved"] });
     },
     onError: () => toast.error("Could not mark this resolved. Try again."),
   });
@@ -128,6 +167,38 @@ function FollowUpsPage() {
             </li>
           ))}
         </ul>
+        {history.length > 0 && (
+          <section className="pt-4">
+            <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
+              History · {history.length} resolved
+            </h2>
+            <ul className="space-y-3">
+              {history.map((g) => (
+                <li
+                  key={g.key}
+                  className="rounded-2xl border border-border bg-card p-4 opacity-80 shadow-card"
+                >
+                  <div className="flex items-start gap-3">
+                    <Check className="mt-0.5 size-4 shrink-0 text-incoming" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-semibold">{g.contact}</div>
+                      {g.phone && g.phone !== g.contact && (
+                        <div className="text-xs text-muted-foreground">{g.phone}</div>
+                      )}
+                      <p className="mt-1 text-sm text-muted-foreground">{g.note}</p>
+                      <div className="mt-2 text-xs text-muted-foreground">
+                        Resolved {new Date(g.resolvedAt).toLocaleString()}
+                        {g.resolvedBy ? ` by ${names.get(g.resolvedBy) || "Manager"}` : ""} ·{" "}
+                        {g.callIds.length} {g.callIds.length === 1 ? "call" : "calls"} ·{" "}
+                        {g.staffIds.map((id) => names.get(id) || "Staff").join(", ")}
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </AppShell>
   );
