@@ -99,6 +99,7 @@ function FollowUpsPage() {
     onSuccess: () => {
       toast.success("Marked resolved");
       void qc.invalidateQueries({ queryKey: ["follow-ups"] });
+      void qc.invalidateQueries({ queryKey: ["follow-ups-resolved"] });
     },
     onError: () => toast.error("Could not mark this resolved. Try again."),
   });
@@ -166,6 +167,38 @@ function FollowUpsPage() {
             </li>
           ))}
         </ul>
+        {history.length > 0 && (
+          <section className="pt-4">
+            <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
+              History · {history.length} resolved
+            </h2>
+            <ul className="space-y-3">
+              {history.map((g) => (
+                <li
+                  key={g.key}
+                  className="rounded-2xl border border-border bg-card p-4 opacity-80 shadow-card"
+                >
+                  <div className="flex items-start gap-3">
+                    <Check className="mt-0.5 size-4 shrink-0 text-incoming" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-semibold">{g.contact}</div>
+                      {g.phone && g.phone !== g.contact && (
+                        <div className="text-xs text-muted-foreground">{g.phone}</div>
+                      )}
+                      <p className="mt-1 text-sm text-muted-foreground">{g.note}</p>
+                      <div className="mt-2 text-xs text-muted-foreground">
+                        Resolved {new Date(g.resolvedAt).toLocaleString()}
+                        {g.resolvedBy ? ` by ${names.get(g.resolvedBy) || "Manager"}` : ""} ·{" "}
+                        {g.callIds.length} {g.callIds.length === 1 ? "call" : "calls"} ·{" "}
+                        {g.staffIds.map((id) => names.get(id) || "Staff").join(", ")}
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </AppShell>
   );
