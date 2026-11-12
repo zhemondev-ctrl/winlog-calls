@@ -56,7 +56,10 @@ export async function handleSummary(request: Request): Promise<Response> {
   try {
     body = bodySchema.parse(await request.json());
   } catch {
-    return err(400, "Those records could not be read. Files must be under about 240,000 characters.");
+    return err(
+      400,
+      "Those records could not be read. Files must be under about 240,000 characters.",
+    );
   }
   const tz = safeTimeZone(body.timeZone);
   let records: string;
@@ -69,23 +72,32 @@ export async function handleSummary(request: Request): Promise<Response> {
     for (let offset = 0; offset < 10_000; offset += 1000) {
       let q = supabase
         .from("call_logs")
-        .select("user_id, source, direction, phone_number, contact_name, started_at, duration_seconds, is_video")
+        .select(
+          "user_id, source, direction, phone_number, contact_name, started_at, duration_seconds, is_video",
+        )
         .gte("started_at", body.from)
         .lte("started_at", body.to);
       if (body.userId) q = q.eq("user_id", body.userId);
-      const { data, error } = await q.order("started_at", { ascending: false }).range(offset, offset + 999);
+      const { data, error } = await q
+        .order("started_at", { ascending: false })
+        .range(offset, offset + 999);
       if (error) return err(500, "Could not load team calls.");
       calls.push(...((data ?? []) as DigestCall[]));
       if (!data || data.length < 1000) break;
     }
-    if (calls.length === 0) return err(400, "No calls in that period. Pick another period or person.");
+    if (calls.length === 0)
+      return err(400, "No calls in that period. Pick another period or person.");
     const { data: people } = await supabase.from("profiles").select("id, display_name");
     const team = (people ?? []).map((p) => ({ id: p.id, name: p.display_name }));
-    records = buildCallDigest(calls, body.userId ? team.filter((p) => p.id === body.userId) : team, {
-      now: new Date(Math.min(to, Date.now())),
-      timeZone: tz,
-      days: Math.max(1, Math.round((to - from) / DAY)),
-    });
+    records = buildCallDigest(
+      calls,
+      body.userId ? team.filter((p) => p.id === body.userId) : team,
+      {
+        now: new Date(Math.min(to, Date.now())),
+        timeZone: tz,
+        days: Math.max(1, Math.round((to - from) / DAY)),
+      },
+    );
   } else {
     records = `Source: ${body.mode === "upload" ? `uploaded file ${body.fileName ?? ""}` : "pasted text"}\nManager's time zone: ${tz}\n\n${body.text}`;
   }
@@ -116,7 +128,10 @@ export async function handleSummary(request: Request): Promise<Response> {
     },
   });
   const response = new Response(stream, {
-    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache, no-transform" },
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+    },
   });
   return withLovableAiGatewayRunIdHeader(response, runIdFetch);
 }

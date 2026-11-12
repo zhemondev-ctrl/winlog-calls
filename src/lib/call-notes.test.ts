@@ -10,7 +10,12 @@ const base = {
   duration_seconds: 0,
   is_video: false,
 };
-const missed: NoteCall = { ...base, id: "a", direction: "missed", started_at: "2026-11-10T09:00:00Z" };
+const missed: NoteCall = {
+  ...base,
+  id: "a",
+  direction: "missed",
+  started_at: "2026-11-10T09:00:00Z",
+};
 const callBack: NoteCall = {
   ...base,
   id: "b",
@@ -28,14 +33,24 @@ describe("call notes", () => {
   });
 
   it("keeps a saved note while nothing new happened with that contact", () => {
-    const saved = { call_id: "a", note: "No callback yet", follow_up: true, contact_last_at: missed.started_at };
+    const saved = {
+      call_id: "a",
+      note: "No callback yet",
+      follow_up: true,
+      contact_last_at: missed.started_at,
+    };
     const { keep, jobs } = planNotes([missed], [missed], [saved]);
     expect(keep).toEqual([saved]);
     expect(jobs).toEqual([]);
   });
 
   it("rewrites the note once the contact has a newer call (e.g. a callback)", () => {
-    const saved = { call_id: "a", note: "No callback yet", follow_up: true, contact_last_at: missed.started_at };
+    const saved = {
+      call_id: "a",
+      note: "No callback yet",
+      follow_up: true,
+      contact_last_at: missed.started_at,
+    };
     const { keep, jobs } = planNotes([missed], [missed, callBack], [saved]);
     expect(keep).toEqual([]);
     expect(jobs[0]?.contactLastAt).toBe(callBack.started_at);

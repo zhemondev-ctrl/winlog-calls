@@ -16,6 +16,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedCallsRouteImport } from './routes/_authenticated/calls'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedPhoneRouteImport } from './routes/_authenticated/phone'
+import { Route as AuthenticatedSummaryRouteImport } from './routes/_authenticated/summary'
 import { Route as AuthenticatedSyncRouteImport } from './routes/_authenticated/sync'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
@@ -56,6 +57,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 const AuthenticatedPhoneRoute = AuthenticatedPhoneRouteImport.update({
   id: '/phone',
   path: '/phone',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSummaryRoute = AuthenticatedSummaryRouteImport.update({
+  id: '/summary',
+  path: '/summary',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSyncRoute = AuthenticatedSyncRouteImport.update({
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/calls': typeof AuthenticatedCallsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/phone': typeof AuthenticatedPhoneRoute
+  '/summary': typeof AuthenticatedSummaryRoute
   '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/calls': typeof AuthenticatedCallsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/phone': typeof AuthenticatedPhoneRoute
+  '/summary': typeof AuthenticatedSummaryRoute
   '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/_authenticated/calls': typeof AuthenticatedCallsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/phone': typeof AuthenticatedPhoneRoute
+  '/_authenticated/summary': typeof AuthenticatedSummaryRoute
   '/_authenticated/sync': typeof AuthenticatedSyncRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/calls'
     | '/dashboard'
     | '/phone'
+    | '/summary'
     | '/sync'
     | '/team'
     | '/api/assistant'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/calls'
     | '/dashboard'
     | '/phone'
+    | '/summary'
     | '/sync'
     | '/team'
     | '/api/assistant'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/_authenticated/calls'
     | '/_authenticated/dashboard'
     | '/_authenticated/phone'
+    | '/_authenticated/summary'
     | '/_authenticated/sync'
     | '/_authenticated/team'
     | '/api/assistant'
@@ -253,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPhoneRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/summary': {
+      id: '/_authenticated/summary'
+      path: '/summary'
+      fullPath: '/summary'
+      preLoaderRoute: typeof AuthenticatedSummaryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/sync': {
       id: '/_authenticated/sync'
       path: '/sync'
@@ -309,6 +328,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCallsRoute: typeof AuthenticatedCallsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedPhoneRoute: typeof AuthenticatedPhoneRoute
+  AuthenticatedSummaryRoute: typeof AuthenticatedSummaryRoute
   AuthenticatedSyncRoute: typeof AuthenticatedSyncRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
@@ -319,6 +339,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCallsRoute: AuthenticatedCallsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedPhoneRoute: AuthenticatedPhoneRoute,
+  AuthenticatedSummaryRoute: AuthenticatedSummaryRoute,
   AuthenticatedSyncRoute: AuthenticatedSyncRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,

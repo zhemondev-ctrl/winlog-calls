@@ -32,9 +32,14 @@ export const LOW_REASONING = {
 export function describeAiError(error: unknown): { status: number; message: string } {
   const e = error as { statusCode?: number; cause?: { statusCode?: number } } | null;
   const status = e?.statusCode ?? e?.cause?.statusCode ?? 500;
-  if (status === 429) return { status, message: "The AI is busy right now. Please try again in a minute." };
+  if (status === 429)
+    return { status, message: "The AI is busy right now. Please try again in a minute." };
   if (status === 402)
-    return { status, message: "AI credits have run out for this workspace. Add credits to keep using AI summaries." };
+    return {
+      status,
+      message:
+        "AI credits have run out for this workspace. Add credits to keep using AI summaries.",
+    };
   if (status === 403) return { status, message: "The AI service refused this request." };
   return { status: 500, message: "The AI could not answer. Please try again." };
 }

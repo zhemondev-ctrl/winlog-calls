@@ -54,7 +54,9 @@ async function readFileAsText(file: File): Promise<string> {
     const wb = XLSX.read(await file.arrayBuffer(), { type: "array", cellDates: true });
     return wb.SheetNames.map((name) => {
       const sheet = wb.Sheets[name];
-      return sheet ? `### Sheet: ${name}\n${XLSX.utils.sheet_to_csv(sheet, { blankrows: false })}` : "";
+      return sheet
+        ? `### Sheet: ${name}\n${XLSX.utils.sheet_to_csv(sheet, { blankrows: false })}`
+        : "";
     }).join("\n\n");
   }
   return file.text();
@@ -107,7 +109,8 @@ function SummaryPage() {
         timeZone,
       };
     }
-    if (mode === "upload") return file ? { mode, text: file.text, fileName: file.name, timeZone } : null;
+    if (mode === "upload")
+      return file ? { mode, text: file.text, fileName: file.name, timeZone } : null;
     const text = paste.trim();
     return text ? { mode, text, fileName: null, timeZone } : null;
   }
@@ -175,7 +178,9 @@ function SummaryPage() {
               <TabsTrigger value="paste">Paste</TabsTrigger>
             </TabsList>
             <TabsContent value="winlog" className="space-y-3 pt-3">
-              <p className="text-sm text-muted-foreground">Calls already uploaded from team phones.</p>
+              <p className="text-sm text-muted-foreground">
+                Calls already uploaded from team phones.
+              </p>
               <Segmented
                 value={days}
                 onChange={setDays}
@@ -222,7 +227,9 @@ function SummaryPage() {
               <Textarea
                 value={paste}
                 onChange={(e) => setPaste(e.target.value)}
-                placeholder={"Paste call records, e.g.\n11 Nov 10:05, Karim Builders, 01711000003, missed, Rahim\n11 Nov 10:40, Nadia, 01811000004, outgoing, 4m 12s, Sumi"}
+                placeholder={
+                  "Paste call records, e.g.\n11 Nov 10:05, Karim Builders, 01711000003, missed, Rahim\n11 Nov 10:40, Nadia, 01811000004, outgoing, 4m 12s, Sumi"
+                }
                 className="min-h-48 bg-background font-mono text-xs"
               />
               <p className="text-right text-xs text-muted-foreground">
@@ -231,7 +238,11 @@ function SummaryPage() {
             </TabsContent>
           </Tabs>
           {running ? (
-            <Button variant="outline" className="w-full rounded-full" onClick={() => abort.current?.abort()}>
+            <Button
+              variant="outline"
+              className="w-full rounded-full"
+              onClick={() => abort.current?.abort()}
+            >
               <Square /> Stop
             </Button>
           ) : (
@@ -248,7 +259,10 @@ function SummaryPage() {
           </p>
         </section>
 
-        <section className="min-h-64 rounded-2xl border border-border bg-card p-5 shadow-card" aria-live="polite">
+        <section
+          className="min-h-64 rounded-2xl border border-border bg-card p-5 shadow-card"
+          aria-live="polite"
+        >
           {error && (
             <p className="mb-3 rounded-xl border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
               {error}

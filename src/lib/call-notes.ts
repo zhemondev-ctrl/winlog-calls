@@ -54,7 +54,11 @@ export function planNotes(
   for (const call of targets) {
     const contactLastAt = latestFor(call, byContact);
     const note = savedById.get(call.id);
-    if (note && note.contact_last_at && Date.parse(note.contact_last_at) >= Date.parse(contactLastAt)) {
+    if (
+      note &&
+      note.contact_last_at &&
+      Date.parse(note.contact_last_at) >= Date.parse(contactLastAt)
+    ) {
       keep.push(note);
       continue;
     }
@@ -82,10 +86,16 @@ function line(c: NoteCall, names: Map<string, string>, tz: string): string {
   return `${when} · ${c.direction}${c.is_video ? " video" : ""} ${c.source} call${talk} · staff ${names.get(c.user_id) ?? "unknown"}`;
 }
 
-export function notesPrompt(jobs: NoteJob[], names: Map<string, string>, tz: string, now: Date): string {
+export function notesPrompt(
+  jobs: NoteJob[],
+  names: Map<string, string>,
+  tz: string,
+  now: Date,
+): string {
   const out = [`Now: ${now.toLocaleString("en-GB", { timeZone: tz })} (${tz}).`];
   for (const j of jobs) {
-    const who = [j.call.contact_name, j.call.phone_number].filter(Boolean).join(" ") || "unknown caller";
+    const who =
+      [j.call.contact_name, j.call.phone_number].filter(Boolean).join(" ") || "unknown caller";
     out.push("", `[ref ${j.ref}] ${who}: ${line(j.call, names, tz)}`);
     if (j.history.length === 0) out.push("  No other calls with this contact in the period.");
     for (const h of j.history) out.push(`  - ${line(h, names, tz)}`);
