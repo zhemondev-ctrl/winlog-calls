@@ -135,7 +135,11 @@ function CallsPage() {
       {isLoading ? (
         <div className="py-10 text-center text-sm text-muted-foreground">Loading calls…</div>
       ) : (
-        <CallList calls={filtered} names={me?.isAdmin && employee === "all" ? names : undefined} />
+        <CallList
+          calls={filtered}
+          names={me?.isAdmin && employee === "all" ? names : undefined}
+          aiNotes={!!me?.isAdmin}
+        />
       )}
     </AppShell>
   );
