@@ -19,6 +19,7 @@ import { Route as AuthenticatedPhoneRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSyncRouteImport } from './routes/_authenticated/sync'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
+import { Route as ApiSummaryRouteImport } from './routes/api/summary'
 import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
 import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant.$threadId'
 import { Route as ApiPublicDeviceUploadRouteImport } from './routes/api/public/device-upload'
@@ -72,6 +73,11 @@ const ApiAssistantRoute = ApiAssistantRouteImport.update({
   path: '/api/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSummaryRoute = ApiSummaryRouteImport.update({
+  id: '/api/summary',
+  path: '/api/summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAssistantIndexRoute =
   AuthenticatedAssistantIndexRouteImport.update({
     id: '/assistant/',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
+  '/api/summary': typeof ApiSummaryRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/assistant/': typeof AuthenticatedAssistantIndexRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
+  '/api/summary': typeof ApiSummaryRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/assistant': typeof AuthenticatedAssistantIndexRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/_authenticated/sync': typeof AuthenticatedSyncRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/api/assistant': typeof ApiAssistantRoute
+  '/api/summary': typeof ApiSummaryRoute
   '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/_authenticated/assistant/': typeof AuthenticatedAssistantIndexRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/sync'
     | '/team'
     | '/api/assistant'
+    | '/api/summary'
     | '/assistant/$threadId'
     | '/api/public/device-upload'
     | '/assistant/'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/sync'
     | '/team'
     | '/api/assistant'
+    | '/api/summary'
     | '/assistant/$threadId'
     | '/api/public/device-upload'
     | '/assistant'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/_authenticated/sync'
     | '/_authenticated/team'
     | '/api/assistant'
+    | '/api/summary'
     | '/_authenticated/assistant/$threadId'
     | '/api/public/device-upload'
     | '/_authenticated/assistant/'
@@ -186,6 +198,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiAssistantRoute: typeof ApiAssistantRoute
+  ApiSummaryRoute: typeof ApiSummaryRoute
   ApiPublicDeviceUploadRoute: typeof ApiPublicDeviceUploadRoute
 }
 
@@ -261,6 +274,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/summary': {
+      id: '/api/summary'
+      path: '/api/summary'
+      fullPath: '/api/summary'
+      preLoaderRoute: typeof ApiSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/assistant/': {
       id: '/_authenticated/assistant/'
       path: '/assistant'
@@ -314,6 +334,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiAssistantRoute: ApiAssistantRoute,
+  ApiSummaryRoute: ApiSummaryRoute,
   ApiPublicDeviceUploadRoute: ApiPublicDeviceUploadRoute,
 }
 export const routeTree = rootRouteImport
