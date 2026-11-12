@@ -20,6 +20,8 @@ export function useCallNotes(enabled: boolean) {
   const paused = useRef(false);
   const observer = useRef<IntersectionObserver | null>(null);
   const timer = useRef<number | null>(null);
+  // Cards mount (and call `observe`) before the observer exists, so remember them.
+  const elements = useRef(new Set<HTMLElement>());
 
   const pump = useCallback(async () => {
     if (running.current || paused.current) return;
@@ -72,6 +74,7 @@ export function useCallNotes(enabled: boolean) {
       },
       { rootMargin: "200px 0px" },
     );
+    for (const el of elements.current) observer.current.observe(el);
     return () => {
       observer.current?.disconnect();
       observer.current = null;
@@ -81,7 +84,9 @@ export function useCallNotes(enabled: boolean) {
 
   /** Ref callback for each call card. */
   const observe = useCallback((el: HTMLElement | null) => {
-    if (el && observer.current) observer.current.observe(el);
+    if (!el) return;
+    elements.current.add(el);
+    observer.current?.observe(el);
   }, []);
 
   return { notes, loading, error, observe: enabled ? observe : undefined };
