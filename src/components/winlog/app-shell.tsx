@@ -56,6 +56,14 @@ export function AppShell({
               <Link
                 key={item.to}
                 to={item.to}
+                onClick={() => {
+                  if (item.to === "/follow-ups") {
+                    window.__lovableEvents?.track?.("lovable.interaction", {
+                      action: "view_follow_ups",
+                      target: "follow_up_queue",
+                    });
+                  }
+                }}
                 className="rounded-full px-3 py-1.5 text-sm font-medium text-primary-foreground/70 transition-colors hover:text-primary-foreground"
                 activeProps={{
                   className: "bg-accent text-accent-foreground hover:text-accent-foreground",
@@ -113,6 +121,14 @@ export function AppShell({
             <Link
               key={item.to}
               to={item.to}
+              onClick={() => {
+                if (item.to === "/follow-ups") {
+                  window.__lovableEvents?.track?.("lovable.interaction", {
+                    action: "view_follow_ups",
+                    target: "follow_up_queue",
+                  });
+                }
+              }}
               className="flex min-w-14 flex-col items-center gap-1 rounded-xl px-2 py-1.5 text-[11px] font-medium text-muted-foreground"
               activeProps={{
                 className: "text-foreground [&_svg]:bg-accent [&_svg]:border-foreground",

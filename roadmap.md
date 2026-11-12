@@ -26,3 +26,4 @@
 
 - [x] Manager follow-up queue with resolve
 - [x] Phone setup checklist (call history, notifications, battery)
+- [x] Manager follow-up viewing and successful-resolution analytics

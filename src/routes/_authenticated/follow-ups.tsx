@@ -96,7 +96,10 @@ function FollowUpsPage() {
         .in("call_id", callIds);
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: (_data, callIds) => {
+      window.__lovableEvents?.track?.("project.follow_up_resolved", {
+        flagged_call_count: callIds.length,
+      });
       toast.success("Marked resolved");
       void qc.invalidateQueries({ queryKey: ["follow-ups"] });
       void qc.invalidateQueries({ queryKey: ["follow-ups-resolved"] });
