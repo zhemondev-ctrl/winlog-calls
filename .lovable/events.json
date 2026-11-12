@@ -1,6 +1,43 @@
 {
   "schema_version": 1,
   "events": {
+    "project.call_uploaded": {
+      "event_schema_version": 1,
+      "description": "A foreground phone sync successfully inserted new calls into the shared log; duplicate re-reads are excluded. Sum call_count by day and source. Closed-app WorkManager uploads are not covered.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "call_count",
+          "source",
+          "upload_mode"
+        ],
+        "properties": {
+          "call_count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "sim",
+              "whatsapp"
+            ]
+          },
+          "upload_mode": {
+            "type": "string",
+            "enum": [
+              "foreground"
+            ]
+          }
+        }
+      }
+    },
     "project.follow_up_resolved": {
       "event_schema_version": 1,
       "description": "A manager successfully marks a grouped contact follow-up resolved.",
