@@ -1,0 +1,2 @@
+ALTER TABLE public.call_ai_notes ADD COLUMN IF NOT EXISTS resolved_at timestamptz, ADD COLUMN IF NOT EXISTS resolved_by uuid;
+CREATE INDEX IF NOT EXISTS call_ai_notes_open_follow_ups ON public.call_ai_notes (generated_at DESC) WHERE follow_up AND resolved_at IS NULL;

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { BarChart3, ListOrdered, LogOut, MessagesSquare, Smartphone, Users } from "lucide-react";
+import { BarChart3, BellRing, ListOrdered, LogOut, MessagesSquare, Smartphone, Users } from "lucide-react";
 import type { ReactNode } from "react";
 
 import logo from "@/assets/winstone-logo.png.asset.json";
@@ -14,6 +14,7 @@ import { useNativeSyncContext } from "./native-sync-context";
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: BarChart3, adminOnly: false },
   { to: "/calls", label: "Calls", icon: ListOrdered, adminOnly: false },
+  { to: "/follow-ups", label: "Follow-ups", icon: BellRing, adminOnly: true },
   { to: "/team", label: "Team", icon: Users, adminOnly: true },
   { to: "/assistant", label: "Ask AI", icon: MessagesSquare, adminOnly: true },
   { to: "/phone", label: "Phone", icon: Smartphone, adminOnly: false },

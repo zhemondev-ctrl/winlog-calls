@@ -83,6 +83,8 @@ export type Database = {
           follow_up: boolean
           generated_at: string
           note: string
+          resolved_at: string | null
+          resolved_by: string | null
         }
         Insert: {
           call_id: string
@@ -90,6 +92,8 @@ export type Database = {
           follow_up?: boolean
           generated_at?: string
           note: string
+          resolved_at?: string | null
+          resolved_by?: string | null
         }
         Update: {
           call_id?: string
@@ -97,6 +101,8 @@ export type Database = {
           follow_up?: boolean
           generated_at?: string
           note?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
         }
         Relationships: [
           {

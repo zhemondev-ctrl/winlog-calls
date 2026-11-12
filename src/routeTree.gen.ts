@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedCallsRouteImport } from './routes/_authenticated/calls'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedFollowUpsRouteImport } from './routes/_authenticated/follow-ups'
 import { Route as AuthenticatedPhoneRouteImport } from './routes/_authenticated/phone'
 import { Route as AuthenticatedSummaryRouteImport } from './routes/_authenticated/summary'
 import { Route as AuthenticatedSyncRouteImport } from './routes/_authenticated/sync'
@@ -52,6 +53,11 @@ const AuthenticatedCallsRoute = AuthenticatedCallsRouteImport.update({
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFollowUpsRoute = AuthenticatedFollowUpsRouteImport.update({
+  id: '/follow-ups',
+  path: '/follow-ups',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPhoneRoute = AuthenticatedPhoneRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/calls': typeof AuthenticatedCallsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/phone': typeof AuthenticatedPhoneRoute
   '/summary': typeof AuthenticatedSummaryRoute
   '/sync': typeof AuthenticatedSyncRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/calls': typeof AuthenticatedCallsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/phone': typeof AuthenticatedPhoneRoute
   '/summary': typeof AuthenticatedSummaryRoute
   '/sync': typeof AuthenticatedSyncRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/calls': typeof AuthenticatedCallsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/_authenticated/phone': typeof AuthenticatedPhoneRoute
   '/_authenticated/summary': typeof AuthenticatedSummaryRoute
   '/_authenticated/sync': typeof AuthenticatedSyncRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/calls'
     | '/dashboard'
+    | '/follow-ups'
     | '/phone'
     | '/summary'
     | '/sync'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/calls'
     | '/dashboard'
+    | '/follow-ups'
     | '/phone'
     | '/summary'
     | '/sync'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/calls'
     | '/_authenticated/dashboard'
+    | '/_authenticated/follow-ups'
     | '/_authenticated/phone'
     | '/_authenticated/summary'
     | '/_authenticated/sync'
@@ -256,6 +268,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/follow-ups': {
+      id: '/_authenticated/follow-ups'
+      path: '/follow-ups'
+      fullPath: '/follow-ups'
+      preLoaderRoute: typeof AuthenticatedFollowUpsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/phone': {
@@ -327,6 +346,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCallsRoute: typeof AuthenticatedCallsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedFollowUpsRoute: typeof AuthenticatedFollowUpsRoute
   AuthenticatedPhoneRoute: typeof AuthenticatedPhoneRoute
   AuthenticatedSummaryRoute: typeof AuthenticatedSummaryRoute
   AuthenticatedSyncRoute: typeof AuthenticatedSyncRoute
@@ -338,6 +358,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCallsRoute: AuthenticatedCallsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedFollowUpsRoute: AuthenticatedFollowUpsRoute,
   AuthenticatedPhoneRoute: AuthenticatedPhoneRoute,
   AuthenticatedSummaryRoute: AuthenticatedSummaryRoute,
   AuthenticatedSyncRoute: AuthenticatedSyncRoute,

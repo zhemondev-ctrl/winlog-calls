@@ -23,3 +23,6 @@
 - [ ] Create real manager and team accounts (blocked: user must create first account/invite members via More → Users; agent has no invitation tool)
 - [ ] Resolve overdue Pro payment (user action: Plans & credits)
 - [x] Rebuild WinLog from this project's Android source and verify shared website URL in the APK
+
+- [x] Manager follow-up queue with resolve
+- [x] Phone setup checklist (call history, notifications, battery)
