@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { BarChart3, ListOrdered, LogOut, MessagesSquare, Smartphone, Users } from "lucide-react";
+import { BarChart3, BellRing, ListOrdered, LogOut, MessagesSquare, Smartphone, Users } from "lucide-react";
 import type { ReactNode } from "react";
 
 import logo from "@/assets/winstone-logo.png.asset.json";

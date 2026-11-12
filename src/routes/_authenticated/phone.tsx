@@ -83,6 +83,14 @@ function PhonePage() {
   return (
     <AppShell title="Phone setup" kicker={status?.deviceName ?? "This phone"}>
       <div className="max-w-xl space-y-3">
+        <SetupChecklist
+          items={[
+            { label: "Call history access", done: !!status?.callLog },
+            { label: "Notification access (WhatsApp)", done: !!status?.notificationAccess },
+            { label: "Battery: unrestricted", done: !!status?.batteryUnrestricted },
+          ]}
+          onRecheck={() => void refreshStatus()}
+        />
         <Link
           to="/sync"
           className="flex items-center gap-4 rounded-2xl border-2 border-foreground bg-accent p-4 text-accent-foreground shadow-card"
@@ -215,6 +223,53 @@ function Step({
         <p className="text-sm text-muted-foreground">{body}</p>
       </div>
       {!done && <div className="self-center">{action}</div>}
+    </div>
+  );
+}
+
+function SetupChecklist({
+  items,
+  onRecheck,
+}: {
+  items: { label: string; done: boolean }[];
+  onRecheck: () => void;
+}) {
+  const done = items.filter((i) => i.done).length;
+  const ready = done === items.length;
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <div className="font-semibold">Setup checklist</div>
+          <div className="text-sm text-muted-foreground">
+            {ready ? "Ready to sync" : `${done} of ${items.length} done — finish the steps below`}
+          </div>
+        </div>
+        <Button variant="outline" size="sm" className="rounded-full" onClick={onRecheck}>
+          <RefreshCw /> Check again
+        </Button>
+      </div>
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-secondary">
+        <div
+          className={cn("h-full rounded-full", ready ? "bg-incoming" : "bg-accent")}
+          style={{ width: `${(done / items.length) * 100}%` }}
+        />
+      </div>
+      <ul className="mt-3 space-y-1.5">
+        {items.map((i) => (
+          <li key={i.label} className="flex items-center gap-2 text-sm">
+            <span
+              className={cn(
+                "grid size-5 place-items-center rounded-full",
+                i.done ? "bg-incoming/15 text-incoming" : "border border-border",
+              )}
+            >
+              {i.done && <Check className="size-3.5" />}
+            </span>
+            <span className={cn(!i.done && "text-muted-foreground")}>{i.label}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
