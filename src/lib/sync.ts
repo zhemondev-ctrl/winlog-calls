@@ -21,11 +21,26 @@ function readCursor(key: string): number {
 async function upload(rows: NewCallRow[]) {
   for (let i = 0; i < rows.length; i += 500) {
     const chunk = rows.slice(i, i + 500);
-    const { error } = await supabase.from("call_logs").upsert(chunk, {
+    const { data, error } = await supabase.from("call_logs").upsert(chunk, {
       onConflict: "user_id,device_id,source,external_id",
       ignoreDuplicates: true,
-    });
+    }).select("source");
     if (error) throw new Error(error.message);
+    // RETURNING contains only newly inserted rows, not the overlap re-read or calls
+    // already uploaded by WorkManager. Emit per committed chunk, even if a later one fails.
+    for (const source of ["sim", "whatsapp"] as const) {
+      const callCount = data?.filter((row) => row.source === source).length ?? 0;
+      if (callCount === 0) continue;
+      try {
+        window.__lovableEvents?.track?.("project.call_uploaded", {
+          call_count: callCount,
+          source,
+          upload_mode: "foreground",
+        });
+      } catch {
+        // Analytics must never prevent a successful sync or advance it into an error state.
+      }
+    }
   }
 }
 
