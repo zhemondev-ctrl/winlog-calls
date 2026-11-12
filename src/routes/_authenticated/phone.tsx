@@ -45,6 +45,16 @@ function PhonePage() {
     }
   }, [native, refreshStatus, refreshBackground]);
 
+  // Re-check after the user comes back from Android settings.
+  useEffect(() => {
+    if (!native) return;
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void refreshStatus();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [native, refreshStatus]);
+
   if (!native) {
     return (
       <AppShell title="Phone setup" kicker="Android app">
