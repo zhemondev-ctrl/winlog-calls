@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "events": {
+    "project.follow_up_resolved": {
+      "event_schema_version": 1,
+      "description": "A manager successfully marks a grouped contact follow-up resolved.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "flagged_call_count"
+        ],
+        "properties": {
+          "flagged_call_count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  }
+}
