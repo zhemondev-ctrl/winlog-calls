@@ -46,3 +46,4 @@ use the editor.
 - APK workflow builds on every branch push and publishes a fixed-name `WinLog.apk`; only default-branch releases become latest. Why: every commit is buildable without letting an experimental branch replace the team's stable download.
 - The dashboard uses existing call/profile queries for personal agent details and a manager agent selector; the Android shell renders this same route. Why: phone and website screens remain one implementation.
 
+- Follow-up queue (`/follow-ups`, managers): open items are `call_ai_notes` rows with follow_up and no resolved_at, grouped per contact by `groupFollowUps` (`src/lib/follow-ups.ts`); a note rewrite clears resolved_at. Why: a contact who calls again reappears automatically.
