@@ -275,7 +275,9 @@ function SummaryPage() {
           )}
           {output ? (
             <>
-              <MessageResponse isAnimating={running}>{output}</MessageResponse>
+              <div>
+                <MessageResponse isAnimating={running}>{output}</MessageResponse>
+              </div>
               {!running && (
                 <Button
                   variant="outline"
