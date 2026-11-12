@@ -1,19 +1,11 @@
 name: Build Android APK
 
-# Lovable sends every saved change to GitHub. Website-only changes reach phones as soon as you
-# publish (the app loads the live site), so a new APK is only built when phone-side files change.
+# Every pushed commit builds an APK. Website changes still require publishing in Lovable,
+# because both the phone and browser load the same published screens.
 # Run it by hand any time from the Actions tab ("Run workflow").
 on:
   push:
-    branches: [main, master]
-    paths:
-      - "android/**"
-      - "capacitor.config.ts"
-      - "android-shell/**"
-      - "package.json"
-      - "bun.lock"
-      - "bun.lockb"
-      - ".github/workflows/android-apk.yml"
+    branches: ["**"]
   workflow_dispatch:
 
 concurrency:
@@ -81,4 +73,4 @@ jobs:
             Install on each company phone: download the APK below, open it, and allow "Install unknown apps" if asked.
             Updates install over the previous version.
           files: out/*.apk
-          make_latest: true
+          make_latest: ${{ github.ref_name == github.event.repository.default_branch }}
