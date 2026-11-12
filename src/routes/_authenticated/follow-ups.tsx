@@ -25,6 +25,11 @@ export const Route = createFileRoute("/_authenticated/follow-ups")({
   component: FollowUpsPage,
 });
 
+interface ResolvedFlaggedCall extends FlaggedCall {
+  resolved_at: string;
+  resolved_by: string | null;
+}
+
 const followUpsQuery = {
   queryKey: ["follow-ups"],
   queryFn: async (): Promise<FlaggedCall[]> => {
@@ -39,6 +44,29 @@ const followUpsQuery = {
       .limit(500);
     if (error) throw error;
     return (data ?? []).map((r) => ({ call_id: r.call_id, note: r.note, ...r.call_logs }));
+  },
+};
+
+const resolvedFollowUpsQuery = {
+  queryKey: ["follow-ups-resolved"],
+  queryFn: async (): Promise<ResolvedFlaggedCall[]> => {
+    const { data, error } = await supabase
+      .from("call_ai_notes")
+      .select(
+        "call_id, note, resolved_at, resolved_by, call_logs!inner(user_id, phone_number, contact_name, direction, started_at)",
+      )
+      .eq("follow_up", true)
+      .not("resolved_at", "is", null)
+      .order("resolved_at", { ascending: false })
+      .limit(200);
+    if (error) throw error;
+    return (data ?? []).map((r) => ({
+      call_id: r.call_id,
+      note: r.note,
+      resolved_at: r.resolved_at!,
+      resolved_by: r.resolved_by,
+      ...r.call_logs,
+    }));
   },
 };
 
