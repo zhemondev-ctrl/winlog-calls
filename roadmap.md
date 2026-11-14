@@ -1,5 +1,8 @@
 # WinLog roadmap
 
+- [ ] Show Android build status and latest APK release directly on dashboard
+- [ ] Retry Android APK build after SDK fix and provide installation steps (real phone test requires user)
+
 - [x] Manually triggered Android build #7 and provided phone installation instructions; failed at SDK setup before signing
 - [ ] Publish signed APK: corrected obsolete SDK package locally; next synced push must complete successfully
 - [ ] Private automatic Winstone Pulse staff/call connection (blocked: source app only exposes property facts; protected staff/call sharing must be implemented in its own chat)
