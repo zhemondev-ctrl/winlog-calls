@@ -1,12 +1,100 @@
-import {useSuspenseQuery,useMutation,useQueryClient} from '@tanstack/react-query';
-import {useServerFn} from '@tanstack/react-start';
-import {useState} from 'react';
-import {Send} from 'lucide-react';
-import {toast} from 'sonner';
-import {Button} from '@/components/ui/button';
-import {Textarea} from '@/components/ui/textarea';
-import {customerMessagesQuery} from '@/lib/support/queries';
-import {mutateSupport} from '@/lib/support/workspace.functions';
-import {SupportShell,Empty,Status} from './shell';
-export function SupportMessages(){const {data}=useSuspenseQuery(customerMessagesQuery);const [id,setId]=useState('');const [body,setBody]=useState('');const [key,setKey]=useState(()=>crypto.randomUUID());const ticket=data.tickets.find(t=>t.id===id)??data.tickets[0];const fn=useServerFn(mutateSupport);const qc=useQueryClient();const mutation=useMutation({mutationFn:()=>{if(!ticket)throw new Error('Select a case');return fn({data:{action:'customer_reply',teamId:ticket.team_id,payload:{ticket_id:ticket.id,body,request_key:key}}});},onSuccess:async()=>{setBody('');setKey(crypto.randomUUID());await qc.invalidateQueries({queryKey:['support']});},onError:e=>toast.error(e.message)});
-return <SupportShell title="My support messages">{!ticket?<Empty title="No customer cases linked to this account" detail="A support administrator can link your own account to your customer profile."/>:<div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]"><div className="space-y-2">{data.tickets.map(t=><Button key={t.id} className="h-auto w-full justify-start whitespace-normal text-left" variant={ticket.id===t.id?'secondary':'ghost'} onClick={()=>setId(t.id)}>{t.subject}</Button>)}</div><section className="min-w-0"><div className="mb-4 flex justify-between"><h2 className="font-semibold">{ticket.subject}</h2><Status value={ticket.status}/></div><div className="space-y-3">{data.messages.filter(m=>m.ticket_id===ticket.id).map(m=><article key={m.id} className="rounded-md border border-border bg-card p-4"><p className="whitespace-pre-wrap break-words text-sm">{m.body}</p><p className="mt-2 text-xs text-muted-foreground">{new Date(m.created_at).toLocaleString()} · {m.delivery_state==='stored'?'Stored in app':'Read'}</p></article>)}</div><form className="mt-5 space-y-3" onSubmit={e=>{e.preventDefault();mutation.mutate();}}><Textarea aria-label="Customer reply" value={body} onChange={e=>setBody(e.target.value)} maxLength={10000} placeholder="Write a reply…"/><Button disabled={mutation.isPending||!body.trim()}><Send/>Send in app</Button></form></section></div>}</SupportShell>;}
+import { useSuspenseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { useState } from "react";
+import { Send } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { customerMessagesQuery } from "@/lib/support/queries";
+import { mutateSupport } from "@/lib/support/workspace.functions";
+import { SupportShell, Empty, Status } from "./shell";
+export function SupportMessages() {
+  const { data } = useSuspenseQuery(customerMessagesQuery);
+  const [id, setId] = useState("");
+  const [body, setBody] = useState("");
+  const [key, setKey] = useState(() => crypto.randomUUID());
+  const ticket = data.tickets.find((t) => t.id === id) ?? data.tickets[0];
+  const fn = useServerFn(mutateSupport);
+  const qc = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: () => {
+      if (!ticket) throw new Error("Select a case");
+      return fn({
+        data: {
+          action: "customer_reply",
+          teamId: ticket.team_id,
+          payload: { ticket_id: ticket.id, body, request_key: key },
+        },
+      });
+    },
+    onSuccess: async () => {
+      setBody("");
+      setKey(crypto.randomUUID());
+      await qc.invalidateQueries({ queryKey: ["support"] });
+    },
+    onError: (e) => toast.error(e.message),
+  });
+  return (
+    <SupportShell title="My support messages">
+      {!ticket ? (
+        <Empty
+          title="No customer cases linked to this account"
+          detail="A support administrator can link your own account to your customer profile."
+        />
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <div className="space-y-2">
+            {data.tickets.map((t) => (
+              <Button
+                key={t.id}
+                className="h-auto w-full justify-start whitespace-normal text-left"
+                variant={ticket.id === t.id ? "secondary" : "ghost"}
+                onClick={() => setId(t.id)}
+              >
+                {t.subject}
+              </Button>
+            ))}
+          </div>
+          <section className="min-w-0">
+            <div className="mb-4 flex justify-between">
+              <h2 className="font-semibold">{ticket.subject}</h2>
+              <Status value={ticket.status} />
+            </div>
+            <div className="space-y-3">
+              {data.messages
+                .filter((m) => m.ticket_id === ticket.id)
+                .map((m) => (
+                  <article key={m.id} className="rounded-md border border-border bg-card p-4">
+                    <p className="whitespace-pre-wrap break-words text-sm">{m.body}</p>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {new Date(m.created_at).toLocaleString()} ·{" "}
+                      {m.delivery_state === "stored" ? "Stored in app" : "Read"}
+                    </p>
+                  </article>
+                ))}
+            </div>
+            <form
+              className="mt-5 space-y-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                mutation.mutate();
+              }}
+            >
+              <Textarea
+                aria-label="Customer reply"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                maxLength={10000}
+                placeholder="Write a reply…"
+              />
+              <Button disabled={mutation.isPending || !body.trim()}>
+                <Send />
+                Send in app
+              </Button>
+            </form>
+          </section>
+        </div>
+      )}
+    </SupportShell>
+  );
+}

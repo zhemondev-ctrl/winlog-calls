@@ -1,18 +1,165 @@
-import {Link, useNavigate} from '@tanstack/react-router';
-import {useSuspenseQuery,useQueryClient} from '@tanstack/react-query';
-import {useState,type ReactNode} from 'react';
-import {Inbox,Users,BookOpen,BarChart3,Settings,MessagesSquare,ArrowLeft,LogOut,ShieldCheck} from 'lucide-react';
-import {Button} from '@/components/ui/button';
-import {supabase} from '@/integrations/supabase/client';
-import logo from '@/assets/winstone-logo.png.asset.json';
-import {supportBootstrapQuery} from '@/lib/support/queries';
-const links=[{to:'/support',label:'Inbox',bn:'ইনবক্স',icon:Inbox},{to:'/support-customers',label:'Customers',bn:'গ্রাহক',icon:Users},{to:'/support-knowledge',label:'Knowledge',bn:'জ্ঞানভান্ডার',icon:BookOpen},{to:'/support-analytics',label:'Analytics',bn:'পরিসংখ্যান',icon:BarChart3},{to:'/support-admin',label:'Admin',bn:'প্রশাসন',icon:Settings},{to:'/support-messages',label:'My messages',bn:'বার্তা',icon:MessagesSquare}] as const;
-export function useSupportTeam(){const {data}=useSuspenseQuery(supportBootstrapQuery);const team=data.teams[0];const membership=data.memberships.find(m=>m.team_id===team?.id);return {team,role:membership?.role,userId:data.userId};}
-export function SupportShell({title,children,actions}:{title:string;children:ReactNode;actions?:ReactNode}){
- const {team,role}=useSupportTeam();const [bn,setBn]=useState(false);const qc=useQueryClient();const navigate=useNavigate();
- async function signOut(){await qc.cancelQueries();qc.clear();await supabase.auth.signOut();await navigate({to:'/auth',replace:true});}
- return <div className="support-console min-h-screen bg-background"><aside className="support-sidebar bg-primary text-primary-foreground"><Link to="/support" className="flex items-center gap-3 border-b border-primary-foreground/15 px-5 py-5"><img src={logo.url} alt="Winstone" className="size-10 rounded-full"/><div><strong className="block text-base">Winlog Calls</strong><span className="text-xs text-accent">Customer operations</span></div></Link><div className="px-5 py-5"><div className="text-xs text-primary-foreground/60">WORKSPACE</div><div className="mt-1 text-sm font-semibold">{team?.name??'Customer portal'}</div><span className="text-xs capitalize text-accent">{role??'Customer'}</span></div><nav className="flex flex-wrap gap-1 px-3 md:flex-col">{links.filter(l=>l.to!=='/support-admin'||role==='admin'||role==='manager').map(l=><Button asChild variant="ghost" key={l.to} className="justify-start text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"><Link to={l.to} activeProps={{className:'bg-accent text-accent-foreground'}}><l.icon className="size-4"/>{bn?l.bn:l.label}</Link></Button>)}</nav><div className="mt-auto space-y-2 px-3 py-5"><Button asChild variant="ghost" className="w-full justify-start text-primary-foreground/80"><Link to="/dashboard"><ArrowLeft/>Call dashboard</Link></Button><Button variant="ghost" onClick={signOut} className="w-full justify-start text-primary-foreground/80"><LogOut/>Sign out</Button></div></aside><div className="support-main min-w-0"><header className="flex items-center justify-between gap-3 border-b border-border bg-card px-5 py-3"><span className="flex items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-4 text-incoming"/>Private workspace</span><Button variant="outline" size="sm" onClick={()=>setBn(!bn)}>{bn?'English':'বাংলা'}</Button></header><main className="p-4 md:p-7"><div className="mb-6 flex flex-wrap items-center justify-between gap-3"><div><p className="mb-1 text-xs uppercase text-muted-foreground">Winstone · support operations</p><h1 className="text-2xl font-bold">{title}</h1></div>{actions}</div>{children}</main></div></div>;
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, type ReactNode } from "react";
+import {
+  Inbox,
+  Users,
+  BookOpen,
+  BarChart3,
+  Settings,
+  MessagesSquare,
+  ArrowLeft,
+  LogOut,
+  ShieldCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import logo from "@/assets/winstone-logo.png.asset.json";
+import { supportBootstrapQuery } from "@/lib/support/queries";
+const links = [
+  { to: "/support", label: "Inbox", bn: "ইনবক্স", icon: Inbox },
+  { to: "/support-customers", label: "Customers", bn: "গ্রাহক", icon: Users },
+  { to: "/support-knowledge", label: "Knowledge", bn: "জ্ঞানভান্ডার", icon: BookOpen },
+  { to: "/support-analytics", label: "Analytics", bn: "পরিসংখ্যান", icon: BarChart3 },
+  { to: "/support-admin", label: "Admin", bn: "প্রশাসন", icon: Settings },
+  { to: "/support-messages", label: "My messages", bn: "বার্তা", icon: MessagesSquare },
+] as const;
+export function useSupportTeam() {
+  const { data } = useSuspenseQuery(supportBootstrapQuery);
+  const team = data.teams[0];
+  const membership = data.memberships.find((m) => m.team_id === team?.id);
+  return { team, role: membership?.role, userId: data.userId };
 }
-export function NoWorkspace(){return <div className="border-y border-border py-12 text-center"><ShieldCheck className="mx-auto mb-3 size-8 text-gold"/><h2 className="font-semibold">No support team assigned</h2><p className="mt-2 text-sm text-muted-foreground">A support administrator must add your existing account to a team.</p><Button asChild variant="outline" className="mt-4"><Link to="/support-messages">My customer messages</Link></Button></div>;}
-export function Empty({title,detail}:{title:string;detail?:string}){return <div className="border-y border-border py-12 text-center"><Inbox className="mx-auto mb-3 size-7 text-muted-foreground"/><h2 className="font-semibold">{title}</h2>{detail&&<p className="mt-2 text-sm text-muted-foreground">{detail}</p>}</div>;}
-export function Status({value}:{value:string}){return <span className={`inline-flex rounded px-2 py-1 text-xs font-semibold capitalize ${value==='resolved'||value==='approved'?'bg-incoming/10 text-incoming':value==='escalated'||value==='urgent'?'bg-destructive/10 text-destructive':'bg-secondary text-secondary-foreground'}`}>{value.replace('_',' ')}</span>;}
+export function SupportShell({
+  title,
+  children,
+  actions,
+}: {
+  title: string;
+  children: ReactNode;
+  actions?: ReactNode;
+}) {
+  const { team, role } = useSupportTeam();
+  const [bn, setBn] = useState(false);
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+  async function signOut() {
+    await qc.cancelQueries();
+    qc.clear();
+    await supabase.auth.signOut();
+    await navigate({ to: "/auth", replace: true });
+  }
+  return (
+    <div className="support-console min-h-screen bg-background">
+      <aside className="support-sidebar bg-primary text-primary-foreground">
+        <Link
+          to="/support"
+          className="flex items-center gap-3 border-b border-primary-foreground/15 px-5 py-5"
+        >
+          <img src={logo.url} alt="Winstone" className="size-10 rounded-full" />
+          <div>
+            <strong className="block text-base">Winlog Calls</strong>
+            <span className="text-xs text-accent">Customer operations</span>
+          </div>
+        </Link>
+        <div className="px-5 py-5">
+          <div className="text-xs text-primary-foreground/60">WORKSPACE</div>
+          <div className="mt-1 text-sm font-semibold">{team?.name ?? "Customer portal"}</div>
+          <span className="text-xs capitalize text-accent">{role ?? "Customer"}</span>
+        </div>
+        <nav className="flex flex-wrap gap-1 px-3 md:flex-col">
+          {links
+            .filter((l) => l.to !== "/support-admin" || role === "admin" || role === "manager")
+            .map((l) => (
+              <Button
+                asChild
+                variant="ghost"
+                key={l.to}
+                className="justify-start text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              >
+                <Link to={l.to} activeProps={{ className: "bg-accent text-accent-foreground" }}>
+                  <l.icon className="size-4" />
+                  {bn ? l.bn : l.label}
+                </Link>
+              </Button>
+            ))}
+        </nav>
+        <div className="mt-auto space-y-2 px-3 py-5">
+          <Button
+            asChild
+            variant="ghost"
+            className="w-full justify-start text-primary-foreground/80"
+          >
+            <Link to="/dashboard">
+              <ArrowLeft />
+              Call dashboard
+            </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={signOut}
+            className="w-full justify-start text-primary-foreground/80"
+          >
+            <LogOut />
+            Sign out
+          </Button>
+        </div>
+      </aside>
+      <div className="support-main min-w-0">
+        <header className="flex items-center justify-between gap-3 border-b border-border bg-card px-5 py-3">
+          <span className="flex items-center gap-2 text-xs text-muted-foreground">
+            <ShieldCheck className="size-4 text-incoming" />
+            Private workspace
+          </span>
+          <Button variant="outline" size="sm" onClick={() => setBn(!bn)}>
+            {bn ? "English" : "বাংলা"}
+          </Button>
+        </header>
+        <main className="p-4 md:p-7">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="mb-1 text-xs uppercase text-muted-foreground">
+                Winstone · support operations
+              </p>
+              <h1 className="text-2xl font-bold">{title}</h1>
+            </div>
+            {actions}
+          </div>
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
+export function NoWorkspace() {
+  return (
+    <div className="border-y border-border py-12 text-center">
+      <ShieldCheck className="mx-auto mb-3 size-8 text-gold" />
+      <h2 className="font-semibold">No support team assigned</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        A support administrator must add your existing account to a team.
+      </p>
+      <Button asChild variant="outline" className="mt-4">
+        <Link to="/support-messages">My customer messages</Link>
+      </Button>
+    </div>
+  );
+}
+export function Empty({ title, detail }: { title: string; detail?: string }) {
+  return (
+    <div className="border-y border-border py-12 text-center">
+      <Inbox className="mx-auto mb-3 size-7 text-muted-foreground" />
+      <h2 className="font-semibold">{title}</h2>
+      {detail && <p className="mt-2 text-sm text-muted-foreground">{detail}</p>}
+    </div>
+  );
+}
+export function Status({ value }: { value: string }) {
+  return (
+    <span
+      className={`inline-flex rounded px-2 py-1 text-xs font-semibold capitalize ${value === "resolved" || value === "approved" ? "bg-incoming/10 text-incoming" : value === "escalated" || value === "urgent" ? "bg-destructive/10 text-destructive" : "bg-secondary text-secondary-foreground"}`}
+    >
+      {value.replace("_", " ")}
+    </span>
+  );
+}
