@@ -1,8 +1,9 @@
 # WinLog roadmap
 
 ## Agent integrations
-- [ ] Enable protected OAuth, consent return flow, and read-only call/case MCP tools
-- [ ] Add dashboard browser tools and verify manifest, access boundaries, and consent states
+- [x] Enable protected OAuth, consent return flow, and read-only call/case MCP tools
+- [x] Add dashboard browser tools; verify manifest, 11 tests, anonymous rejection and consent error states (AGENT-INTEGRATIONS.md)
+- [ ] Verify external OAuth client end-to-end and browser registration (requires republish and a compatible agent client/browser)
 
 ## Database and running-credit optimization
 - [x] Measure recorded running usage, query plans, indexes, storage, scheduled jobs, and AI requests
