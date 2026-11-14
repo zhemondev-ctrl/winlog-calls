@@ -1,5 +1,8 @@
 # WinLog roadmap
 
+- [ ] Bring Winstone Pulse staff and real-call records here (requires source-project data export)
+- [ ] Request dashboard publication and provide team-phone installation/test steps
+
 - [x] Private company-code setup with manager-selected staff assignment (successful staff activation pending: no staff account exists)
 - [x] Signed Winlog Calls v6 APK built and signature verified; dashboard, recap, pending sync ready for publication
 - [x] Renamed project and APK label to Winlog Calls; referenced ZIP is the already-inspected kit, no new attachment present
