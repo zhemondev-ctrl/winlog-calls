@@ -51,6 +51,12 @@ function Consent() {
   return <BrandPanel>
     <h1 className="font-display text-3xl">Connect {details.client.name} to Winlog Calls</h1>
     <p className="mt-4 text-muted-foreground">{email}</p>
+    <Button variant="link" disabled={busy} onClick={async () => {
+      setBusy(true);
+      const result = await supabase.auth.signOut();
+      if (result.error) { setError("Could not switch accounts. Please try again."); setBusy(false); return; }
+      window.location.assign(`/auth?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+    }}>Switch account</Button>
     <p className="mt-4">This lets {details.client.name} use this app as you.</p>
     <p className="mt-2 break-all text-sm text-muted-foreground">{details.redirect_uri}</p>
     <ul className="my-5 list-disc space-y-2 pl-5">
