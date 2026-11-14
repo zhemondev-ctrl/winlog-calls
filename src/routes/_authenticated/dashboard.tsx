@@ -21,7 +21,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { computeStats, dailySeries, formatDuration, startOfDay, startOfWeek } from "@/lib/calls";
-import { callsQuery, meQuery, profilesQuery } from "@/lib/queries";
+import { callsQuery, meQuery, profilesQuery, uploadReceiptsQuery } from "@/lib/queries";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -78,7 +78,7 @@ function Dashboard() {
     { ...callsQuery({ from: range.from, to: range.to, userId }), refetchInterval: 15000 },
   );
   const { data: uploadedCalls = [] } = useQuery({
-    ...callsQuery({ from: range.from, to: range.to, userId, dateField: "created_at" }),
+    ...uploadReceiptsQuery({ from: range.from, to: range.to, userId }),
     refetchInterval: 15000,
   });
   const { data: profiles = [] } = useQuery({ ...profilesQuery, enabled: !!me?.isAdmin });
