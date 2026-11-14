@@ -46,6 +46,11 @@ const chartConfig = {
   missed: { label: "Missed", color: "var(--missed)" },
 } satisfies ChartConfig;
 
+const uploadConfig = {
+  sim: { label: "SIM", color: "var(--primary)" },
+  whatsapp: { label: "WhatsApp", color: "var(--whatsapp)" },
+} satisfies ChartConfig;
+
 function Dashboard() {
   const { data: me } = useSuspenseQuery(meQuery);
   const [period, setPeriod] = useState<"today" | "week">("today");
