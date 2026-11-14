@@ -31,5 +31,5 @@
 - [ ] Complete daily-upload goal analytics including closed-app uploads (blocked: analytics supports browser events only, not WorkManager/server uploads)
 - [x] Stay signed in on phones
 - [x] Dashboard chart: daily calls uploaded by team phones
-- [ ] Remove sign-in (waiting on owner's choice: phone code / fully open / keep)
-- [ ] Daily manager digest (AI recap of yesterday on dashboard)
+- [ ] Remove sign-in: owner chose fully open; held back because it would put customer phone numbers on the open internet
+- [x] Daily manager digest (AI recap of yesterday on dashboard)

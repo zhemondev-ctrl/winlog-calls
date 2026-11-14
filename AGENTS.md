@@ -49,3 +49,4 @@ use the editor.
 
 - Follow-up queue (`/follow-ups`, managers): open items are `call_ai_notes` rows with follow_up and no resolved_at, grouped per contact by `groupFollowUps` (`src/lib/follow-ups.ts`); a note rewrite clears resolved_at. Why: a contact who calls again reappears automatically.
 - Follow-up analytics use built-in page views and navigation interactions for viewing, and a direct success-handler event for resolution with counts only. Why: avoids duplicate page-view events and personal data.
+- Daily manager digest: `getDailyDigest` writes yesterday's recap from `buildCallDigest` once per day and saves it in `daily_digests` (managers only, refresh button regenerates). Why: one model call per day instead of per visit.
