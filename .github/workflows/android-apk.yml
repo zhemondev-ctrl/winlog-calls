@@ -33,6 +33,9 @@ jobs:
           java-version: 21
 
       - uses: android-actions/setup-android@v3
+        with:
+          # Legacy "tools" is no longer available from Google's SDK repository.
+          packages: platform-tools
 
       - name: Install packages
         run: bun install --frozen-lockfile || bun install
