@@ -1,5 +1,9 @@
 # WinLog roadmap
 
+## Agent integrations
+- [ ] Enable protected OAuth, consent return flow, and read-only call/case MCP tools
+- [ ] Add dashboard browser tools and verify manifest, access boundaries, and consent states
+
 ## Database and running-credit optimization
 - [x] Measure recorded running usage, query plans, indexes, storage, scheduled jobs, and AI requests
 - [x] Narrow daily-upload chart reads and index upload-arrival filters without changing privacy or refresh timing
