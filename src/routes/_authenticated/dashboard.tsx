@@ -6,6 +6,7 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { AppShell } from "@/components/winlog/app-shell";
 import { CallItem } from "@/components/winlog/call-item";
 import { DailyDigest } from "@/components/winlog/daily-digest";
+import { DashboardRelease } from "@/components/winlog/dashboard-release";
 import { SetupBanner } from "@/components/winlog/setup-banner";
 import { PhoneUploadStatus } from "@/components/winlog/phone-upload-status";
 import { PhoneCodeManager } from "@/components/winlog/phone-code-manager";
@@ -121,6 +122,7 @@ function Dashboard() {
     >
       <SetupBanner />
       <PhoneUploadStatus />
+      <DashboardRelease />
       {me?.isAdmin && <DailyDigest />}
       {me?.isAdmin && <PhoneCodeManager />}
 
