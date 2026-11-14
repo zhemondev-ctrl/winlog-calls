@@ -33,3 +33,4 @@
 - [x] Dashboard chart: daily calls uploaded by team phones
 - [ ] Remove sign-in: owner chose fully open; held back because it would put customer phone numbers on the open internet
 - [x] Daily manager digest (AI recap of yesterday on dashboard)
+- [ ] Merge all Winstone Connect APK features with WinLog (blocked: need Winstone Connect source code/repository and any required service access; APK identifiers alone do not establish complete functionality)
