@@ -912,10 +912,21 @@ export type Database = {
           id: string
         }[]
       }
+      support_customer_case: {
+        Args: {
+          _body: string
+          _customer: string
+          _key: string
+          _subject: string
+        }
+        Returns: string
+      }
+      support_mark_read: { Args: { _ticket: string }; Returns: undefined }
       support_mutate: {
         Args: { _action: string; _payload: Json; _team: string }
         Returns: string
       }
+      support_portal: { Args: never; Returns: Json }
       support_role: { Args: { _team: string }; Returns: string }
     }
     Enums: {
