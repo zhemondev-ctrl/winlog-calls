@@ -1,8 +1,12 @@
 # WinLog roadmap
 
+- [x] Show Android build status and latest APK release directly on dashboard (authenticated desktop/mobile verified; eight status tests passed)
+- [x] Retry Android APK build after SDK fix: build #9 succeeded; installation guidance provided (real phone test requires user)
+
 - [x] Manually triggered Android build #7 and provided phone installation instructions; failed at SDK setup before signing
-- [ ] Publish signed APK: corrected obsolete SDK package locally; next synced push must complete successfully
+- [x] Publish signed APK: corrected obsolete SDK package; GitHub build #9 succeeded
 - [ ] Private automatic Winstone Pulse staff/call connection (blocked: source app only exposes property facts; protected staff/call sharing must be implemented in its own chat)
+- [ ] Automatically send live Winlog Calls records back to Winstone Pulse, including foreground and closed-app uploads (blocked: Pulse must provide a protected receiving endpoint and stable staff mapping; retries must not duplicate or echo records)
 - [ ] Verify a real team-phone call after installation (physical phone access required)
 
 - [x] Add installed-version screen and latest signed APK release link (browser verified; installed version uses existing native bridge)

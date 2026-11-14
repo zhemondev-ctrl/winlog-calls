@@ -31,7 +31,7 @@ use the editor.
 
 ## Project rules
 
-- App version and Android build status live at `/version`; authenticated server reads use the linked GitHub connector, polling only in the foreground, while installed versions come from the existing native status bridge. Why: credentials stay private and website versions never masquerade as installed APK versions.
+- App version and Android build status appear at `/version` and in a compact dashboard section sharing the android-release query; authenticated server reads use the linked GitHub connector, polling only in the foreground, while installed versions come from the existing native status bridge. Why: credentials stay private and website versions never masquerade as installed APK versions.
 
 - Company phone codes are high-entropy, single-use, 24-hour credentials issued by managers for existing non-manager staff; redemption atomically claims the hash before creating that staff session. Why: phones need private passwordless setup without granting manager access or trusting a caller-supplied owner.
 
