@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PhoneCodeRouteImport } from './routes/phone-code'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedCallsRouteImport } from './routes/_authenticated/calls'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedFollowUpsRouteImport } from './routes/_authenticated/follow-ups'
@@ -30,6 +32,7 @@ import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/t
 import { Route as AuthenticatedVersionRouteImport } from './routes/_authenticated/version'
 import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
 import { Route as ApiSummaryRouteImport } from './routes/api/summary'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
 import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant.$threadId'
 import { Route as AuthenticatedSupportCaseTicketIdRouteImport } from './routes/_authenticated/support-case.$ticketId'
@@ -51,6 +54,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PhoneCodeRoute = PhoneCodeRouteImport.update({
   id: '/phone-code',
   path: '/phone-code',
@@ -61,6 +69,12 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedCallsRoute = AuthenticatedCallsRouteImport.update({
   id: '/calls',
   path: '/calls',
@@ -146,6 +160,11 @@ const ApiSummaryRoute = ApiSummaryRouteImport.update({
   path: '/api/summary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAssistantIndexRoute =
   AuthenticatedAssistantIndexRouteImport.update({
     id: '/assistant/',
@@ -184,8 +203,10 @@ const ApiPublicJobsCallAiRoute = ApiPublicJobsCallAiRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
   '/phone-code': typeof PhoneCodeRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/calls': typeof AuthenticatedCallsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/follow-ups': typeof AuthenticatedFollowUpsRoute
@@ -202,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
   '/support-customers/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
@@ -212,8 +234,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
   '/phone-code': typeof PhoneCodeRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/calls': typeof AuthenticatedCallsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/follow-ups': typeof AuthenticatedFollowUpsRoute
@@ -230,6 +254,7 @@ export interface FileRoutesByTo {
   '/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
   '/support-customers/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
@@ -242,8 +267,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
   '/phone-code': typeof PhoneCodeRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/calls': typeof AuthenticatedCallsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/follow-ups': typeof AuthenticatedFollowUpsRoute
@@ -260,6 +287,7 @@ export interface FileRoutesById {
   '/_authenticated/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/_authenticated/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
   '/_authenticated/support-customers_/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
@@ -272,8 +300,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/mcp'
     | '/phone-code'
     | '/reset-password'
+    | '/.well-known/oauth-protected-resource'
     | '/calls'
     | '/dashboard'
     | '/follow-ups'
@@ -290,6 +320,7 @@ export interface FileRouteTypes {
     | '/version'
     | '/api/assistant'
     | '/api/summary'
+    | '/.lovable/oauth/consent'
     | '/assistant/$threadId'
     | '/support-case/$ticketId'
     | '/support-customers/$customerId'
@@ -300,8 +331,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/mcp'
     | '/phone-code'
     | '/reset-password'
+    | '/.well-known/oauth-protected-resource'
     | '/calls'
     | '/dashboard'
     | '/follow-ups'
@@ -318,6 +351,7 @@ export interface FileRouteTypes {
     | '/version'
     | '/api/assistant'
     | '/api/summary'
+    | '/.lovable/oauth/consent'
     | '/assistant/$threadId'
     | '/support-case/$ticketId'
     | '/support-customers/$customerId'
@@ -329,8 +363,10 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/mcp'
     | '/phone-code'
     | '/reset-password'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/calls'
     | '/_authenticated/dashboard'
     | '/_authenticated/follow-ups'
@@ -347,6 +383,7 @@ export interface FileRouteTypes {
     | '/_authenticated/version'
     | '/api/assistant'
     | '/api/summary'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/assistant/$threadId'
     | '/_authenticated/support-case/$ticketId'
     | '/_authenticated/support-customers_/$customerId'
@@ -359,10 +396,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  McpRoute: typeof McpRoute
   PhoneCodeRoute: typeof PhoneCodeRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiAssistantRoute: typeof ApiAssistantRoute
   ApiSummaryRoute: typeof ApiSummaryRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicDeviceUploadRoute: typeof ApiPublicDeviceUploadRoute
   ApiPublicJobsCallAiRoute: typeof ApiPublicJobsCallAiRoute
 }
@@ -390,6 +430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/phone-code': {
       id: '/phone-code'
       path: '/phone-code'
@@ -402,6 +449,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/calls': {
@@ -516,6 +570,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSummaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/assistant/': {
       id: '/_authenticated/assistant/'
       path: '/assistant'
@@ -611,10 +672,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  McpRoute: McpRoute,
   PhoneCodeRoute: PhoneCodeRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiAssistantRoute: ApiAssistantRoute,
   ApiSummaryRoute: ApiSummaryRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicDeviceUploadRoute: ApiPublicDeviceUploadRoute,
   ApiPublicJobsCallAiRoute: ApiPublicJobsCallAiRoute,
 }

@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { oauthReturnPath } from "@/lib/oauth-return-path";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (s: Record<string, unknown>): { next?: string } => ({ next: oauthReturnPath(s["next"]) }),
   head: () => ({
     meta: [
       { title: "Sign in — WinLog" },
@@ -28,6 +30,8 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
+  const destination = !next || next === "/" ? "/dashboard" : next;
   const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -37,9 +41,9 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard", replace: true });
+      if (data.session) navigate({ href: destination, replace: true });
     });
-  }, [navigate]);
+  }, [navigate, destination]);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -49,15 +53,15 @@ function AuthPage() {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/dashboard", replace: true });
+        navigate({ href: destination, replace: true });
       } else if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin, data: { display_name: name.trim() } },
+          options: { emailRedirectTo: new URL(destination, window.location.origin).href, data: { display_name: name.trim() } },
         });
         if (error) throw error;
-        if (data.session) navigate({ to: "/dashboard", replace: true });
+        if (data.session) navigate({ href: destination, replace: true });
         else setNotice("Check your email and tap the confirmation link, then sign in here.");
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {

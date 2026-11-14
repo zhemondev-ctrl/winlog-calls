@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { useWebMCP } from "use-webmcp-tool";
+import { runWebMCPTool } from "@/lib/webmcp-telemetry";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { AppShell } from "@/components/winlog/app-shell";
@@ -90,6 +92,22 @@ function Dashboard() {
   );
   const shown = period === "today" ? todayCalls : weekCalls;
   const stats = computeStats(shown);
+  useWebMCP({
+    name: "read_dashboard_activity",
+    description: "Read counts for the currently visible agent and period without contact details.",
+    annotations: { readOnlyHint: true },
+    execute: () => runWebMCPTool("read_dashboard_activity", () => isLoading ? "Call activity is loading." : `${period}: ${shown.length} device-reported calls; ${shown.filter(c => c.source === "whatsapp").length} WhatsApp notification-inferred calls. Real-device acceptance is not established by these counts.`),
+  });
+  function changePeriod(value: unknown) {
+    if (value !== "today" && value !== "week") throw new Error("Expected today or week.");
+    setPeriod(value);
+  }
+  useWebMCP({
+    name: "set_dashboard_period",
+    description: "Change the dashboard period to today or this week.",
+    inputSchema: { type: "object", properties: { period: { type: "string", enum: ["today", "week"], description: "The period to display." } }, required: ["period"] },
+    execute: ({ period: value }: { period: string }) => runWebMCPTool("set_dashboard_period", () => { changePeriod(value); return "Dashboard period updated."; }),
+  });
   const series = useMemo(
     () => dailySeries(weekCalls, range.weekStart, 7),
     [weekCalls, range.weekStart],
@@ -129,7 +147,7 @@ function Dashboard() {
       <div className="mb-5 flex flex-wrap items-center gap-2">
         <Segmented
           value={period}
-          onChange={setPeriod}
+          onChange={changePeriod}
           options={[
             { value: "today", label: "Today" },
             { value: "week", label: "This week" },
