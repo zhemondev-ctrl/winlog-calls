@@ -165,6 +165,24 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_digests: {
+        Row: {
+          day: string
+          generated_at: string
+          summary: string
+        }
+        Insert: {
+          day: string
+          generated_at?: string
+          summary: string
+        }
+        Update: {
+          day?: string
+          generated_at?: string
+          summary?: string
+        }
+        Relationships: []
+      }
       device_upload_tokens: {
         Row: {
           created_at: string
