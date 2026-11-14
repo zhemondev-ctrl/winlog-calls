@@ -5,6 +5,7 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { AppShell } from "@/components/winlog/app-shell";
 import { CallItem } from "@/components/winlog/call-item";
+import { DailyDigest } from "@/components/winlog/daily-digest";
 import { SetupBanner } from "@/components/winlog/setup-banner";
 import { Segmented } from "@/components/winlog/segmented";
 import { StatCard } from "@/components/winlog/stat-card";
@@ -112,6 +113,7 @@ function Dashboard() {
       })}
     >
       <SetupBanner />
+      {me?.isAdmin && <DailyDigest />}
 
       <div className="mb-5 flex flex-wrap items-center gap-2">
         <Segmented
