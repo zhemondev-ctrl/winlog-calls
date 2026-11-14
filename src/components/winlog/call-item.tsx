@@ -13,6 +13,8 @@ import type { CallNote } from "@/lib/call-notes.functions";
 
 import { DIRECTION_LABEL, formatDuration, isUnanswered, type CallRow } from "@/lib/calls";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 
 const ICONS = {
   incoming: PhoneIncoming,
@@ -29,12 +31,14 @@ export function CallItem({
   note,
   noteLoading,
   observe,
+  detailLink = false,
 }: {
   call: CallRow;
   employee?: string | undefined;
   note?: CallNote | undefined;
   noteLoading?: boolean;
   observe?: ((el: HTMLElement | null) => void) | undefined;
+  detailLink?: boolean;
 }) {
   const Icon = call.is_video ? Video : ICONS[call.direction];
   const unanswered = isUnanswered(call.direction);
@@ -84,6 +88,7 @@ export function CallItem({
           <div className="num text-xs text-muted-foreground">{time}</div>
         </div>
       </div>
+      {detailLink && <Button asChild variant="link" size="sm" className="ml-10"><Link to="/calls/$callId" params={{ callId: call.id }}>Call details</Link></Button>}
       {note ? (
         <p
           className={cn(
@@ -112,11 +117,13 @@ export function CallList({
   calls,
   names,
   aiNotes = false,
+  detailLinks = false,
 }: {
   calls: CallRow[];
   names?: Map<string, string> | undefined;
   /** Managers: show a short AI note on each card as it scrolls into view. */
   aiNotes?: boolean;
+  detailLinks?: boolean;
 }) {
   const notes = useCallNotes(aiNotes);
   if (calls.length === 0) {
@@ -152,6 +159,7 @@ export function CallList({
               <CallItem
                 key={c.id}
                 call={c}
+                detailLink={detailLinks}
                 employee={names?.get(c.user_id)}
                 note={notes.notes[c.id]}
                 noteLoading={notes.loading.has(c.id)}

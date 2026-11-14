@@ -1,5 +1,10 @@
 # WinLog roadmap
 
+## Linked call details and real integrations
+- [ ] Add private call detail page linked from Calls with date/time, reported duration, staff attribution and saved notes
+- [ ] Verify real-device call and support inbox evidence (blocked: physical team phone required; zero calls)
+- [ ] Connect bidirectional Pulse staff/call sharing (blocked: Pulse only advertises public property facts; no private staff/call receiving contract)
+
 ## Agent integrations
 - [x] Enable protected OAuth, consent return flow, and read-only call/case MCP tools
 - [x] Add dashboard browser tools; verify manifest, 11 tests, anonymous rejection and consent error states (AGENT-INTEGRATIONS.md)
