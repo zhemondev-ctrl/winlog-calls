@@ -57,6 +57,13 @@
       "when": 1794698231754,
       "tag": "0007_support_portal_hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794698781403,
+      "tag": "0008_support_call_ai_queue",
+      "breakpoints": true
     }
   ]
 }

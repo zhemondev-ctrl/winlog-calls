@@ -1,0 +1,31 @@
+CREATE TABLE public.support_call_ai_jobs (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), team_id uuid NOT NULL REFERENCES public.support_teams(id), call_id uuid NOT NULL REFERENCES public.call_logs(id), ticket_id uuid REFERENCES public.support_tickets(id), state text NOT NULL DEFAULT 'pending' CHECK(state IN ('pending','running','complete','failed','unknown')), error text, summary text, reply text, lease_token uuid, created_at timestamptz NOT NULL DEFAULT now(), completed_at timestamptz, UNIQUE(team_id,call_id));
+GRANT SELECT ON public.support_call_ai_jobs TO authenticated; GRANT ALL ON public.support_call_ai_jobs TO service_role;
+ALTER TABLE public.support_call_ai_jobs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Managers see call AI processing" ON public.support_call_ai_jobs FOR SELECT TO authenticated USING(public.support_role(team_id) IN ('admin','manager'));
+CREATE INDEX support_call_ai_pending ON public.support_call_ai_jobs(state,created_at);
+CREATE TABLE public.support_call_ai_control (team_id uuid PRIMARY KEY REFERENCES public.support_teams(id), paused boolean NOT NULL DEFAULT false, pause_reason text, lease_token uuid, lease_until timestamptz, last_success_at timestamptz);
+GRANT SELECT ON public.support_call_ai_control TO authenticated; GRANT ALL ON public.support_call_ai_control TO service_role;
+ALTER TABLE public.support_call_ai_control ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Managers see AI queue control" ON public.support_call_ai_control FOR SELECT TO authenticated USING(public.support_role(team_id) IN ('admin','manager'));
+INSERT INTO public.support_call_ai_control(team_id) SELECT id FROM public.support_teams ON CONFLICT DO NOTHING;
+CREATE FUNCTION public.support_queue_call_ai() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN INSERT INTO public.support_call_ai_jobs(team_id,call_id) SELECT team_id,NEW.id FROM public.support_members WHERE user_id=NEW.user_id ON CONFLICT DO NOTHING; RETURN NEW; END $$;
+CREATE TRIGGER support_queue_uploaded_call AFTER INSERT ON public.call_logs FOR EACH ROW EXECUTE FUNCTION public.support_queue_call_ai();
+INSERT INTO public.support_call_ai_jobs(team_id,call_id) SELECT m.team_id,l.id FROM public.call_logs l JOIN public.support_members m ON m.user_id=l.user_id ON CONFLICT DO NOTHING;
+CREATE FUNCTION public.support_claim_call_ai(_team uuid,_token uuid) RETURNS SETOF public.support_call_ai_jobs LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE j public.support_call_ai_jobs; BEGIN
+ INSERT INTO public.support_call_ai_control(team_id) VALUES(_team) ON CONFLICT DO NOTHING;
+ UPDATE public.support_call_ai_control SET lease_token=_token,lease_until=now()+interval '10 minutes' WHERE team_id=_team AND NOT paused AND (lease_until IS NULL OR lease_until<now()) AND EXISTS(SELECT 1 FROM public.support_teams WHERE id=_team AND settings->>'ai_enabled'='true'); IF NOT FOUND THEN RETURN; END IF;
+ UPDATE public.support_call_ai_jobs SET state='unknown',error='Previous worker ended without confirming outcome; manual review required' WHERE team_id=_team AND state='running';
+ SELECT * INTO j FROM public.support_call_ai_jobs WHERE team_id=_team AND state='pending' ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1;
+ IF j.id IS NULL THEN UPDATE public.support_call_ai_control SET lease_until=NULL,lease_token=NULL WHERE team_id=_team AND lease_token=_token; RETURN; END IF;
+ UPDATE public.support_call_ai_jobs SET state='running',lease_token=_token WHERE id=j.id RETURNING * INTO j; RETURN NEXT j; END $$;
+REVOKE ALL ON FUNCTION public.support_claim_call_ai(uuid,uuid) FROM PUBLIC,authenticated; GRANT EXECUTE ON FUNCTION public.support_claim_call_ai(uuid,uuid) TO service_role;
+CREATE FUNCTION public.support_finish_call_ai(_job uuid,_token uuid,_summary text,_reply text,_citations jsonb) RETURNS uuid LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE j public.support_call_ai_jobs; t uuid; owner uuid; hours integer; BEGIN
+ SELECT * INTO j FROM public.support_call_ai_jobs WHERE id=_job AND state='running' AND lease_token=_token FOR UPDATE; IF j.id IS NULL THEN RAISE EXCEPTION 'Worker lease lost'; END IF;
+ IF NOT EXISTS(SELECT 1 FROM public.support_call_ai_control WHERE team_id=j.team_id AND lease_token=_token AND lease_until>now() AND NOT paused) THEN RAISE EXCEPTION 'Worker lease expired'; END IF;
+ SELECT created_by,COALESCE((settings->'sla_hours'->>'normal')::integer,24) INTO owner,hours FROM public.support_teams WHERE id=j.team_id;
+ SELECT id INTO t FROM public.support_tickets WHERE team_id=j.team_id AND call_id=j.call_id AND merged_into IS NULL ORDER BY created_at DESC LIMIT 1;
+ IF t IS NULL THEN INSERT INTO public.support_tickets(team_id,call_id,subject,description,channel,request_key,sla_due_at,created_by) VALUES(j.team_id,j.call_id,'Uploaded call · '||left(j.call_id::text,8),'Device-reported call metadata; no recording or transcript supplied.','call',j.id,now()+make_interval(hours=>hours),owner) RETURNING id INTO t; END IF;
+ INSERT INTO public.support_ai_drafts(team_id,ticket_id,kind,body,mode,created_by,citations) VALUES(j.team_id,t,'summary',_summary,'live',owner,_citations),(j.team_id,t,'reply',_reply,'live',owner,_citations);
+ UPDATE public.support_call_ai_jobs SET state='complete',ticket_id=t,summary=_summary,reply=_reply,completed_at=now(),error=NULL WHERE id=j.id;
+ UPDATE public.support_call_ai_control SET last_success_at=now(),lease_until=NULL,lease_token=NULL WHERE team_id=j.team_id AND lease_token=_token; RETURN t; END $$;
+REVOKE ALL ON FUNCTION public.support_finish_call_ai(uuid,uuid,text,text,jsonb) FROM PUBLIC,authenticated; GRANT EXECUTE ON FUNCTION public.support_finish_call_ai(uuid,uuid,text,text,jsonb) TO service_role;

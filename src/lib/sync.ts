@@ -3,6 +3,8 @@ import { mapSimCall, mapWhatsAppCall, type DeviceInfo, type NewCallRow } from "@
 import { WinLogNative, isAndroidApp } from "@/lib/native";
 import type { SourceSync, SyncSource } from "@/lib/sync-health";
 
+import { wakeUploadedCallAi } from "@/lib/support/call-ai.functions";
+
 const DAY = 86_400_000;
 const FIRST_SYNC_DAYS = 30;
 // Re-read a day of overlap each time; uploads skip calls already saved, so nothing is doubled.
@@ -21,20 +23,33 @@ function readCursor(key: string): number {
 async function upload(rows: NewCallRow[]) {
   for (let i = 0; i < rows.length; i += 500) {
     const chunk = rows.slice(i, i + 500);
-    const { data, error } = await supabase.from("call_logs").upsert(chunk, {
-      onConflict: "user_id,device_id,source,external_id",
-      ignoreDuplicates: true,
-    }).select("source");
+    const { data, error } = await supabase
+      .from("call_logs")
+      .upsert(chunk, {
+        onConflict: "user_id,device_id,source,external_id",
+        ignoreDuplicates: true,
+      })
+      .select("source");
     if (error) throw new Error(error.message);
+    if (data?.length) {
+      try {
+        await wakeUploadedCallAi();
+      } catch (error) {
+        console.error("Call AI wake failed; upload remains saved", error);
+      }
+    }
     // Includes duplicates accepted by idempotent upsert, not just new rows.
     // Older APKs do not have receipts; failure here must not undo a successful upload.
     try {
       const owner = chunk[0]?.user_id;
-      if (owner) await WinLogNative.acknowledgeUploads({
-        userId: owner,
-        rows: chunk.map(({ source, external_id }) => ({ source, external_id })),
-      });
-    } catch { /* Upgrade the APK to enable the local queue count. */ }
+      if (owner)
+        await WinLogNative.acknowledgeUploads({
+          userId: owner,
+          rows: chunk.map(({ source, external_id }) => ({ source, external_id })),
+        });
+    } catch {
+      /* Upgrade the APK to enable the local queue count. */
+    }
     // RETURNING contains only newly inserted rows, not the overlap re-read or calls
     // already uploaded by WorkManager. Emit per committed chunk, even if a later one fails.
     for (const source of ["sim", "whatsapp"] as const) {

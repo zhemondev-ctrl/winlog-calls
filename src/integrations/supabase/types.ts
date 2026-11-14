@@ -526,6 +526,105 @@ export type Database = {
           },
         ]
       }
+      support_call_ai_control: {
+        Row: {
+          last_success_at: string | null
+          lease_token: string | null
+          lease_until: string | null
+          pause_reason: string | null
+          paused: boolean
+          team_id: string
+        }
+        Insert: {
+          last_success_at?: string | null
+          lease_token?: string | null
+          lease_until?: string | null
+          pause_reason?: string | null
+          paused?: boolean
+          team_id: string
+        }
+        Update: {
+          last_success_at?: string | null
+          lease_token?: string | null
+          lease_until?: string | null
+          pause_reason?: string | null
+          paused?: boolean
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_call_ai_control_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_call_ai_jobs: {
+        Row: {
+          call_id: string
+          completed_at: string | null
+          created_at: string
+          error: string | null
+          id: string
+          lease_token: string | null
+          reply: string | null
+          state: string
+          summary: string | null
+          team_id: string
+          ticket_id: string | null
+        }
+        Insert: {
+          call_id: string
+          completed_at?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          lease_token?: string | null
+          reply?: string | null
+          state?: string
+          summary?: string | null
+          team_id: string
+          ticket_id?: string | null
+        }
+        Update: {
+          call_id?: string
+          completed_at?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          lease_token?: string | null
+          reply?: string | null
+          state?: string
+          summary?: string | null
+          team_id?: string
+          ticket_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_call_ai_jobs_call_id_fkey"
+            columns: ["call_id"]
+            isOneToOne: false
+            referencedRelation: "call_logs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_call_ai_jobs_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_call_ai_jobs_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       support_customer_contacts: {
         Row: {
           customer_id: string
@@ -912,12 +1011,44 @@ export type Database = {
           id: string
         }[]
       }
+      support_claim_call_ai: {
+        Args: { _team: string; _token: string }
+        Returns: {
+          call_id: string
+          completed_at: string | null
+          created_at: string
+          error: string | null
+          id: string
+          lease_token: string | null
+          reply: string | null
+          state: string
+          summary: string | null
+          team_id: string
+          ticket_id: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "support_call_ai_jobs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       support_customer_case: {
         Args: {
           _body: string
           _customer: string
           _key: string
           _subject: string
+        }
+        Returns: string
+      }
+      support_finish_call_ai: {
+        Args: {
+          _citations: Json
+          _job: string
+          _reply: string
+          _summary: string
+          _token: string
         }
         Returns: string
       }
