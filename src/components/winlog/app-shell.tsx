@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { BarChart3, BellRing, ListOrdered, LogOut, MessagesSquare, Smartphone, Users } from "lucide-react";
+import { BarChart3, BellRing, Info, ListOrdered, LogOut, MessagesSquare, Smartphone, Users } from "lucide-react";
 import type { ReactNode } from "react";
 
 import logo from "@/assets/winstone-logo.png.asset.json";
@@ -74,6 +74,9 @@ export function AppShell({
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-3">
+            <Button asChild variant="ghost" size="icon" className="shrink-0 text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground">
+              <Link to="/version" aria-label="App version and build status" title="App version and build status"><Info className="size-4" /></Link>
+            </Button>
             {sync.native && (
               <Link
                 to="/sync"
