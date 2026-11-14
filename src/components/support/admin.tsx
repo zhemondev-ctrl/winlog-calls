@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { adminQuery } from "@/lib/support/queries";
 import { mutateSupport } from "@/lib/support/workspace.functions";
 import { releaseReadiness, roles, type SupportMutation } from "@/lib/support/rules";
+import { CallAiStatus } from "./call-ai-status";
 import { SupportShell, useSupportTeam, NoWorkspace, Status } from "./shell";
 export function SupportAdmin() {
   const { team } = useSupportTeam();
@@ -36,6 +37,7 @@ function AdminBody({ teamId }: { teamId: string }) {
   const data = q.data;
   return (
     <div className="space-y-8">
+      <CallAiStatus teamId={teamId} admin={data.role === "admin"} />
       <section>
         <h2 className="mb-4 font-semibold">Team access</h2>
         <div className="overflow-x-auto">

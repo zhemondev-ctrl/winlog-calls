@@ -35,6 +35,7 @@ import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_au
 import { Route as AuthenticatedSupportCaseTicketIdRouteImport } from './routes/_authenticated/support-case.$ticketId'
 import { Route as AuthenticatedSupportCustomersCustomerIdRouteImport } from './routes/_authenticated/support-customers_.$customerId'
 import { Route as ApiPublicDeviceUploadRouteImport } from './routes/api/public/device-upload'
+import { Route as ApiPublicJobsCallAiRouteImport } from './routes/api/public/jobs/call-ai'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -174,6 +175,11 @@ const ApiPublicDeviceUploadRoute = ApiPublicDeviceUploadRouteImport.update({
   path: '/api/public/device-upload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicJobsCallAiRoute = ApiPublicJobsCallAiRouteImport.update({
+  id: '/api/public/jobs/call-ai',
+  path: '/api/public/jobs/call-ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -201,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/support-customers/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/assistant/': typeof AuthenticatedAssistantIndexRoute
+  '/api/public/jobs/call-ai': typeof ApiPublicJobsCallAiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -228,6 +235,7 @@ export interface FileRoutesByTo {
   '/support-customers/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/assistant': typeof AuthenticatedAssistantIndexRoute
+  '/api/public/jobs/call-ai': typeof ApiPublicJobsCallAiRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -257,6 +265,7 @@ export interface FileRoutesById {
   '/_authenticated/support-customers_/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/_authenticated/assistant/': typeof AuthenticatedAssistantIndexRoute
+  '/api/public/jobs/call-ai': typeof ApiPublicJobsCallAiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -286,6 +295,7 @@ export interface FileRouteTypes {
     | '/support-customers/$customerId'
     | '/api/public/device-upload'
     | '/assistant/'
+    | '/api/public/jobs/call-ai'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -313,6 +323,7 @@ export interface FileRouteTypes {
     | '/support-customers/$customerId'
     | '/api/public/device-upload'
     | '/assistant'
+    | '/api/public/jobs/call-ai'
   id:
     | '__root__'
     | '/'
@@ -341,6 +352,7 @@ export interface FileRouteTypes {
     | '/_authenticated/support-customers_/$customerId'
     | '/api/public/device-upload'
     | '/_authenticated/assistant/'
+    | '/api/public/jobs/call-ai'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -352,6 +364,7 @@ export interface RootRouteChildren {
   ApiAssistantRoute: typeof ApiAssistantRoute
   ApiSummaryRoute: typeof ApiSummaryRoute
   ApiPublicDeviceUploadRoute: typeof ApiPublicDeviceUploadRoute
+  ApiPublicJobsCallAiRoute: typeof ApiPublicJobsCallAiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -538,6 +551,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicDeviceUploadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/jobs/call-ai': {
+      id: '/api/public/jobs/call-ai'
+      path: '/api/public/jobs/call-ai'
+      fullPath: '/api/public/jobs/call-ai'
+      preLoaderRoute: typeof ApiPublicJobsCallAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -596,6 +616,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAssistantRoute: ApiAssistantRoute,
   ApiSummaryRoute: ApiSummaryRoute,
   ApiPublicDeviceUploadRoute: ApiPublicDeviceUploadRoute,
+  ApiPublicJobsCallAiRoute: ApiPublicJobsCallAiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
