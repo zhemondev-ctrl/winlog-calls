@@ -1,6 +1,9 @@
 # WinLog roadmap
 
 ## Support workspace extension
+- [ ] Queue every server-received team call for live summary and reply drafts, including closed-app uploads
+- [ ] Add bounded durable AI processing, visible error/pause states, and human-only approval
+- [ ] Verify live provider and queue rules; preserve Android and deployment settings
 - [x] Add team-scoped support schema, authorization, audit, and duplicate-safe mutations
 - [x] Add inbox, customer profiles, ticket workspace, approved AI drafts, knowledge base, messaging, analytics, and admin (limits recorded in SUPPORT-DELIVERY.md)
 - [x] Preserve existing call/follow-up flows and show supplied Android audit as unverified release readiness
