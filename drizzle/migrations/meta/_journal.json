@@ -36,6 +36,13 @@
       "when": 1794688972211,
       "tag": "0004_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794691230565,
+      "tag": "0005_private_phone_setup_codes",
+      "breakpoints": true
     }
   ]
 }
