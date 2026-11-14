@@ -139,6 +139,7 @@ function CallsPage() {
       ) : (
         <CallList
           calls={filtered}
+          detailLinks
           names={me?.isAdmin && employee === "all" ? names : undefined}
           aiNotes={!!me?.isAdmin}
         />

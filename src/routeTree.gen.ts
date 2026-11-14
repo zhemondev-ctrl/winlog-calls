@@ -35,6 +35,7 @@ import { Route as ApiSummaryRouteImport } from './routes/api/summary'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
 import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant.$threadId'
+import { Route as AuthenticatedCallsCallIdRouteImport } from './routes/_authenticated/calls_.$callId'
 import { Route as AuthenticatedSupportCaseTicketIdRouteImport } from './routes/_authenticated/support-case.$ticketId'
 import { Route as AuthenticatedSupportCustomersCustomerIdRouteImport } from './routes/_authenticated/support-customers_.$customerId'
 import { Route as ApiPublicDeviceUploadRouteImport } from './routes/api/public/device-upload'
@@ -177,6 +178,12 @@ const AuthenticatedAssistantThreadIdRoute =
     path: '/assistant/$threadId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCallsCallIdRoute =
+  AuthenticatedCallsCallIdRouteImport.update({
+    id: '/calls_/$callId',
+    path: '/calls/$callId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSupportCaseTicketIdRoute =
   AuthenticatedSupportCaseTicketIdRouteImport.update({
     id: '/support-case/$ticketId',
@@ -225,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/api/summary': typeof ApiSummaryRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/calls/$callId': typeof AuthenticatedCallsCallIdRoute
   '/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
   '/support-customers/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
@@ -256,6 +264,7 @@ export interface FileRoutesByTo {
   '/api/summary': typeof ApiSummaryRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/calls/$callId': typeof AuthenticatedCallsCallIdRoute
   '/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
   '/support-customers/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
@@ -289,6 +298,7 @@ export interface FileRoutesById {
   '/api/summary': typeof ApiSummaryRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/_authenticated/calls_/$callId': typeof AuthenticatedCallsCallIdRoute
   '/_authenticated/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
   '/_authenticated/support-customers_/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/api/summary'
     | '/.lovable/oauth/consent'
     | '/assistant/$threadId'
+    | '/calls/$callId'
     | '/support-case/$ticketId'
     | '/support-customers/$customerId'
     | '/api/public/device-upload'
@@ -353,6 +364,7 @@ export interface FileRouteTypes {
     | '/api/summary'
     | '/.lovable/oauth/consent'
     | '/assistant/$threadId'
+    | '/calls/$callId'
     | '/support-case/$ticketId'
     | '/support-customers/$customerId'
     | '/api/public/device-upload'
@@ -385,6 +397,7 @@ export interface FileRouteTypes {
     | '/api/summary'
     | '/.lovable/oauth/consent'
     | '/_authenticated/assistant/$threadId'
+    | '/_authenticated/calls_/$callId'
     | '/_authenticated/support-case/$ticketId'
     | '/_authenticated/support-customers_/$customerId'
     | '/api/public/device-upload'
@@ -591,6 +604,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAssistantThreadIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/calls_/$callId': {
+      id: '/_authenticated/calls_/$callId'
+      path: '/calls/$callId'
+      fullPath: '/calls/$callId'
+      preLoaderRoute: typeof AuthenticatedCallsCallIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/support-case/$ticketId': {
       id: '/_authenticated/support-case/$ticketId'
       path: '/support-case/$ticketId'
@@ -638,6 +658,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedVersionRoute: typeof AuthenticatedVersionRoute
   AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
+  AuthenticatedCallsCallIdRoute: typeof AuthenticatedCallsCallIdRoute
   AuthenticatedSupportCaseTicketIdRoute: typeof AuthenticatedSupportCaseTicketIdRoute
   AuthenticatedSupportCustomersCustomerIdRoute: typeof AuthenticatedSupportCustomersCustomerIdRoute
   AuthenticatedAssistantIndexRoute: typeof AuthenticatedAssistantIndexRoute
@@ -659,6 +680,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedVersionRoute: AuthenticatedVersionRoute,
   AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,
+  AuthenticatedCallsCallIdRoute: AuthenticatedCallsCallIdRoute,
   AuthenticatedSupportCaseTicketIdRoute: AuthenticatedSupportCaseTicketIdRoute,
   AuthenticatedSupportCustomersCustomerIdRoute:
     AuthenticatedSupportCustomersCustomerIdRoute,
