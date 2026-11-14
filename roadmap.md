@@ -1,7 +1,7 @@
 # WinLog roadmap
 
-- [ ] Add installed-version screen and latest signed APK release link
-- [ ] Add latest Android workflow status panel with start/success/failure times
+- [x] Add installed-version screen and latest signed APK release link (browser verified; installed version uses existing native bridge)
+- [x] Add latest Android workflow status panel with start/success/failure times (real GitHub build #4 failure verified; no stable release exists yet)
 
 - [ ] Bring Winstone Pulse staff and real-call records here; live cross-project sharing requires a protected connection built in the source project, existing data requires its export
 - [x] Requested dashboard publication and prepared team-phone installation/test steps
