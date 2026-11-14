@@ -60,8 +60,9 @@ function Index() {
         </li>
       </ul>
       <Button asChild variant="signal" size="xl" className="mt-8 w-full">
-        <Link to="/auth">Sign in</Link>
+        <Link to="/phone-code">Company phone setup</Link>
       </Button>
+      <Button asChild variant="link" className="mt-3 w-full"><Link to="/auth">Manager sign in</Link></Button>
     </BrandPanel>
   );
 }

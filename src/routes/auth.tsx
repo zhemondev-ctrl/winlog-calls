@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
@@ -157,6 +157,8 @@ function AuthPage() {
                 : "Send reset link"}
         </Button>
       </form>
+
+      <Button asChild variant="outline" className="mt-4 w-full"><Link to="/phone-code">Company phone setup</Link></Button>
 
       <button
         type="button"

@@ -9,6 +9,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/winlog/app-shell";
@@ -16,6 +17,7 @@ import { useNativeSyncContext } from "@/components/winlog/native-sync-context";
 import { Button } from "@/components/ui/button";
 import { WinLogNative } from "@/lib/native";
 import { cn } from "@/lib/utils";
+import { meQuery } from "@/lib/queries";
 
 export const Route = createFileRoute("/_authenticated/phone")({
   head: () => ({
@@ -35,6 +37,7 @@ export const Route = createFileRoute("/_authenticated/phone")({
 });
 
 function PhonePage() {
+  const { data: me } = useSuspenseQuery(meQuery);
   const sync = useNativeSyncContext();
   const { native, status, refreshStatus, background, refreshBackground } = sync;
 
@@ -93,6 +96,10 @@ function PhonePage() {
   return (
     <AppShell title="Phone setup" kicker={status?.deviceName ?? "This phone"}>
       <div className="max-w-xl space-y-3">
+        <section className="border-y border-border py-3">
+          <h2 className="font-semibold">Calls assigned to {me?.displayName}</h2>
+          <Button asChild variant="link" className="px-0"><Link to="/phone-code">Set up for another staff member</Link></Button>
+        </section>
         <SetupChecklist
           items={[
             { label: "Call history access", done: !!status?.callLog },

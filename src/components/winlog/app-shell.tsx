@@ -49,7 +49,7 @@ export function AppShell({
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3">
           <Link to="/dashboard" className="flex items-center gap-2">
             <img src={logo.url} alt="Winstone Properties" className="size-9 rounded-full" />
-            <span className="font-display text-lg font-bold tracking-wide text-accent">WinLog</span>
+            <span className="font-display text-lg font-bold tracking-wide text-accent">Winlog Calls</span>
           </Link>
           <nav className="ml-4 hidden items-center gap-1 md:flex">
             {items.map((item) => (

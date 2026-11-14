@@ -1,5 +1,9 @@
 # WinLog roadmap
 
+- [x] Private company-code setup with manager-selected staff assignment (successful staff activation pending: no staff account exists)
+- [x] Signed Winlog Calls v6 APK built and signature verified; dashboard, recap, pending sync ready for publication
+- [x] Renamed project and APK label to Winlog Calls; referenced ZIP is the already-inspected kit, no new attachment present
+
 - [x] Backend: accounts, manager role, call log storage
 - [x] Web screens: today/week stats, call log, team, phone setup, sign-in
 - [x] Android app: SIM call history + WhatsApp call capture + upload
@@ -38,3 +42,5 @@
 - [x] Phone dashboard: live count of calls waiting to upload (native receipts implemented; real-phone acceptance pending)
 - [x] Deliver a clean complete source ZIP for rebuilding the final APK (private signing key excluded; build instructions included)
 - [ ] Confirm a real phone call appears in dashboard and daily uploads chart (blocked until a team phone uploads a call; current call count is zero)
+
+- [x] Supplied GitHub repository is accessible and contains the Android push-build workflow; Lovable Git sync status remains user-controlled

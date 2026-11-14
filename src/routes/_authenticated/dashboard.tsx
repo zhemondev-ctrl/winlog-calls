@@ -8,6 +8,7 @@ import { CallItem } from "@/components/winlog/call-item";
 import { DailyDigest } from "@/components/winlog/daily-digest";
 import { SetupBanner } from "@/components/winlog/setup-banner";
 import { PhoneUploadStatus } from "@/components/winlog/phone-upload-status";
+import { PhoneCodeManager } from "@/components/winlog/phone-code-manager";
 import { Segmented } from "@/components/winlog/segmented";
 import { StatCard } from "@/components/winlog/stat-card";
 import { Button } from "@/components/ui/button";
@@ -121,6 +122,7 @@ function Dashboard() {
       <SetupBanner />
       <PhoneUploadStatus />
       {me?.isAdmin && <DailyDigest />}
+      {me?.isAdmin && <PhoneCodeManager />}
 
       <div className="mb-5 flex flex-wrap items-center gap-2">
         <Segmented
