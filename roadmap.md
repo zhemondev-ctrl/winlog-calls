@@ -1,5 +1,10 @@
 # WinLog roadmap
 
+- [x] Manually triggered Android build #7 and provided phone installation instructions; failed at SDK setup before signing
+- [ ] Publish signed APK: corrected obsolete SDK package locally; next synced push must complete successfully
+- [ ] Private automatic Winstone Pulse staff/call connection (blocked: source app only exposes property facts; protected staff/call sharing must be implemented in its own chat)
+- [ ] Verify a real team-phone call after installation (physical phone access required)
+
 - [x] Add installed-version screen and latest signed APK release link (browser verified; installed version uses existing native bridge)
 - [x] Add latest Android workflow status panel with start/success/failure times (real GitHub build #4 failure verified; no stable release exists yet)
 
