@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "sdk_version": "3.5.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://wohmruymgohuapcgefuq.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "winlog-calls",
+      "version": "0.1.0",
+      "title": "Winlog Calls"
+    },
+    "tools": [
+      {
+        "name": "list_call_evidence",
+        "title": "List call evidence",
+        "description": "Read recent permitted device-reported calls and server receipt times, without contact numbers or AI inference.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "sim",
+                "whatsapp"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_support_cases",
+        "title": "List support cases",
+        "description": "Read a bounded list of support cases accessible through your existing team permissions.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "new",
+                "open",
+                "pending",
+                "escalated",
+                "resolved"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
