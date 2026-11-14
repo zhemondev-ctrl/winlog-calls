@@ -152,6 +152,42 @@ public class WinLogNativePlugin extends Plugin {
         call.resolve(backgroundStatus());
     }
 
+    @PluginMethod
+    public void acknowledgeUploads(PluginCall call) {
+        String userId = call.getString("userId");
+        JSONArray rows = call.getArray("rows");
+        if (userId == null || rows == null) {
+            call.reject("userId and rows are required");
+            return;
+        }
+        UploadReceipts.acknowledge(getContext(), userId, rows);
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void getPendingUploadStatus(PluginCall call) {
+        String userId = call.getString("userId");
+        if (userId == null) { call.reject("userId is required"); return; }
+        getBridge().execute(() -> {
+            try {
+                Context ctx = getContext();
+                long since = System.currentTimeMillis() - 30L * 86_400_000L;
+                boolean canRead = CallLogReader.canRead(ctx);
+                Integer sim = canRead ? UploadReceipts.countPending(ctx, userId, "sim",
+                    CallLogReader.read(ctx, since, Integer.MAX_VALUE)) : null;
+                int whatsapp = UploadReceipts.countPending(ctx, userId, "whatsapp", WhatsAppCallStore.since(ctx, since));
+                JSObject result = new JSObject();
+                result.put("sim", sim == null ? JSONObject.NULL : sim);
+                result.put("whatsapp", whatsapp);
+                result.put("total", sim == null ? JSONObject.NULL : sim + whatsapp);
+                result.put("checkedAt", System.currentTimeMillis());
+                call.resolve(result);
+            } catch (Exception e) {
+                call.reject("Could not read calls waiting to upload", e);
+            }
+        });
+    }
+
     private JSObject backgroundStatus() {
         android.content.SharedPreferences p = BackgroundUpload.prefs(getContext());
         JSObject s = new JSObject();

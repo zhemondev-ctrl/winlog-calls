@@ -1,0 +1,17 @@
+{
+  "source": "winstone-connect-2.22-signing-kit_v2_2.zip",
+  "capabilities": [
+    {"capability":"Android Kotlin/Compose source", "source":"android/app/src/main", "outcome":"inspect and port through existing WinLog bridge/shared web screens", "status":"inspected", "next_action":"Port remaining source capabilities rather than replacing TanStack screens with Compose."},
+    {"capability":"SIM/WhatsApp call logs and background uploads", "source":"data/sync and telephony", "outcome":"retain existing WinLog implementation", "status":"implemented", "next_action":"Verify on a real Android phone."},
+    {"capability":"live waiting-to-upload count", "source":"data/sync/SyncStatus.kt", "outcome":"port to phone dashboard", "status":"in_progress", "next_action":"Add local upload acknowledgements shared by foreground and background uploads."},
+    {"capability":"leads, lead evaluations, rejection reports, scheduled callbacks and WhatsApp messages", "source":"ui/DeskScreen.kt and data/remote", "outcome":"migrate", "status":"pending", "next_action":"Recreate web screens, Cloud schema and tested source business rules."},
+    {"capability":"live dialer controls, consent-based recordings, voice notes and recording pickup", "source":"telephony and ui", "outcome":"migrate", "status":"pending", "next_action":"Adapt native features through WinLogNative with real-device acceptance checks."},
+    {"capability":"location/nearby leads", "source":"location/NearbyLeadLocator.kt", "outcome":"migrate", "status":"pending", "next_action":"Port permission-gated location and lead lookup."},
+    {"capability":"maintenance, app updates, handoff and diagnostics", "source":"data/remote and data/sync", "outcome":"migrate", "status":"pending", "next_action":"Inspect source service contracts and preserve callers during cutover."},
+    {"capability":"schema and records", "source":"Appwrite/CRM API references; no export supplied", "outcome":"migrate to Lovable Cloud", "status":"pending", "next_action":"Obtain source web CRM code/schema and CSV/JSON record exports."},
+    {"capability":"users and authorization", "source":"AgentSession, RoleSelectionScreen and source APIs", "outcome":"migrate with verified identity mapping", "status":"pending", "next_action":"Obtain users/roles export; existing users will verify email and choose a new password."},
+    {"capability":"storage bytes, providers, endpoints and schedules", "source":"WinstoneApi and sync workers", "outcome":"preserve compatible providers and migrate application data", "status":"pending", "next_action":"Inspect source web CRM code; obtain file exports and securely configure retained providers before verification."},
+    {"capability":"signing and package identity", "source":"source handover and uploaded APK", "outcome":"build WinLog package separately using its existing signature", "status":"pending", "next_action":"Build and verify fresh WinLog APK; it does not update com.winstone.connect in place."},
+    {"capability":"cutover and real-phone verification", "source":"source handover", "outcome":"pending", "status":"pending", "next_action":"Do not claim complete migration or real-phone operation until all capabilities and device checks pass."}
+  ]
+}

@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
   getCalls: vi.fn(),
   getWhatsAppCalls: vi.fn(),
   track: vi.fn(),
+  acknowledgeUploads: vi.fn(),
 }));
 
 vi.mock("@/integrations/supabase/client", () => ({
@@ -16,6 +17,7 @@ vi.mock("@/lib/native", () => ({
     getStatus: async () => ({ callLog: true, deviceId: "phone", deviceName: "Phone" }),
     getCalls: mocks.getCalls,
     getWhatsAppCalls: mocks.getWhatsAppCalls,
+    acknowledgeUploads: mocks.acknowledgeUploads,
   },
 }));
 
@@ -56,6 +58,22 @@ describe("phone upload analytics", () => {
     await syncCalls("staff");
     await syncCalls("staff");
     expect(mocks.track).not.toHaveBeenCalled();
+  });
+
+  it("acknowledges accepted calls including duplicates so waiting count can clear", async () => {
+    await syncCalls("staff");
+    expect(mocks.acknowledgeUploads.mock.calls).toEqual([
+      [{ userId: "staff", rows: [{ source: "sim", external_id: "sim-call" }] }],
+      [{ userId: "staff", rows: [{ source: "whatsapp", external_id: "wa-call" }] }],
+    ]);
+  });
+
+  it("keeps failed SIM calls waiting while acknowledging successful WhatsApp calls", async () => {
+    mocks.select.mockResolvedValueOnce({ data: null, error: { message: "SIM failed" } });
+    await expect(syncCalls("staff")).rejects.toThrow("SIM failed");
+    expect(mocks.acknowledgeUploads).toHaveBeenCalledExactlyOnceWith({
+      userId: "staff", rows: [{ source: "whatsapp", external_id: "wa-call" }],
+    });
   });
 
   it("does not count failed uploads, but counts the other source that succeeds", async () => {

@@ -7,6 +7,7 @@ import { AppShell } from "@/components/winlog/app-shell";
 import { CallItem } from "@/components/winlog/call-item";
 import { DailyDigest } from "@/components/winlog/daily-digest";
 import { SetupBanner } from "@/components/winlog/setup-banner";
+import { PhoneUploadStatus } from "@/components/winlog/phone-upload-status";
 import { Segmented } from "@/components/winlog/segmented";
 import { StatCard } from "@/components/winlog/stat-card";
 import { Button } from "@/components/ui/button";
@@ -72,8 +73,12 @@ function Dashboard() {
 
   const userId = me?.isAdmin ? (agent === "all" ? null : agent) : me?.userId;
   const { data: weekCalls = [], isLoading } = useQuery(
-    callsQuery({ from: range.from, to: range.to, userId }),
+    { ...callsQuery({ from: range.from, to: range.to, userId }), refetchInterval: 15000 },
   );
+  const { data: uploadedCalls = [] } = useQuery({
+    ...callsQuery({ from: range.from, to: range.to, userId, dateField: "created_at" }),
+    refetchInterval: 15000,
+  });
   const { data: profiles = [] } = useQuery({ ...profilesQuery, enabled: !!me?.isAdmin });
   const names = useMemo(() => new Map(profiles.map((p) => [p.id, p.display_name])), [profiles]);
 
@@ -93,12 +98,13 @@ function Dashboard() {
       d.setDate(d.getDate() + i);
       return { label: d.toLocaleDateString(undefined, { weekday: "short" }), sim: 0, whatsapp: 0 };
     });
-    for (const c of weekCalls) {
+    for (const c of uploadedCalls) {
       const i = Math.floor((startOfDay(new Date(c.created_at)).getTime() - range.weekStart.getTime()) / 86400000);
-      if (i >= 0 && i < 7) days[i]![c.source === "whatsapp" ? "whatsapp" : "sim"] += 1;
+      const day = days[i];
+      if (i >= 0 && i < 7 && day) day[c.source === "whatsapp" ? "whatsapp" : "sim"] += 1;
     }
     return days;
-  }, [weekCalls, range.weekStart]);
+  }, [uploadedCalls, range.weekStart]);
   const showNames = me?.isAdmin && agent === "all";
   const selectedName = me?.isAdmin && agent === "all" ? "All agents" : names.get(agent) || me?.displayName;
   const latestUpload = shown.reduce<string | null>((latest, call) => !latest || call.created_at > latest ? call.created_at : latest, null);
@@ -113,6 +119,7 @@ function Dashboard() {
       })}
     >
       <SetupBanner />
+      <PhoneUploadStatus />
       {me?.isAdmin && <DailyDigest />}
 
       <div className="mb-5 flex flex-wrap items-center gap-2">

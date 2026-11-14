@@ -33,4 +33,8 @@
 - [x] Dashboard chart: daily calls uploaded by team phones
 - [ ] Remove sign-in: owner chose fully open; held back because it would put customer phone numbers on the open internet
 - [x] Daily manager digest (AI recap of yesterday on dashboard)
-- [ ] Merge all Winstone Connect APK features with WinLog (blocked: need Winstone Connect source code/repository and any required service access; APK identifiers alone do not establish complete functionality)
+- [ ] Merge all Winstone Connect APK features with WinLog (deferred: latest request focuses on building this site's WinLog APK; source inspected, remaining capabilities recorded in migration ledger)
+- [x] Build a fresh signed Android APK using this site's shared screens
+- [x] Phone dashboard: live count of calls waiting to upload (native receipts implemented; real-phone acceptance pending)
+- [x] Deliver a clean complete source ZIP for rebuilding the final APK (private signing key excluded; build instructions included)
+- [ ] Confirm a real phone call appears in dashboard and daily uploads chart (blocked until a team phone uploads a call; current call count is zero)

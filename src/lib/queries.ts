@@ -45,19 +45,21 @@ export interface CallFilter {
   from: string;
   to: string;
   userId?: string | null | undefined;
+  dateField?: "started_at" | "created_at";
 }
 
 /** Fetches every call in the window, page by page (the backend returns at most 1000 rows per request). */
 export async function fetchCalls(filter: CallFilter): Promise<CallRow[]> {
   const out: CallRow[] = [];
   const page = 1000;
+  const dateField = filter.dateField ?? "started_at";
   for (let offset = 0; offset < 50_000; offset += page) {
     let q = supabase
       .from("call_logs")
       .select("*")
-      .gte("started_at", filter.from)
-      .lt("started_at", filter.to)
-      .order("started_at", { ascending: false })
+      .gte(dateField, filter.from)
+      .lt(dateField, filter.to)
+      .order(dateField, { ascending: false })
       .range(offset, offset + page - 1);
     if (filter.userId) q = q.eq("user_id", filter.userId);
     const { data, error } = await q;
@@ -70,7 +72,7 @@ export async function fetchCalls(filter: CallFilter): Promise<CallRow[]> {
 
 export function callsQuery(filter: CallFilter) {
   return queryOptions({
-    queryKey: ["calls", filter.from, filter.to, filter.userId ?? "all"],
+    queryKey: ["calls", filter.from, filter.to, filter.userId ?? "all", filter.dateField ?? "started_at"],
     queryFn: () => fetchCalls(filter),
   });
 }
