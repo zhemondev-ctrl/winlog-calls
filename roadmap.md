@@ -3,7 +3,7 @@
 ## Linked call details and real integrations
 - [x] Add private /calls/$callId linked from Calls with date/time, reported duration, staff attribution, saved AI notes and permitted support links; 10 tests passed, build OK, signed-out privacy gate checked (authenticated real-call flow awaits user sign-in and uploaded call)
 - [ ] Verify real-device call and support inbox evidence (blocked: physical team phone required; zero calls)
-- [ ] Connect bidirectional Pulse staff/call sharing (blocked: Pulse only advertises public property facts; no private staff/call receiving contract)
+- [ ] Connect bidirectional Pulse staff/call sharing (blocked: inspected Pulse snapshot f0f35cb7; existing /api/public/os/events accepts bookings/payments/leads/site visits, not staff or call synchronization; source-side private export/import with stable staff mapping needed; cross-project snapshot is read-only)
 
 ## Agent integrations
 - [x] Enable protected OAuth, consent return flow, and read-only call/case MCP tools
