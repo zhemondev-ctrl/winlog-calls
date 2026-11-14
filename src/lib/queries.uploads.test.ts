@@ -9,7 +9,7 @@ vi.mock("@/integrations/supabase/client", () => ({
     mocks.order.mockReturnValue(chain); mocks.eq.mockReturnValue(chain);
     mocks.range.mockImplementation((...args: unknown[]) => {
       const result = mocks.page(...args);
-      return { then: result.then.bind(result), eq: mocks.eq };
+      return Object.assign(chain, { then: result.then.bind(result) });
     });
     return chain;
   } }) },
