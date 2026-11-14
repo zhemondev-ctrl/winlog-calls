@@ -48,3 +48,18 @@ export const resumeCallAi = createServerFn({ method: "POST" })
     if (error) throw new Error("Could not resume");
     return { ok: true };
   });
+// Upload success, not page rendering, wakes one bounded job per user's team.
+export const wakeUploadedCallAi = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: members, error } = await context.supabase
+      .from("support_members")
+      .select("team_id")
+      .eq("user_id", context.userId)
+      .limit(1);
+    if (error) throw new Error("Could not find call support team");
+    const member = members?.[0];
+    if (!member) return { processed: 0 };
+    const { processCallAi } = await import("./call-ai.server");
+    return processCallAi(member.team_id);
+  });

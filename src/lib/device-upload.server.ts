@@ -90,5 +90,21 @@ export async function handleDeviceUpload(request: Request): Promise<Response> {
     })
     .eq("id", key.id);
 
+  if (rows.length) {
+    try {
+      const { data: member } = await supabaseAdmin
+        .from("support_members")
+        .select("team_id")
+        .eq("user_id", key.user_id)
+        .limit(1)
+        .maybeSingle();
+      if (member) {
+        const { processCallAi } = await import("@/lib/support/call-ai.server");
+        await processCallAi(member.team_id);
+      }
+    } catch (error) {
+      console.error("Background call AI wake failed; calls remain saved", error);
+    }
+  }
   return json(200, { received: rows.length });
 }
