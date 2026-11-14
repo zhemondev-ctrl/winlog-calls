@@ -1,5 +1,9 @@
 # WinLog roadmap
 
+- [ ] Current request: private company-code phone setup with staff assignment
+- [ ] Current request: rebuild signed APK and publish dashboard, recap, pending sync
+- [ ] Rename project to Winlog Calls; inspect newly referenced signing-kit ZIP if attached
+
 - [x] Backend: accounts, manager role, call log storage
 - [x] Web screens: today/week stats, call log, team, phone setup, sign-in
 - [x] Android app: SIM call history + WhatsApp call capture + upload
