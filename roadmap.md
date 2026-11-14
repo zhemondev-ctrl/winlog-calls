@@ -1,5 +1,10 @@
 # WinLog roadmap
 
+## Database and running-credit optimization
+- [x] Measure recorded running usage, query plans, indexes, storage, scheduled jobs, and AI requests
+- [x] Narrow daily-upload chart reads and index upload-arrival filters without changing privacy or refresh timing
+- [x] Run 20 regression tests, verify authenticated empty dashboard and live query plans; findings in DATABASE-OPTIMIZATION.md (real-load savings unverified: zero calls)
+
 ## Support workspace extension
 - [x] Queue server-received team calls for live summary and reply drafts, including closed-app uploads
 - [x] Add bounded durable AI processing, visible error/pause states, and human-only approval

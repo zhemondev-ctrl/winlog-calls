@@ -76,3 +76,24 @@ export function callsQuery(filter: CallFilter) {
     queryFn: () => fetchCalls(filter),
   });
 }
+
+/** Chart receipts contain no contact or device details; RLS and arrival-day filtering are unchanged. */
+export async function fetchUploadReceipts(filter: Omit<CallFilter, "dateField">) {
+  const out: { created_at: string; source: string }[] = [];
+  for (let offset = 0; offset < 50_000; offset += 1000) {
+    let q = supabase.from("call_logs").select("created_at,source")
+      .gte("created_at", filter.from).lt("created_at", filter.to)
+      .order("created_at", { ascending: false }).range(offset, offset + 999);
+    if (filter.userId) q = q.eq("user_id", filter.userId);
+    const { data, error } = await q;
+    if (error) throw new Error(error.message);
+    out.push(...(data ?? []));
+    if (!data || data.length < 1000) break;
+  }
+  return out;
+}
+
+export const uploadReceiptsQuery = (filter: Omit<CallFilter, "dateField">) => queryOptions({
+  queryKey: ["calls", "upload-receipts", filter.from, filter.to, filter.userId ?? "all"],
+  queryFn: () => fetchUploadReceipts(filter),
+});
