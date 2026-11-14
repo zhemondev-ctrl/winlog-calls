@@ -276,6 +276,604 @@ export type Database = {
         }
         Relationships: []
       }
+      support_ai_drafts: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          body: string
+          citations: Json
+          created_at: string
+          created_by: string
+          id: string
+          kind: string
+          mode: string
+          status: string
+          team_id: string
+          ticket_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          body: string
+          citations?: Json
+          created_at?: string
+          created_by?: string
+          id?: string
+          kind: string
+          mode: string
+          status?: string
+          team_id: string
+          ticket_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          body?: string
+          citations?: Json
+          created_at?: string
+          created_by?: string
+          id?: string
+          kind?: string
+          mode?: string
+          status?: string
+          team_id?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_ai_drafts_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_ai_drafts_team_id_ticket_id_fkey"
+            columns: ["team_id", "ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["team_id", "id"]
+          },
+        ]
+      }
+      support_article_versions: {
+        Row: {
+          article_id: string
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          source_url: string
+          state: string
+          team_id: string
+          title: string
+          version: number
+        }
+        Insert: {
+          article_id: string
+          author_id: string
+          body: string
+          created_at?: string
+          id?: string
+          source_url: string
+          state: string
+          team_id: string
+          title: string
+          version: number
+        }
+        Update: {
+          article_id?: string
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          source_url?: string
+          state?: string
+          team_id?: string
+          title?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_article_versions_team_id_article_id_fkey"
+            columns: ["team_id", "article_id"]
+            isOneToOne: false
+            referencedRelation: "support_articles"
+            referencedColumns: ["team_id", "id"]
+          },
+          {
+            foreignKeyName: "support_article_versions_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_articles: {
+        Row: {
+          body: string
+          category: string
+          id: string
+          source_url: string
+          state: string
+          team_id: string
+          title: string
+          updated_at: string
+          updated_by: string
+          version: number
+        }
+        Insert: {
+          body: string
+          category?: string
+          id?: string
+          source_url?: string
+          state?: string
+          team_id: string
+          title: string
+          updated_at?: string
+          updated_by?: string
+          version?: number
+        }
+        Update: {
+          body?: string
+          category?: string
+          id?: string
+          source_url?: string
+          state?: string
+          team_id?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_articles_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_attachments: {
+        Row: {
+          content_base64: string
+          created_at: string
+          created_by: string
+          id: string
+          mime: string
+          name: string
+          size_bytes: number
+          team_id: string
+          ticket_id: string
+        }
+        Insert: {
+          content_base64: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          mime: string
+          name: string
+          size_bytes: number
+          team_id: string
+          ticket_id: string
+        }
+        Update: {
+          content_base64?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          mime?: string
+          name?: string
+          size_bytes?: number
+          team_id?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_attachments_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_attachments_team_id_ticket_id_fkey"
+            columns: ["team_id", "ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["team_id", "id"]
+          },
+        ]
+      }
+      support_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          team_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          team_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_audit_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_customer_contacts: {
+        Row: {
+          customer_id: string
+          email: string
+          phone: string
+          team_id: string
+        }
+        Insert: {
+          customer_id: string
+          email?: string
+          phone?: string
+          team_id: string
+        }
+        Update: {
+          customer_id?: string
+          email?: string
+          phone?: string
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_customer_contacts_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: true
+            referencedRelation: "support_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_customer_contacts_team_id_customer_id_fkey"
+            columns: ["team_id", "customer_id"]
+            isOneToOne: false
+            referencedRelation: "support_customers"
+            referencedColumns: ["team_id", "id"]
+          },
+          {
+            foreignKeyName: "support_customer_contacts_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_customers: {
+        Row: {
+          communication_preference: string
+          consent: boolean
+          created_at: string
+          id: string
+          name: string
+          notes: string
+          phone_last4: string
+          team_id: string
+          user_id: string | null
+        }
+        Insert: {
+          communication_preference?: string
+          consent?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string
+          phone_last4?: string
+          team_id: string
+          user_id?: string | null
+        }
+        Update: {
+          communication_preference?: string
+          consent?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string
+          phone_last4?: string
+          team_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_customers_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_customers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_members: {
+        Row: {
+          display_name: string
+          role: string
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          display_name: string
+          role: string
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          display_name?: string
+          role?: string
+          team_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_messages: {
+        Row: {
+          ai_draft_id: string | null
+          author_id: string
+          body: string
+          created_at: string
+          delivery_state: string
+          id: string
+          request_key: string
+          team_id: string
+          ticket_id: string
+          visibility: string
+        }
+        Insert: {
+          ai_draft_id?: string | null
+          author_id?: string
+          body: string
+          created_at?: string
+          delivery_state?: string
+          id?: string
+          request_key: string
+          team_id: string
+          ticket_id: string
+          visibility: string
+        }
+        Update: {
+          ai_draft_id?: string | null
+          author_id?: string
+          body?: string
+          created_at?: string
+          delivery_state?: string
+          id?: string
+          request_key?: string
+          team_id?: string
+          ticket_id?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_messages_team_id_ai_draft_id_fkey"
+            columns: ["team_id", "ai_draft_id"]
+            isOneToOne: false
+            referencedRelation: "support_ai_drafts"
+            referencedColumns: ["team_id", "id"]
+          },
+          {
+            foreignKeyName: "support_messages_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_messages_team_id_ticket_id_fkey"
+            columns: ["team_id", "ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["team_id", "id"]
+          },
+        ]
+      }
+      support_teams: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+          settings: Json
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          name: string
+          settings?: Json
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          name?: string
+          settings?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_teams_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          assignee_id: string | null
+          call_id: string | null
+          category: string
+          channel: string
+          created_at: string
+          created_by: string
+          customer_id: string | null
+          description: string
+          first_response_at: string | null
+          id: string
+          merged_into: string | null
+          priority: string
+          reopen_count: number
+          request_key: string
+          resolved_at: string | null
+          revision: number
+          sla_due_at: string
+          status: string
+          subject: string
+          tags: string[]
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          call_id?: string | null
+          category?: string
+          channel?: string
+          created_at?: string
+          created_by: string
+          customer_id?: string | null
+          description?: string
+          first_response_at?: string | null
+          id?: string
+          merged_into?: string | null
+          priority?: string
+          reopen_count?: number
+          request_key: string
+          resolved_at?: string | null
+          revision?: number
+          sla_due_at: string
+          status?: string
+          subject: string
+          tags?: string[]
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          call_id?: string | null
+          category?: string
+          channel?: string
+          created_at?: string
+          created_by?: string
+          customer_id?: string | null
+          description?: string
+          first_response_at?: string | null
+          id?: string
+          merged_into?: string | null
+          priority?: string
+          reopen_count?: number
+          request_key?: string
+          resolved_at?: string | null
+          revision?: number
+          sla_due_at?: string
+          status?: string
+          subject?: string
+          tags?: string[]
+          team_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_call_id_fkey"
+            columns: ["call_id"]
+            isOneToOne: false
+            referencedRelation: "call_logs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_team_id_assignee_id_fkey"
+            columns: ["team_id", "assignee_id"]
+            isOneToOne: false
+            referencedRelation: "support_members"
+            referencedColumns: ["team_id", "user_id"]
+          },
+          {
+            foreignKeyName: "support_tickets_team_id_customer_id_fkey"
+            columns: ["team_id", "customer_id"]
+            isOneToOne: false
+            referencedRelation: "support_customers"
+            referencedColumns: ["team_id", "id"]
+          },
+          {
+            foreignKeyName: "support_tickets_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "support_teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_team_id_merged_into_fkey"
+            columns: ["team_id", "merged_into"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["team_id", "id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -307,6 +905,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      support_available_people: {
+        Args: { _team: string }
+        Returns: {
+          display_name: string
+          id: string
+        }[]
+      }
+      support_mutate: {
+        Args: { _action: string; _payload: Json; _team: string }
+        Returns: string
+      }
+      support_role: { Args: { _team: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "member"

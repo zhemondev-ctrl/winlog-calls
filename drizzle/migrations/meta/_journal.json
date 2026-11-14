@@ -43,6 +43,13 @@
       "when": 1794691230565,
       "tag": "0005_private_phone_setup_codes",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794697699913,
+      "tag": "0006_support_workspace",
+      "breakpoints": true
     }
   ]
 }
