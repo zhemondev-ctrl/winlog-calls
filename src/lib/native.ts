@@ -20,7 +20,16 @@ export interface BackgroundUploadStatus {
   lastError: string | null;
 }
 
+export interface PendingUploadStatus {
+  sim: number | null;
+  whatsapp: number;
+  total: number | null;
+  checkedAt: number;
+}
+
 interface WinLogNativePlugin {
+  getPendingUploadStatus(options: { userId: string }): Promise<PendingUploadStatus>;
+  acknowledgeUploads(options: { userId: string; rows: { source: string; external_id: string }[] }): Promise<void>;
   getStatus(): Promise<NativeStatus>;
   requestCallLogPermission(): Promise<NativeStatus>;
   openNotificationAccessSettings(): Promise<void>;

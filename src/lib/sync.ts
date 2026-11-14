@@ -26,6 +26,15 @@ async function upload(rows: NewCallRow[]) {
       ignoreDuplicates: true,
     }).select("source");
     if (error) throw new Error(error.message);
+    // Includes duplicates accepted by idempotent upsert, not just new rows.
+    // Older APKs do not have receipts; failure here must not undo a successful upload.
+    try {
+      const owner = chunk[0]?.user_id;
+      if (owner) await WinLogNative.acknowledgeUploads({
+        userId: owner,
+        rows: chunk.map(({ source, external_id }) => ({ source, external_id })),
+      });
+    } catch { /* Upgrade the APK to enable the local queue count. */ }
     // RETURNING contains only newly inserted rows, not the overlap re-read or calls
     // already uploaded by WorkManager. Emit per committed chunk, even if a later one fails.
     for (const source of ["sim", "whatsapp"] as const) {

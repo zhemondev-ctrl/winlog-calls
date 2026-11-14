@@ -7,6 +7,7 @@ import { AppShell } from "@/components/winlog/app-shell";
 import { CallItem } from "@/components/winlog/call-item";
 import { DailyDigest } from "@/components/winlog/daily-digest";
 import { SetupBanner } from "@/components/winlog/setup-banner";
+import { PhoneUploadStatus } from "@/components/winlog/phone-upload-status";
 import { Segmented } from "@/components/winlog/segmented";
 import { StatCard } from "@/components/winlog/stat-card";
 import { Button } from "@/components/ui/button";
@@ -95,7 +96,8 @@ function Dashboard() {
     });
     for (const c of weekCalls) {
       const i = Math.floor((startOfDay(new Date(c.created_at)).getTime() - range.weekStart.getTime()) / 86400000);
-      if (i >= 0 && i < 7) days[i]![c.source === "whatsapp" ? "whatsapp" : "sim"] += 1;
+      const day = days[i];
+      if (i >= 0 && i < 7 && day) day[c.source === "whatsapp" ? "whatsapp" : "sim"] += 1;
     }
     return days;
   }, [weekCalls, range.weekStart]);
@@ -113,6 +115,7 @@ function Dashboard() {
       })}
     >
       <SetupBanner />
+      <PhoneUploadStatus />
       {me?.isAdmin && <DailyDigest />}
 
       <div className="mb-5 flex flex-wrap items-center gap-2">

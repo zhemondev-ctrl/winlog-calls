@@ -7,6 +7,7 @@ import {
   WinLogNative,
   type BackgroundUploadStatus,
   type NativeStatus,
+  type PendingUploadStatus,
 } from "@/lib/native";
 import { lastSyncAt, readSourceSync, syncCalls, type SyncResult } from "@/lib/sync";
 import type { SourceSync } from "@/lib/sync-health";
@@ -33,6 +34,33 @@ export function useNativeSync(userId: string | undefined) {
     whatsapp: EMPTY_SOURCE,
   });
   const [online, setOnline] = useState(true);
+  const [pending, setPending] = useState<PendingUploadStatus | null>(null);
+  const [pendingError, setPendingError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!userId || !isAndroidApp()) return;
+    let active = true;
+    let reading = false;
+    setPending(null);
+    const refresh = async () => {
+      if (reading || document.visibilityState !== "visible") return;
+      reading = true;
+      try {
+        const [queue, bg] = await Promise.all([
+          WinLogNative.getPendingUploadStatus({ userId }),
+          WinLogNative.getBackgroundUploadStatus().catch(() => null),
+        ]);
+        if (active) { setPending(queue); setPendingError(null); if (bg) setBackground(bg); }
+      } catch {
+        if (active) { setPending(null); setPendingError("Queue count unavailable. Install the latest WinLog APK and check phone permissions."); }
+      } finally { reading = false; }
+    };
+    void refresh();
+    const timer = window.setInterval(() => void refresh(), 5000);
+    const onVisible = () => void refresh();
+    document.addEventListener("visibilitychange", onVisible);
+    return () => { active = false; window.clearInterval(timer); document.removeEventListener("visibilitychange", onVisible); };
+  }, [userId, syncing]);
 
   const readSources = useCallback(() => {
     if (!userId || typeof window === "undefined") return;
@@ -125,5 +153,7 @@ export function useNativeSync(userId: string | undefined) {
     syncNow,
     refreshStatus,
     refreshBackground,
+    pending,
+    pendingError,
   };
 }

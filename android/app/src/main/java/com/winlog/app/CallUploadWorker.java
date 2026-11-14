@@ -61,7 +61,7 @@ public class CallUploadWorker extends Worker {
                     rows.put(simRow(c));
                     newest = Math.max(newest, c.optLong("date"));
                 }
-                sent += post(endpoint, token, deviceName, rows);
+                sent += post(ctx, p.getString(BackgroundUpload.KEY_USER, ""), endpoint, token, deviceName, rows);
                 p.edit().putLong(BackgroundUpload.KEY_CURSOR_SIM, newest).apply();
             }
 
@@ -74,7 +74,7 @@ public class CallUploadWorker extends Worker {
                 waRows.put(whatsAppRow(e));
                 waNewest = Math.max(waNewest, e.optLong("startedAt"));
             }
-            sent += post(endpoint, token, deviceName, waRows);
+            sent += post(ctx, p.getString(BackgroundUpload.KEY_USER, ""), endpoint, token, deviceName, waRows);
             p.edit()
                 .putLong(BackgroundUpload.KEY_CURSOR_WHATSAPP, waNewest)
                 .putLong(BackgroundUpload.KEY_LAST_SUCCESS, System.currentTimeMillis())
@@ -137,7 +137,7 @@ public class CallUploadWorker extends Worker {
     }
 
     /** Sends rows in batches; returns how many were sent. */
-    private static int post(String endpoint, String token, String deviceName, JSONArray rows)
+    private static int post(Context ctx, String userId, String endpoint, String token, String deviceName, JSONArray rows)
         throws IOException, JSONException, AuthRejected {
         int sent = 0;
         for (int start = 0; start < rows.length(); start += BATCH) {
@@ -167,6 +167,7 @@ public class CallUploadWorker extends Worker {
                     throw new IOException("server returned " + code);
                 }
                 conn.getInputStream().close();
+                UploadReceipts.acknowledge(ctx, userId, chunk);
             } finally {
                 conn.disconnect();
             }

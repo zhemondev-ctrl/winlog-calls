@@ -31,6 +31,8 @@ use the editor.
 
 ## Project rules
 
+- Phone pending-upload counts use per-user, per-source native upload receipts shared by foreground and background success handlers; poll only while visible. Why: overlap cursors and timestamps cannot count unsent calls accurately or distinguish accepted duplicates.
+
 - Android app = Capacitor shell in `android/` whose `server.url` (capacitor.config.ts) loads the published site; web changes reach phones after publishing, native changes need a new APK. Why: TanStack Start SSR has no static bundle to ship inside the APK.
 - Native call access lives only in the `WinLogNative` Capacitor plugin (`android/app/src/main/java/com/winlog/app/`); web code reaches it through `src/lib/native.ts`. Why: one typed bridge, browser builds stay safe.
 - WhatsApp calls are inferred from WhatsApp call notifications by a NotificationListenerService and stored on-device until uploaded. Why: WhatsApp exposes no call history API.
