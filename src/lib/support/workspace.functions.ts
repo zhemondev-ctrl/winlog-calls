@@ -388,42 +388,70 @@ export const getSupportAttachment = createServerFn({ method: "POST" })
         .single(),
     );
   });
+const portalSchema = z.object({
+  customers: z.array(
+    z.object({
+      id: z.string().uuid(),
+      team_id: z.string().uuid(),
+      name: z.string(),
+      consent: z.boolean(),
+      communication_preference: z.string(),
+    }),
+  ),
+  tickets: z.array(
+    z.object({
+      id: z.string().uuid(),
+      team_id: z.string().uuid(),
+      subject: z.string(),
+      status: z.string(),
+      created_at: z.string(),
+    }),
+  ),
+  messages: z.array(
+    z.object({
+      id: z.string().uuid(),
+      ticket_id: z.string().uuid(),
+      body: z.string(),
+      author_id: z.string().uuid(),
+      created_at: z.string(),
+      delivery_state: z.string(),
+    }),
+  ),
+});
 export const getCustomerMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    const customers =
-      checked(
-        await context.supabase
-          .from("support_customers")
-          .select("id,name")
-          .eq("user_id", context.userId),
-      ) ?? [];
-    if (!customers.length) return { tickets: [], messages: [] };
-    const tickets =
-      checked(
-        await context.supabase
-          .from("support_tickets")
-          .select("id,team_id,subject,status,created_at")
-          .in(
-            "customer_id",
-            customers.map((c) => c.id),
-          )
-          .order("created_at", { ascending: false }),
-      ) ?? [];
-    const messages = tickets.length
-      ? (checked(
-          await context.supabase
-            .from("support_messages")
-            .select("id,ticket_id,body,author_id,created_at,delivery_state")
-            .eq("visibility", "customer")
-            .in(
-              "ticket_id",
-              tickets.map((t) => t.id),
-            )
-            .order("created_at"),
-        ) ?? [])
-      : [];
-    return { tickets, messages };
+  .handler(async ({ context }) =>
+    portalSchema.parse(checked(await context.supabase.rpc("support_portal"))),
+  );
+export const createCustomerInquiry = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) =>
+    z
+      .object({
+        customerId: z.string().uuid(),
+        subject: z.string().trim().min(1).max(200),
+        body: z.string().trim().min(1).max(10000),
+        requestKey: z.string().uuid(),
+      })
+      .parse(i),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: id, error } = await context.supabase.rpc("support_customer_case", {
+      _customer: data.customerId,
+      _subject: data.subject,
+      _body: data.body,
+      _key: data.requestKey,
+    });
+    if (error) throw new Error(error.message);
+    return { id };
+  });
+export const markSupportRead = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ ticketId: z.string().uuid() }).parse(i))
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase.rpc("support_mark_read", { _ticket: data.ticketId });
+    if (error) throw new Error("Could not update read receipt");
+    return { ok: true };
   });
 export const getSupportCallCandidates = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

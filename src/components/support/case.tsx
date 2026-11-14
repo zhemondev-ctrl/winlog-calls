@@ -49,6 +49,7 @@ function CaseBody({ teamId, id }: { teamId: string; id: string }) {
   const [visibility, setVisibility] = useState<"internal" | "customer">("internal");
   const [draftId, setDraftId] = useState<string | null>(null);
   const [draftText, setDraftText] = useState("");
+  const [composerAiId, setComposerAiId] = useState<string | null>(null);
   const [kind, setKind] = useState<"summary" | "reply" | "follow_up" | "next_action">("summary");
   const [target, setTarget] = useState("");
   const [messageKey, setMessageKey] = useState(() => crypto.randomUUID());
@@ -227,19 +228,24 @@ function CaseBody({ teamId, id }: { teamId: string; id: string }) {
                 className="mt-4 space-y-3"
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  await mutation.mutateAsync({
-                    action: "message",
-                    teamId,
-                    payload: {
-                      ticket_id: id,
-                      body: text,
-                      visibility,
-                      request_key: messageKey,
-                      ai_draft_id: draftId && text === draftText ? draftId : null,
-                    },
-                  });
-                  setText("");
-                  setMessageKey(crypto.randomUUID());
+                  try {
+                    await mutation.mutateAsync({
+                      action: "message",
+                      teamId,
+                      payload: {
+                        ticket_id: id,
+                        body: text,
+                        visibility,
+                        request_key: messageKey,
+                        ai_draft_id: composerAiId,
+                      },
+                    });
+                    setText("");
+                    setMessageKey(crypto.randomUUID());
+                    setComposerAiId(null);
+                  } catch {
+                    /* Input remains available after a failed send. */
+                  }
                 }}
               >
                 <div className="flex gap-2">
@@ -273,7 +279,6 @@ function CaseBody({ teamId, id }: { teamId: string; id: string }) {
                   value={text}
                   onChange={(e) => {
                     setText(e.target.value);
-                    if (draftId && e.target.value !== draftText) setDraftId(null);
                   }}
                   maxLength={10000}
                 />
@@ -402,6 +407,7 @@ function CaseBody({ teamId, id }: { teamId: string; id: string }) {
               <label className="support-field">
                 Status
                 <select
+                  aria-label="Status"
                   className="support-select"
                   disabled={!writable || !!t.merged_into}
                   value={status}
@@ -530,6 +536,16 @@ function CaseBody({ teamId, id }: { teamId: string; id: string }) {
                           return (
                             <div key={i}>
                               {String(c["title"])} · v{String(c["version"])}
+                              {typeof c["url"] === "string" && c["url"].startsWith("https://") && (
+                                <a
+                                  className="ml-2 underline"
+                                  href={c["url"]}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  Source
+                                </a>
+                              )}
                             </div>
                           );
                         })
@@ -554,6 +570,7 @@ function CaseBody({ teamId, id }: { teamId: string; id: string }) {
                       disabled={!approved}
                       onClick={() => {
                         setText(draftText);
+                        setComposerAiId(draft.id);
                         setVisibility("customer");
                       }}
                     >
