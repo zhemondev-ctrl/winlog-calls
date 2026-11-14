@@ -94,7 +94,7 @@ function Dashboard() {
     });
     for (const c of weekCalls) {
       const i = Math.floor((startOfDay(new Date(c.created_at)).getTime() - range.weekStart.getTime()) / 86400000);
-      if (i >= 0 && i < 7) days[i][c.source === "whatsapp" ? "whatsapp" : "sim"] += 1;
+      if (i >= 0 && i < 7) days[i]![c.source === "whatsapp" ? "whatsapp" : "sim"] += 1;
     }
     return days;
   }, [weekCalls, range.weekStart]);
