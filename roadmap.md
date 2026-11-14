@@ -42,3 +42,5 @@
 - [x] Phone dashboard: live count of calls waiting to upload (native receipts implemented; real-phone acceptance pending)
 - [x] Deliver a clean complete source ZIP for rebuilding the final APK (private signing key excluded; build instructions included)
 - [ ] Confirm a real phone call appears in dashboard and daily uploads chart (blocked until a team phone uploads a call; current call count is zero)
+
+- [ ] Check supplied GitHub repository https://github.com/zhemondev-ctrl/winlog-calls.git without replacing this project
