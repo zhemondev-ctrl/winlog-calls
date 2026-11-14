@@ -12,6 +12,7 @@
 @custom-variant dark (&:is(.dark *));
 
 .support-console { letter-spacing: 0; }
+.google-signin { background: var(--google-background); color: var(--google-foreground); border-color: var(--google-border); font-size: 14px; font-weight: 500; line-height: 20px; padding-inline: 12px; }
 .support-sidebar { display: flex; flex-direction: column; }
 .support-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.8125rem; }
 .support-table th { padding: 12px 14px; color: var(--muted-foreground); font-weight: 600; background: var(--muted); white-space: nowrap; }
@@ -93,6 +94,9 @@
 }
 
 :root {
+  --google-background: #FFFFFF;
+  --google-foreground: #1F1F1F;
+  --google-border: #747775;
   --radius: 0.75rem;
   /* WinLog in Winstone Properties colours: deep navy ink, metallic gold, warm cream paper. */
   --background: oklch(0.962 0.016 85);
@@ -138,6 +142,9 @@
 }
 
 .dark {
+  --google-background: #131314;
+  --google-foreground: #E3E3E3;
+  --google-border: #8E918F;
   --background: oklch(0.2 0.045 262);
   --foreground: oklch(0.94 0.03 85);
   --card: oklch(0.24 0.05 262);
