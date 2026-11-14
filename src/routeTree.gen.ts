@@ -21,6 +21,7 @@ import { Route as AuthenticatedPhoneRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSummaryRouteImport } from './routes/_authenticated/summary'
 import { Route as AuthenticatedSyncRouteImport } from './routes/_authenticated/sync'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
+import { Route as AuthenticatedVersionRouteImport } from './routes/_authenticated/version'
 import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
 import { Route as ApiSummaryRouteImport } from './routes/api/summary'
 import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
@@ -86,6 +87,11 @@ const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
   path: '/team',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedVersionRoute = AuthenticatedVersionRouteImport.update({
+  id: '/version',
+  path: '/version',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiAssistantRoute = ApiAssistantRouteImport.update({
   id: '/api/assistant',
   path: '/api/assistant',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/summary': typeof AuthenticatedSummaryRoute
   '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/summary': typeof AuthenticatedSummaryRoute
   '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/_authenticated/summary': typeof AuthenticatedSummaryRoute
   '/_authenticated/sync': typeof AuthenticatedSyncRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
+  '/_authenticated/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
   '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/summary'
     | '/sync'
     | '/team'
+    | '/version'
     | '/api/assistant'
     | '/api/summary'
     | '/assistant/$threadId'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/summary'
     | '/sync'
     | '/team'
+    | '/version'
     | '/api/assistant'
     | '/api/summary'
     | '/assistant/$threadId'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/_authenticated/summary'
     | '/_authenticated/sync'
     | '/_authenticated/team'
+    | '/_authenticated/version'
     | '/api/assistant'
     | '/api/summary'
     | '/_authenticated/assistant/$threadId'
@@ -325,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/version': {
+      id: '/_authenticated/version'
+      path: '/version'
+      fullPath: '/version'
+      preLoaderRoute: typeof AuthenticatedVersionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/assistant': {
       id: '/api/assistant'
       path: '/api/assistant'
@@ -371,6 +390,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSummaryRoute: typeof AuthenticatedSummaryRoute
   AuthenticatedSyncRoute: typeof AuthenticatedSyncRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
+  AuthenticatedVersionRoute: typeof AuthenticatedVersionRoute
   AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
   AuthenticatedAssistantIndexRoute: typeof AuthenticatedAssistantIndexRoute
 }
@@ -383,6 +403,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSummaryRoute: AuthenticatedSummaryRoute,
   AuthenticatedSyncRoute: AuthenticatedSyncRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
+  AuthenticatedVersionRoute: AuthenticatedVersionRoute,
   AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,
   AuthenticatedAssistantIndexRoute: AuthenticatedAssistantIndexRoute,
 }
