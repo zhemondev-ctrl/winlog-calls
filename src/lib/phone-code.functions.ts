@@ -50,7 +50,5 @@ export const redeemPhoneCode = createServerFn({ method: "POST" })
     if (!email) throw new Error("This staff account needs an email address");
     const { data: link, error: linkError } = await supabaseAdmin.auth.admin.generateLink({ type: "magiclink", email });
     if (linkError || !link.properties?.hashed_token) throw new Error("Ask your manager for a new setup code");
-    const { data: session, error: sessionError } = await supabaseAdmin.auth.verifyOtp({ type: "magiclink", token_hash: link.properties.hashed_token });
-    if (sessionError || !session.session) throw new Error("Could not activate this phone");
-    return { access_token: session.session.access_token, refresh_token: session.session.refresh_token };
+    return { token_hash: link.properties.hashed_token };
   });

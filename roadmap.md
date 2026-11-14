@@ -1,8 +1,8 @@
 # WinLog roadmap
 
-- [ ] Current request: private company-code phone setup with staff assignment
-- [ ] Current request: rebuild signed APK and publish dashboard, recap, pending sync
-- [ ] Rename project to Winlog Calls; inspect newly referenced signing-kit ZIP if attached
+- [x] Private company-code setup with manager-selected staff assignment (successful staff activation pending: no staff account exists)
+- [x] Signed Winlog Calls v6 APK built and signature verified; dashboard, recap, pending sync ready for publication
+- [x] Renamed project and APK label to Winlog Calls; referenced ZIP is the already-inspected kit, no new attachment present
 
 - [x] Backend: accounts, manager role, call log storage
 - [x] Web screens: today/week stats, call log, team, phone setup, sign-in
@@ -43,4 +43,4 @@
 - [x] Deliver a clean complete source ZIP for rebuilding the final APK (private signing key excluded; build instructions included)
 - [ ] Confirm a real phone call appears in dashboard and daily uploads chart (blocked until a team phone uploads a call; current call count is zero)
 
-- [ ] Check supplied GitHub repository https://github.com/zhemondev-ctrl/winlog-calls.git without replacing this project
+- [x] Supplied GitHub repository is accessible and contains the Android push-build workflow; Lovable Git sync status remains user-controlled

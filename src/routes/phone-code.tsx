@@ -27,8 +27,8 @@ function PhoneCodePage() {
   async function submit(e: FormEvent) {
     e.preventDefault(); setBusy(true); setError(null);
     try {
-      const tokens = await redeem({ data: { code } });
-      const { error: sessionError } = await supabase.auth.setSession(tokens);
+      const token = await redeem({ data: { code } });
+      const { error: sessionError } = await supabase.auth.verifyOtp({ type: "magiclink", token_hash: token.token_hash });
       if (sessionError) throw sessionError;
       await navigate({ to: "/phone", replace: true });
     } catch (e) { setError(e instanceof Error ? e.message : "Could not activate phone"); }
