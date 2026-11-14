@@ -11,11 +11,13 @@ import {
   ArrowLeft,
   LogOut,
   ShieldCheck,
+  Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/winstone-logo.png.asset.json";
 import { supportBootstrapQuery } from "@/lib/support/queries";
+import { stopBackgroundUpload } from "@/lib/background-upload";
 const links = [
   { to: "/support", label: "Inbox", bn: "ইনবক্স", icon: Inbox },
   { to: "/support-customers", label: "Customers", bn: "গ্রাহক", icon: Users },
@@ -41,9 +43,11 @@ export function SupportShell({
 }) {
   const { team, role } = useSupportTeam();
   const [bn, setBn] = useState(false);
+  const [menuOpen,setMenuOpen]=useState(false);
   const qc = useQueryClient();
   const navigate = useNavigate();
   async function signOut() {
+    await stopBackgroundUpload();
     await qc.cancelQueries();
     qc.clear();
     await supabase.auth.signOut();
@@ -62,12 +66,13 @@ export function SupportShell({
             <span className="text-xs text-accent">Customer operations</span>
           </div>
         </Link>
-        <div className="px-5 py-5">
+        <div className="px-5 py-5 hidden md:block">
           <div className="text-xs text-primary-foreground/60">WORKSPACE</div>
           <div className="mt-1 text-sm font-semibold">{team?.name ?? "Customer portal"}</div>
           <span className="text-xs capitalize text-accent">{role ?? "Customer"}</span>
         </div>
-        <nav className="flex flex-wrap gap-1 px-3 md:flex-col">
+        <Button variant="ghost" aria-label="Toggle support navigation" className="absolute right-4 top-6 text-primary-foreground md:hidden" onClick={()=>setMenuOpen(!menuOpen)}><Menu/></Button>
+        <nav className={`${menuOpen?'flex':'hidden'} flex-wrap gap-1 px-3 pb-3 md:flex md:flex-col md:pb-0`}>
           {links
             .filter((l) => l.to !== "/support-admin" || role === "admin" || role === "manager")
             .map((l) => (
@@ -84,7 +89,7 @@ export function SupportShell({
               </Button>
             ))}
         </nav>
-        <div className="mt-auto space-y-2 px-3 py-5">
+        <div className={`${menuOpen?'block':'hidden'} mt-auto space-y-2 px-3 py-5 md:block`}>
           <Button
             asChild
             variant="ghost"

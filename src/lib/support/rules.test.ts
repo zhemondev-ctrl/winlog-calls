@@ -7,6 +7,7 @@ import {
   supportMetrics,
   validateAttachment,
   releaseReadiness,
+  canReadCustomerMessage,
 } from "./rules";
 describe("Ticket lifecycle", () => {
   it("allows closing and reopening only into open", () => {
@@ -16,6 +17,9 @@ describe("Ticket lifecycle", () => {
   });
 });
 describe("Role boundaries", () => {
+  it("customers cannot read internal notes",()=>expect(canReadCustomerMessage(false,true,'internal')).toBe(false));
+  it("linked customers can read public replies",()=>expect(canReadCustomerMessage(false,true,'customer')).toBe(true));
+  it("unrelated customers cannot read messages",()=>expect(canReadCustomerMessage(false,false,'customer')).toBe(false));
   it("viewer cannot mutate", () => expect(canMutate("viewer", "ticket")).toBe(false));
   it("agent cannot manage roles", () => expect(canMutate("agent", "member")).toBe(false));
   it("manager cannot manage admin settings", () =>

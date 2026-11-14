@@ -60,6 +60,7 @@ export const mutationSchema = z.discriminatedUnion("action", [
       phone: z
         .string()
         .regex(/^[+\d ()-]{0,30}$/)
+        .transform((v)=>v.replace(/[ ()-]/g,""))
         .default(""),
       email: z.union([z.literal(""), z.string().email()]).default(""),
       consent: z.boolean(),
@@ -151,6 +152,7 @@ export function maySendAi(draft: { status: string; body: string; kind: string },
     ["reply", "follow_up"].includes(draft.kind)
   );
 }
+export function canReadCustomerMessage(isTeamMember:boolean,isLinkedCustomer:boolean,visibility:string){return isTeamMember||(isLinkedCustomer&&visibility==='customer');}
 export function validateAttachment(mime: string, base64: string, size: number) {
   const raw = atob(base64);
   if (raw.length !== size || size > 2097152 || size < 1)
