@@ -1,5 +1,11 @@
 # WinLog roadmap
 
+## Support workspace extension
+- [ ] Add team-scoped support schema, authorization, audit, and duplicate-safe mutations
+- [ ] Add inbox, customer profiles, ticket workspace, approved AI drafts, knowledge base, messaging, analytics, and admin
+- [ ] Preserve existing call/follow-up flows and show supplied Android audit as unverified release readiness
+- [ ] Run automated rules tests and authenticated desktop/mobile workflow checks; do not publish or build APK
+
 - [x] Show Android build status and latest APK release directly on dashboard (authenticated desktop/mobile verified; eight status tests passed)
 - [x] Retry Android APK build after SDK fix: build #9 succeeded; installation guidance provided (real phone test requires user)
 
