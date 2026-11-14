@@ -29,3 +29,5 @@
 - [x] Manager follow-up viewing and successful-resolution analytics
 - [x] Foreground upload analytics: new SIM/WhatsApp calls only, counts without personal details
 - [ ] Complete daily-upload goal analytics including closed-app uploads (blocked: analytics supports browser events only, not WorkManager/server uploads)
+- [x] Stay signed in on phones
+- [x] Dashboard chart: daily calls uploaded by team phones

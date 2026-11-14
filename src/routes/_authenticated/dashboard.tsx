@@ -46,6 +46,11 @@ const chartConfig = {
   missed: { label: "Missed", color: "var(--missed)" },
 } satisfies ChartConfig;
 
+const uploadConfig = {
+  sim: { label: "SIM", color: "var(--primary)" },
+  whatsapp: { label: "WhatsApp", color: "var(--whatsapp)" },
+} satisfies ChartConfig;
+
 function Dashboard() {
   const { data: me } = useSuspenseQuery(meQuery);
   const [period, setPeriod] = useState<"today" | "week">("today");
@@ -81,6 +86,18 @@ function Dashboard() {
     () => dailySeries(weekCalls, range.weekStart, 7),
     [weekCalls, range.weekStart],
   );
+  const uploads = useMemo(() => {
+    const days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(range.weekStart);
+      d.setDate(d.getDate() + i);
+      return { label: d.toLocaleDateString(undefined, { weekday: "short" }), sim: 0, whatsapp: 0 };
+    });
+    for (const c of weekCalls) {
+      const i = Math.floor((startOfDay(new Date(c.created_at)).getTime() - range.weekStart.getTime()) / 86400000);
+      if (i >= 0 && i < 7) days[i]![c.source === "whatsapp" ? "whatsapp" : "sim"] += 1;
+    }
+    return days;
+  }, [weekCalls, range.weekStart]);
   const showNames = me?.isAdmin && agent === "all";
   const selectedName = me?.isAdmin && agent === "all" ? "All agents" : names.get(agent) || me?.displayName;
   const latestUpload = shown.reduce<string | null>((latest, call) => !latest || call.created_at > latest ? call.created_at : latest, null);
@@ -165,6 +182,23 @@ function Dashboard() {
             <Bar dataKey="incoming" stackId="a" fill="var(--color-incoming)" />
             <Bar dataKey="outgoing" stackId="a" fill="var(--color-outgoing)" />
             <Bar dataKey="missed" stackId="a" fill="var(--color-missed)" radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ChartContainer>
+      </section>
+
+      <section className="mt-6 border-b border-border pb-5">
+        <div className="mb-3 flex items-baseline justify-between">
+          <h2 className="font-display text-lg font-bold">Calls uploaded per day</h2>
+          <span className="stamp text-muted-foreground">Goal metric</span>
+        </div>
+        <ChartContainer config={uploadConfig} className="aspect-auto h-56 w-full">
+          <BarChart data={uploads} margin={{ left: -20, right: 4, top: 4 }}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <XAxis dataKey="label" tickLine={false} axisLine={false} />
+            <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Bar dataKey="sim" stackId="u" fill="var(--color-sim)" />
+            <Bar dataKey="whatsapp" stackId="u" fill="var(--color-whatsapp)" radius={[6, 6, 0, 0]} />
           </BarChart>
         </ChartContainer>
       </section>
