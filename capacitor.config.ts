@@ -6,7 +6,7 @@ const serverUrl = process.env.CAP_SERVER_URL || "https://winlog-calls.lovable.ap
 
 const config: CapacitorConfig = {
   appId: "com.winlog.app",
-  appName: "WinLog",
+  appName: "Winlog Calls",
   webDir: "android-shell",
   server: {
     url: serverUrl,

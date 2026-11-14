@@ -31,6 +31,8 @@ use the editor.
 
 ## Project rules
 
+- Company phone codes are high-entropy, single-use, 24-hour credentials issued by managers for existing non-manager staff; redemption atomically claims the hash before creating that staff session. Why: phones need private passwordless setup without granting manager access or trusting a caller-supplied owner.
+
 - Phone pending-upload counts use per-user, per-source native upload receipts shared by foreground and background success handlers; poll only while visible. Why: overlap cursors and timestamps cannot count unsent calls accurately or distinguish accepted duplicates.
 - Daily uploads query call_logs by created_at separately from call activity by started_at, with foreground polling. Why: delayed uploads must count on arrival day even if the call was made outside this week's activity window.
 
