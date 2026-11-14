@@ -1,5 +1,9 @@
 # WinLog roadmap
 
+- [ ] Manually trigger signed Android APK release and guide team-phone installation
+- [ ] Private automatic Winstone Pulse staff/call connection (requires source-app supported access)
+- [ ] Verify a real team-phone call after installation (physical phone access required)
+
 - [x] Add installed-version screen and latest signed APK release link (browser verified; installed version uses existing native bridge)
 - [x] Add latest Android workflow status panel with start/success/failure times (real GitHub build #4 failure verified; no stable release exists yet)
 
