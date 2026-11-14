@@ -15,14 +15,15 @@ interface Release {
 export const getAndroidRelease = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
-    const apiKey = process.env.GITHUB_API_KEY;
-    const lovableKey = process.env.LOVABLE_API_KEY;
+    const apiKey = process.env['GITHUB_API_KEY'];
+    const lovableKey = process.env['LOVABLE_API_KEY'];
     if (!apiKey || !lovableKey) throw new Error("GitHub connection is unavailable.");
+    const headers = { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": apiKey,
+      Accept: "application/vnd.github+json" };
     async function read<T>(path: string): Promise<{ data: T | null; error: string | null; status: number }> {
       try {
         const response = await fetch(`https://connector-gateway.lovable.dev/github/repos/zhemondev-ctrl/winlog-calls/${path}`, {
-          headers: { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": apiKey,
-            Accept: "application/vnd.github+json" }, signal: AbortSignal.timeout(15000),
+          headers, signal: AbortSignal.timeout(15000),
         });
         if (!response.ok) {
           const body = await response.text();
