@@ -1,7 +1,7 @@
 # WinLog roadmap
 
 ## Linked call details and real integrations
-- [ ] Add private call detail page linked from Calls with date/time, reported duration, staff attribution and saved notes
+- [x] Add private /calls/$callId linked from Calls with date/time, reported duration, staff attribution, saved AI notes and permitted support links; 10 tests passed, build OK, signed-out privacy gate checked (authenticated real-call flow awaits user sign-in and uploaded call)
 - [ ] Verify real-device call and support inbox evidence (blocked: physical team phone required; zero calls)
 - [ ] Connect bidirectional Pulse staff/call sharing (blocked: Pulse only advertises public property facts; no private staff/call receiving contract)
 
