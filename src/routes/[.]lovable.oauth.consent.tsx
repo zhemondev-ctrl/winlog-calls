@@ -13,7 +13,7 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
     { property: "og:description", content: "Control assistant access to your Winlog Calls account." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),
-  validateSearch: (s: Record<string, unknown>) => ({ authorization_id: typeof s.authorization_id === "string" ? s.authorization_id : "" }),
+  validateSearch: (s: Record<string, unknown>) => ({ authorization_id: typeof s["authorization_id"] === "string" ? s["authorization_id"] : "" }),
   beforeLoad: async ({ search, location }) => {
     if (!search.authorization_id) throw new Error("This connection request is missing its authorization ID.");
     const { data, error } = await supabase.auth.getSession();
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
     return { details: data, email: account.user?.email };
   },
   pendingComponent: () => <BrandPanel><p>Loading connection request…</p></BrandPanel>,
-  errorComponent: ({ error }) => <BrandPanel><h1 className="font-display text-2xl">Connection unavailable</h1><p role="alert" className="mt-4">{error.message}</p></BrandPanel>,
+  errorComponent: ({ error }) => <BrandPanel><h1 className="font-display text-2xl">Connection unavailable</h1><p role="alert" className="mt-4">{error instanceof Error ? error.message : "Please restart this connection."}</p></BrandPanel>,
   component: Consent,
 });
 function Consent() {
@@ -54,7 +54,7 @@ function Consent() {
     <p className="mt-4">This lets {details.client.name} use this app as you.</p>
     <p className="mt-2 break-all text-sm text-muted-foreground">{details.redirect_uri}</p>
     <ul className="my-5 list-disc space-y-2 pl-5">
-      {details.scopes.map(scope => <li key={scope}>{scope === "openid" || scope === "profile" ? "Share your basic profile" : scope === "email" ? "Share your email address" : `Additional permission requested: ${scope}`}</li>)}
+      {details.scope.split(" ").filter(Boolean).map(scope => <li key={scope}>{scope === "openid" || scope === "profile" ? "Share your basic profile" : scope === "email" ? "Share your email address" : `Additional permission requested: ${scope}`}</li>)}
       <li>Read permitted call metadata and support cases.</li>
     </ul>
     <p className="text-sm text-muted-foreground">Your app permissions still apply. No replies are sent and no records are changed.</p>
