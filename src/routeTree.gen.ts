@@ -19,6 +19,12 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedFollowUpsRouteImport } from './routes/_authenticated/follow-ups'
 import { Route as AuthenticatedPhoneRouteImport } from './routes/_authenticated/phone'
 import { Route as AuthenticatedSummaryRouteImport } from './routes/_authenticated/summary'
+import { Route as AuthenticatedSupportRouteImport } from './routes/_authenticated/support'
+import { Route as AuthenticatedSupportAdminRouteImport } from './routes/_authenticated/support-admin'
+import { Route as AuthenticatedSupportAnalyticsRouteImport } from './routes/_authenticated/support-analytics'
+import { Route as AuthenticatedSupportCustomersRouteImport } from './routes/_authenticated/support-customers'
+import { Route as AuthenticatedSupportKnowledgeRouteImport } from './routes/_authenticated/support-knowledge'
+import { Route as AuthenticatedSupportMessagesRouteImport } from './routes/_authenticated/support-messages'
 import { Route as AuthenticatedSyncRouteImport } from './routes/_authenticated/sync'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedVersionRouteImport } from './routes/_authenticated/version'
@@ -26,6 +32,8 @@ import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
 import { Route as ApiSummaryRouteImport } from './routes/api/summary'
 import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
 import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant.$threadId'
+import { Route as AuthenticatedSupportCaseTicketIdRouteImport } from './routes/_authenticated/support-case.$ticketId'
+import { Route as AuthenticatedSupportCustomersCustomerIdRouteImport } from './routes/_authenticated/support-customers_.$customerId'
 import { Route as ApiPublicDeviceUploadRouteImport } from './routes/api/public/device-upload'
 
 const IndexRoute = IndexRouteImport.update({
@@ -77,6 +85,41 @@ const AuthenticatedSummaryRoute = AuthenticatedSummaryRouteImport.update({
   path: '/summary',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSupportRoute = AuthenticatedSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSupportAdminRoute =
+  AuthenticatedSupportAdminRouteImport.update({
+    id: '/support-admin',
+    path: '/support-admin',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSupportAnalyticsRoute =
+  AuthenticatedSupportAnalyticsRouteImport.update({
+    id: '/support-analytics',
+    path: '/support-analytics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSupportCustomersRoute =
+  AuthenticatedSupportCustomersRouteImport.update({
+    id: '/support-customers',
+    path: '/support-customers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSupportKnowledgeRoute =
+  AuthenticatedSupportKnowledgeRouteImport.update({
+    id: '/support-knowledge',
+    path: '/support-knowledge',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSupportMessagesRoute =
+  AuthenticatedSupportMessagesRouteImport.update({
+    id: '/support-messages',
+    path: '/support-messages',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSyncRoute = AuthenticatedSyncRouteImport.update({
   id: '/sync',
   path: '/sync',
@@ -114,6 +157,18 @@ const AuthenticatedAssistantThreadIdRoute =
     path: '/assistant/$threadId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSupportCaseTicketIdRoute =
+  AuthenticatedSupportCaseTicketIdRouteImport.update({
+    id: '/support-case/$ticketId',
+    path: '/support-case/$ticketId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSupportCustomersCustomerIdRoute =
+  AuthenticatedSupportCustomersCustomerIdRouteImport.update({
+    id: '/support-customers_/$customerId',
+    path: '/support-customers/$customerId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicDeviceUploadRoute = ApiPublicDeviceUploadRouteImport.update({
   id: '/api/public/device-upload',
   path: '/api/public/device-upload',
@@ -130,12 +185,20 @@ export interface FileRoutesByFullPath {
   '/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/phone': typeof AuthenticatedPhoneRoute
   '/summary': typeof AuthenticatedSummaryRoute
+  '/support': typeof AuthenticatedSupportRoute
+  '/support-admin': typeof AuthenticatedSupportAdminRoute
+  '/support-analytics': typeof AuthenticatedSupportAnalyticsRoute
+  '/support-customers': typeof AuthenticatedSupportCustomersRoute
+  '/support-knowledge': typeof AuthenticatedSupportKnowledgeRoute
+  '/support-messages': typeof AuthenticatedSupportMessagesRoute
   '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
   '/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
+  '/support-customers/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/assistant/': typeof AuthenticatedAssistantIndexRoute
 }
@@ -149,12 +212,20 @@ export interface FileRoutesByTo {
   '/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/phone': typeof AuthenticatedPhoneRoute
   '/summary': typeof AuthenticatedSummaryRoute
+  '/support': typeof AuthenticatedSupportRoute
+  '/support-admin': typeof AuthenticatedSupportAdminRoute
+  '/support-analytics': typeof AuthenticatedSupportAnalyticsRoute
+  '/support-customers': typeof AuthenticatedSupportCustomersRoute
+  '/support-knowledge': typeof AuthenticatedSupportKnowledgeRoute
+  '/support-messages': typeof AuthenticatedSupportMessagesRoute
   '/sync': typeof AuthenticatedSyncRoute
   '/team': typeof AuthenticatedTeamRoute
   '/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
+  '/support-customers/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/assistant': typeof AuthenticatedAssistantIndexRoute
 }
@@ -170,12 +241,20 @@ export interface FileRoutesById {
   '/_authenticated/follow-ups': typeof AuthenticatedFollowUpsRoute
   '/_authenticated/phone': typeof AuthenticatedPhoneRoute
   '/_authenticated/summary': typeof AuthenticatedSummaryRoute
+  '/_authenticated/support': typeof AuthenticatedSupportRoute
+  '/_authenticated/support-admin': typeof AuthenticatedSupportAdminRoute
+  '/_authenticated/support-analytics': typeof AuthenticatedSupportAnalyticsRoute
+  '/_authenticated/support-customers': typeof AuthenticatedSupportCustomersRoute
+  '/_authenticated/support-knowledge': typeof AuthenticatedSupportKnowledgeRoute
+  '/_authenticated/support-messages': typeof AuthenticatedSupportMessagesRoute
   '/_authenticated/sync': typeof AuthenticatedSyncRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/version': typeof AuthenticatedVersionRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/summary': typeof ApiSummaryRoute
   '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/_authenticated/support-case/$ticketId': typeof AuthenticatedSupportCaseTicketIdRoute
+  '/_authenticated/support-customers_/$customerId': typeof AuthenticatedSupportCustomersCustomerIdRoute
   '/api/public/device-upload': typeof ApiPublicDeviceUploadRoute
   '/_authenticated/assistant/': typeof AuthenticatedAssistantIndexRoute
 }
@@ -191,12 +270,20 @@ export interface FileRouteTypes {
     | '/follow-ups'
     | '/phone'
     | '/summary'
+    | '/support'
+    | '/support-admin'
+    | '/support-analytics'
+    | '/support-customers'
+    | '/support-knowledge'
+    | '/support-messages'
     | '/sync'
     | '/team'
     | '/version'
     | '/api/assistant'
     | '/api/summary'
     | '/assistant/$threadId'
+    | '/support-case/$ticketId'
+    | '/support-customers/$customerId'
     | '/api/public/device-upload'
     | '/assistant/'
   fileRoutesByTo: FileRoutesByTo
@@ -210,12 +297,20 @@ export interface FileRouteTypes {
     | '/follow-ups'
     | '/phone'
     | '/summary'
+    | '/support'
+    | '/support-admin'
+    | '/support-analytics'
+    | '/support-customers'
+    | '/support-knowledge'
+    | '/support-messages'
     | '/sync'
     | '/team'
     | '/version'
     | '/api/assistant'
     | '/api/summary'
     | '/assistant/$threadId'
+    | '/support-case/$ticketId'
+    | '/support-customers/$customerId'
     | '/api/public/device-upload'
     | '/assistant'
   id:
@@ -230,12 +325,20 @@ export interface FileRouteTypes {
     | '/_authenticated/follow-ups'
     | '/_authenticated/phone'
     | '/_authenticated/summary'
+    | '/_authenticated/support'
+    | '/_authenticated/support-admin'
+    | '/_authenticated/support-analytics'
+    | '/_authenticated/support-customers'
+    | '/_authenticated/support-knowledge'
+    | '/_authenticated/support-messages'
     | '/_authenticated/sync'
     | '/_authenticated/team'
     | '/_authenticated/version'
     | '/api/assistant'
     | '/api/summary'
     | '/_authenticated/assistant/$threadId'
+    | '/_authenticated/support-case/$ticketId'
+    | '/_authenticated/support-customers_/$customerId'
     | '/api/public/device-upload'
     | '/_authenticated/assistant/'
   fileRoutesById: FileRoutesById
@@ -323,6 +426,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSummaryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/support': {
+      id: '/_authenticated/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof AuthenticatedSupportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/support-admin': {
+      id: '/_authenticated/support-admin'
+      path: '/support-admin'
+      fullPath: '/support-admin'
+      preLoaderRoute: typeof AuthenticatedSupportAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/support-analytics': {
+      id: '/_authenticated/support-analytics'
+      path: '/support-analytics'
+      fullPath: '/support-analytics'
+      preLoaderRoute: typeof AuthenticatedSupportAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/support-customers': {
+      id: '/_authenticated/support-customers'
+      path: '/support-customers'
+      fullPath: '/support-customers'
+      preLoaderRoute: typeof AuthenticatedSupportCustomersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/support-knowledge': {
+      id: '/_authenticated/support-knowledge'
+      path: '/support-knowledge'
+      fullPath: '/support-knowledge'
+      preLoaderRoute: typeof AuthenticatedSupportKnowledgeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/support-messages': {
+      id: '/_authenticated/support-messages'
+      path: '/support-messages'
+      fullPath: '/support-messages'
+      preLoaderRoute: typeof AuthenticatedSupportMessagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/sync': {
       id: '/_authenticated/sync'
       path: '/sync'
@@ -372,6 +517,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAssistantThreadIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/support-case/$ticketId': {
+      id: '/_authenticated/support-case/$ticketId'
+      path: '/support-case/$ticketId'
+      fullPath: '/support-case/$ticketId'
+      preLoaderRoute: typeof AuthenticatedSupportCaseTicketIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/support-customers_/$customerId': {
+      id: '/_authenticated/support-customers_/$customerId'
+      path: '/support-customers/$customerId'
+      fullPath: '/support-customers/$customerId'
+      preLoaderRoute: typeof AuthenticatedSupportCustomersCustomerIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/device-upload': {
       id: '/api/public/device-upload'
       path: '/api/public/device-upload'
@@ -388,10 +547,18 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFollowUpsRoute: typeof AuthenticatedFollowUpsRoute
   AuthenticatedPhoneRoute: typeof AuthenticatedPhoneRoute
   AuthenticatedSummaryRoute: typeof AuthenticatedSummaryRoute
+  AuthenticatedSupportRoute: typeof AuthenticatedSupportRoute
+  AuthenticatedSupportAdminRoute: typeof AuthenticatedSupportAdminRoute
+  AuthenticatedSupportAnalyticsRoute: typeof AuthenticatedSupportAnalyticsRoute
+  AuthenticatedSupportCustomersRoute: typeof AuthenticatedSupportCustomersRoute
+  AuthenticatedSupportKnowledgeRoute: typeof AuthenticatedSupportKnowledgeRoute
+  AuthenticatedSupportMessagesRoute: typeof AuthenticatedSupportMessagesRoute
   AuthenticatedSyncRoute: typeof AuthenticatedSyncRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedVersionRoute: typeof AuthenticatedVersionRoute
   AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
+  AuthenticatedSupportCaseTicketIdRoute: typeof AuthenticatedSupportCaseTicketIdRoute
+  AuthenticatedSupportCustomersCustomerIdRoute: typeof AuthenticatedSupportCustomersCustomerIdRoute
   AuthenticatedAssistantIndexRoute: typeof AuthenticatedAssistantIndexRoute
 }
 
@@ -401,10 +568,19 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFollowUpsRoute: AuthenticatedFollowUpsRoute,
   AuthenticatedPhoneRoute: AuthenticatedPhoneRoute,
   AuthenticatedSummaryRoute: AuthenticatedSummaryRoute,
+  AuthenticatedSupportRoute: AuthenticatedSupportRoute,
+  AuthenticatedSupportAdminRoute: AuthenticatedSupportAdminRoute,
+  AuthenticatedSupportAnalyticsRoute: AuthenticatedSupportAnalyticsRoute,
+  AuthenticatedSupportCustomersRoute: AuthenticatedSupportCustomersRoute,
+  AuthenticatedSupportKnowledgeRoute: AuthenticatedSupportKnowledgeRoute,
+  AuthenticatedSupportMessagesRoute: AuthenticatedSupportMessagesRoute,
   AuthenticatedSyncRoute: AuthenticatedSyncRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedVersionRoute: AuthenticatedVersionRoute,
   AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,
+  AuthenticatedSupportCaseTicketIdRoute: AuthenticatedSupportCaseTicketIdRoute,
+  AuthenticatedSupportCustomersCustomerIdRoute:
+    AuthenticatedSupportCustomersCustomerIdRoute,
   AuthenticatedAssistantIndexRoute: AuthenticatedAssistantIndexRoute,
 }
 
