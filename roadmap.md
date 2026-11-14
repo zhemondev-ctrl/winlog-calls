@@ -36,5 +36,5 @@
 - [ ] Merge all Winstone Connect APK features with WinLog (deferred: latest request focuses on building this site's WinLog APK; source inspected, remaining capabilities recorded in migration ledger)
 - [x] Build a fresh signed Android APK using this site's shared screens
 - [x] Phone dashboard: live count of calls waiting to upload (native receipts implemented; real-phone acceptance pending)
-- [ ] Deliver a clean complete source ZIP for rebuilding the final APK
+- [x] Deliver a clean complete source ZIP for rebuilding the final APK (private signing key excluded; build instructions included)
 - [ ] Confirm a real phone call appears in dashboard and daily uploads chart (blocked until a team phone uploads a call; current call count is zero)
