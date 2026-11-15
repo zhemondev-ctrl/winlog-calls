@@ -11,6 +11,7 @@ import { DailyDigest } from "@/components/winlog/daily-digest";
 import { DashboardRelease } from "@/components/winlog/dashboard-release";
 import { SetupBanner } from "@/components/winlog/setup-banner";
 import { PhoneUploadStatus } from "@/components/winlog/phone-upload-status";
+import { DashboardSyncWarning } from "@/components/winlog/dashboard-sync-warning";
 import { PhoneCodeManager } from "@/components/winlog/phone-code-manager";
 import { Segmented } from "@/components/winlog/segmented";
 import { StatCard } from "@/components/winlog/stat-card";
@@ -128,6 +129,9 @@ function Dashboard() {
   const showNames = me?.isAdmin && agent === "all";
   const selectedName = me?.isAdmin && agent === "all" ? "All agents" : names.get(agent) || me?.displayName;
   const latestUpload = shown.reduce<string | null>((latest, call) => !latest || call.created_at > latest ? call.created_at : latest, null);
+  const warningAgent = me?.isAdmin
+    ? profiles.find(p => agent === "all" ? p.display_name === "zhemon.sm123" : p.id === agent)
+    : me ? { id: me.userId, display_name: me.displayName } : undefined;
 
   return (
     <AppShell
@@ -140,6 +144,7 @@ function Dashboard() {
     >
       <SetupBanner />
       <PhoneUploadStatus />
+      {warningAgent && me && <DashboardSyncWarning userId={warningAgent.id} name={warningAgent.display_name || "Agent"} currentUserId={me.userId} />}
       <DashboardRelease />
       {me?.isAdmin && <DailyDigest />}
       {me?.isAdmin && <PhoneCodeManager />}
