@@ -1,5 +1,10 @@
 # WinLog roadmap
 
+## Security review and evidence empty state
+- [x] Restricted privileged function grants (migration 0010); patched zod, seroval, js-yaml and source-map-js; dependency re-scan has no known advisories for 71 checked packages (SheetJS URL distribution not checked). 99 unit tests passed; 3 existing live tests skipped; 5 new live authorization tests passed. Basic security re-scan clear. Managed pg_net placement and 7 authenticated guarded function warnings remain for review.
+- [x] Added Bengali no-call explanation and four next steps; authenticated 428px dashboard, refresh and /sync link verified; build OK. Website changes not published; database grants already applied.
+- [ ] Review deep security scan results (waiting for background scan notification).
+
 ## Dashboard sync warning
 - [x] Add combined staff sync/call evidence panel; 14 tests passed, authenticated desktop/mobile and refresh checked, build OK. Current real data: no call receipt, remote sync time unknown, test/device NOT VERIFIED. Not published.
 - [x] Show staff-specific receipt warning and Bengali troubleshooting; 11 tests passed, authenticated desktop/mobile warning and refresh verified; no calls received for zhemon.sm123, remote phone cause remains unknown. Not published.

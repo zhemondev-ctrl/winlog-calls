@@ -27,13 +27,14 @@
           "openWorldHint": false
         },
         "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
             "limit": {
+              "default": 25,
               "type": "integer",
               "minimum": 1,
-              "maximum": 100,
-              "default": 25
+              "maximum": 100
             },
             "source": {
               "type": "string",
@@ -43,8 +44,7 @@
               ]
             }
           },
-          "additionalProperties": false,
-          "$schema": "http://json-schema.org/draft-07/schema#"
+          "additionalProperties": false
         },
         "outputSchema": null
       },
@@ -58,13 +58,14 @@
           "openWorldHint": false
         },
         "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
             "limit": {
+              "default": 25,
               "type": "integer",
               "minimum": 1,
-              "maximum": 100,
-              "default": 25
+              "maximum": 100
             },
             "status": {
               "type": "string",
@@ -77,8 +78,7 @@
               ]
             }
           },
-          "additionalProperties": false,
-          "$schema": "http://json-schema.org/draft-07/schema#"
+          "additionalProperties": false
         },
         "outputSchema": null
       }
