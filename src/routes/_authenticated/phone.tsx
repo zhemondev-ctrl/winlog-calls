@@ -5,14 +5,13 @@ import {
   Check,
   ChevronRight,
   MessageCircle,
-  Phone,
   RefreshCw,
 } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 import { AppShell } from "@/components/winlog/app-shell";
+import { CallPermissionSetup } from "@/components/winlog/call-permission-setup";
 import { useNativeSyncContext } from "@/components/winlog/native-sync-context";
 import { Button } from "@/components/ui/button";
 import { WinLogNative } from "@/lib/native";
@@ -77,20 +76,10 @@ function PhonePage() {
           <p className="text-sm text-muted-foreground">
             This page in a normal browser only shows uploaded calls.
           </p>
+          <CallPermissionSetup native={false} />
         </div>
       </AppShell>
     );
-  }
-
-  async function allowCallLog() {
-    const s = await WinLogNative.requestCallLogPermission();
-    await refreshStatus();
-    if (s.callLog) {
-      toast.success("Call history allowed");
-      void sync.syncNow();
-    } else {
-      toast.error("Call history was not allowed. Open the app's settings to allow it.");
-    }
   }
 
   return (
@@ -121,17 +110,7 @@ function PhonePage() {
           </div>
           <ChevronRight className="size-5" />
         </Link>
-        <Step
-          done={!!status?.callLog}
-          icon={<Phone className="size-5" />}
-          title="SIM calls"
-          body="Reads this phone's call history: number, name, time and talk time."
-          action={
-            <Button variant="signal" onClick={allowCallLog}>
-              Allow
-            </Button>
-          }
-        />
+        <CallPermissionSetup native={native} onGranted={() => void refreshStatus()} />
         <Step
           done={!!status?.notificationAccess}
           icon={<MessageCircle className="size-5" />}
