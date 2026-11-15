@@ -4,7 +4,7 @@ import { diagnose, STALE_AFTER_MS, type HealthInput } from "./sync-health";
 export function dashboardSyncWarning(input: {
   now: number;
   latestReceipt: string | null;
-  phone?: HealthInput;
+  phone?: HealthInput | undefined;
 }) {
   if (input.phone) {
     const issues = diagnose(input.phone);
