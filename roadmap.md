@@ -1,8 +1,8 @@
 # WinLog roadmap
 
 ## Security review and evidence empty state
-- [ ] Review database privileges and production dependency advisories; fix confirmed risks and verify regressions.
-- [ ] Add Bengali no-call explanation and next steps, preserving receipt versus device verification boundaries.
+- [x] Restricted privileged function grants (migration 0010); patched zod, seroval, js-yaml and source-map-js; dependency re-scan has no known advisories for 71 checked packages (SheetJS URL distribution not checked). 99 unit tests passed; 3 existing live tests skipped; 5 new live authorization tests passed. Basic security re-scan clear. Managed pg_net placement and 7 authenticated guarded function warnings remain for review.
+- [x] Added Bengali no-call explanation and four next steps; authenticated 428px dashboard, refresh and /sync link verified; build OK. Website changes not published; database grants already applied.
 - [ ] Review deep security scan results (waiting for background scan notification).
 
 ## Dashboard sync warning
