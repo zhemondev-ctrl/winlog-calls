@@ -5,7 +5,6 @@ import {
   Check,
   ChevronRight,
   MessageCircle,
-  Phone,
   RefreshCw,
 } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
