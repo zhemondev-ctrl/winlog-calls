@@ -1,5 +1,8 @@
 # WinLog roadmap
 
+## Dashboard sync warning
+- [x] Show staff-specific receipt warning and Bengali troubleshooting; 11 tests passed, authenticated desktop/mobile warning and refresh verified; no calls received for zhemon.sm123, remote phone cause remains unknown. Not published.
+
 ## Linked call details and real integrations
 - [x] Add private /calls/$callId linked from Calls with date/time, reported duration, staff attribution, saved AI notes and permitted support links; 10 tests passed, build OK, signed-out privacy gate checked (authenticated real-call flow awaits user sign-in and uploaded call)
 - [ ] Verify real-device call and support inbox evidence (blocked: physical team phone required; zero calls)
