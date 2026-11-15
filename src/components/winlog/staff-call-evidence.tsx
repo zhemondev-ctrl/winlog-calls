@@ -58,6 +58,18 @@ export function StaffCallEvidence({ userId, name, currentUserId }: { userId: str
             <p className="mt-2 text-xs text-muted-foreground">বাস্তব ফোনের পরীক্ষা: NOT VERIFIED। পরীক্ষামূলক কলের পরিচয়: NOT VERIFIED। AI লেখা কোনো কলের প্রমাণ নয়।</p>
           </div>
         </div>
+        {!call && <div className="mt-5 border-t border-border pt-4" aria-label="কল না থাকলে করণীয়">
+          <h3 className="text-sm font-semibold">কেন Not verified?</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{name}-এর কোনো কল রেকর্ড এখনো এই অ্যাকাউন্টে পাওয়া যায়নি। তাই আপলোড যাচাই করার প্রমাণ নেই; এটি ফোনে কল হয়নি বা অনুমতি বন্ধ আছে—এমন প্রমাণ নয়।</p>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm">
+            <li>টিম ফোনে সঠিক কর্মীর কোম্পানি কোড দিয়ে সেটআপ সম্পন্ন করুন।</li>
+            <li>ফোনে কল হিস্ট্রি ও WhatsApp নোটিফিকেশনের অনুমতি এবং ব্যাটারি সেটিংস পরীক্ষা করুন।</li>
+            <li>একটি SIM কল করে শেষ করুন; ইন্টারনেট চালু রেখে ফোনের Sync now চাপুন।</li>
+            <li>এরপর এখানে ‘আবার পরীক্ষা’ চাপুন। রেকর্ড এলে সার্ভারে পাওয়া যাচাই হবে; বাস্তব ফোনের পরীক্ষা নিশ্চিত করতে কর্মীর নাম ও কলের সময় মিলিয়ে দেখুন।</li>
+          </ol>
+          <Button asChild variant="outline" size="sm" className="mt-4"><Link to="/sync"><ShieldCheck className="size-4" />সিঙ্কের সমস্যা পরীক্ষা</Link></Button>
+          {!ownPhone && <p className="mt-2 text-xs text-muted-foreground">অনুমতি ও Sync now কর্মীর Android ফোনেই পরীক্ষা করতে হবে; এই ওয়েবসাইট থেকে অন্য ফোনের সেটিংস জানা যায় না।</p>}
+        </div>}
       </>}
     </section>
   );

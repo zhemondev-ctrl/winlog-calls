@@ -1,5 +1,10 @@
 # WinLog roadmap
 
+## Security review and evidence empty state
+- [ ] Review database privileges and production dependency advisories; fix confirmed risks and verify regressions.
+- [ ] Add Bengali no-call explanation and next steps, preserving receipt versus device verification boundaries.
+- [ ] Review deep security scan results (waiting for background scan notification).
+
 ## Dashboard sync warning
 - [x] Add combined staff sync/call evidence panel; 14 tests passed, authenticated desktop/mobile and refresh checked, build OK. Current real data: no call receipt, remote sync time unknown, test/device NOT VERIFIED. Not published.
 - [x] Show staff-specific receipt warning and Bengali troubleshooting; 11 tests passed, authenticated desktop/mobile warning and refresh verified; no calls received for zhemon.sm123, remote phone cause remains unknown. Not published.
