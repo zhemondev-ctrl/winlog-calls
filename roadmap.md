@@ -1,6 +1,7 @@
 # WinLog roadmap
 
 ## Dashboard sync warning
+- [ ] Add combined staff sync/call evidence panel, with receipt-only verified status and explicit unverified test-call/device boundaries; verify dashboard and tests.
 - [x] Show staff-specific receipt warning and Bengali troubleshooting; 11 tests passed, authenticated desktop/mobile warning and refresh verified; no calls received for zhemon.sm123, remote phone cause remains unknown. Not published.
 
 ## Linked call details and real integrations

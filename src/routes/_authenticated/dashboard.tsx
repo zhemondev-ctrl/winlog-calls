@@ -12,6 +12,7 @@ import { DashboardRelease } from "@/components/winlog/dashboard-release";
 import { SetupBanner } from "@/components/winlog/setup-banner";
 import { PhoneUploadStatus } from "@/components/winlog/phone-upload-status";
 import { DashboardSyncWarning } from "@/components/winlog/dashboard-sync-warning";
+import { StaffCallEvidence } from "@/components/winlog/staff-call-evidence";
 import { PhoneCodeManager } from "@/components/winlog/phone-code-manager";
 import { Segmented } from "@/components/winlog/segmented";
 import { StatCard } from "@/components/winlog/stat-card";
@@ -144,6 +145,7 @@ function Dashboard() {
     >
       <SetupBanner />
       <PhoneUploadStatus />
+      {warningAgent && me && <StaffCallEvidence userId={warningAgent.id} name={warningAgent.display_name || "Agent"} currentUserId={me.userId} />}
       {warningAgent && me && <DashboardSyncWarning userId={warningAgent.id} name={warningAgent.display_name || "Agent"} currentUserId={me.userId} />}
       <DashboardRelease />
       {me?.isAdmin && <DailyDigest />}
